@@ -1,15 +1,11 @@
-import { Navigate, Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
+import Header from "./components/custom/Header";
 import "./App.css";
-import { UserButton, useUser } from "@clerk/clerk-react";
 
 function App() {
-  const { user, isLoaded, isSignedIn } = useUser();
-
-  if (!isSignedIn && isLoaded) return <Navigate to={"/auth/sign-in"} />;
-
   return (
     <>
-      <UserButton />
+      <Header />
       <Outlet />
     </>
   );

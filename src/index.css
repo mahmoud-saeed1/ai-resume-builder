@@ -1,3 +1,45 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/*~~~~~~~~$ Global Styling $~~~~~~~~*/
+h1{
+    @apply text-4xl font-bold capitalize
+}
+
+h2{
+    @apply font-semibold
+}
+
+.container {
+    @apply px-4 py-8 md:px-8 lg:px-60 xl:px-60 ;
+}
+
+/*~~~~~~~~$ Header Styling $~~~~~~~~*/
+header{
+    @apply flex justify-between items-center p-4;
+}
+
+.btn-primary{
+    @apply rounded-[5px] text-white font-bold tracking-wider capitalize;
+}
+
+.link-primary{
+    @apply bg-primary px-4 py-2 rounded-[5px] text-white font-bold tracking-wider capitalize
+}
+
+.header-btns{
+    @apply flex items-center justify-center space-x-2
+}
+
+/*~~~~~~~~$ Dashboard Styling $~~~~~~~~*/
+.resume-container{
+    @apply grid grid-cols-2 place-items-center sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5
+}
+
+.resume{
+    @apply bg-gray-200 w-52 h-72 flex items-center justify-center rounded-[0.4rem] border-gray-500 border-2 border-dashed
+}
+.resume:hover{
+    @apply scale-105 transition-all duration-300 ease-linear
+}
