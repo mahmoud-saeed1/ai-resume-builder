@@ -7,15 +7,18 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-
-import { CirclePlus } from "lucide-react";
+import { useUser } from "@clerk/clerk-react";
+import { CirclePlus, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
+import GlobalApi from "@/service/GlobalApi"; // Corrected import path
 
 const AddResume = () => {
   /*~~~~~~~~$ States $~~~~~~~~*/
   const [openDailog, setOpenDialog] = useState(false);
   const [resumeTitle, setResumeTitle] = useState("");
+  const { user } = useUser();
+  const [loading, setLoading] = useState(false);
 
   /*~~~~~~~~$ Handlers $~~~~~~~~*/
   const handleOpenDialog = () => {
@@ -32,6 +35,31 @@ const AddResume = () => {
     console.log(resumeId + resumeTitle);
   };
 
+  const handleCreateResume = async () => {
+    setLoading(true);
+    const uuid = uuidv4();
+    const data = {
+      data: {
+        title: resumeTitle,
+        resumeId: uuid,
+        userEmail: user?.primaryEmailAddress?.emailAddress,
+        userName: user?.fullName,
+      },
+    };
+
+    try {
+      await GlobalApi.createNewResume(data).then((res) => {
+        console.log(res);
+      });
+      console.log("Resume created successfully");
+    } catch (error) {
+      console.error("Error creating resume:", error);
+      console.log(data)
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="resume">
       <Button
@@ -43,17 +71,22 @@ const AddResume = () => {
       <Dialog open={openDailog}>
         <DialogContent className="bg-white rounded-xl">
           <DialogHeader>
-            <DialogTitle>create a new resume</DialogTitle>
-            <DialogDescription>add your resume title.</DialogDescription>
+            <DialogTitle>Create a new resume</DialogTitle>
+            <DialogDescription>Add your resume title.</DialogDescription>
             <Input
-              placeholder="enter resume title"
+              placeholder="Enter resume title"
               onChange={handleResumeTitle}
             />
             <div className="flex items-center justify-end space-x-2">
               <Button onClick={handleCloseDialog} variant={"ghost"}>
                 Cancel
               </Button>
-              <Button onClick={handleCloseDialog} disabled={!resumeTitle}>create</Button>
+              <Button
+                onClick={handleCreateResume}
+                disabled={!resumeTitle || loading}
+              >
+                {loading ? <Loader2 className="animate-spin" /> : "Create"}
+              </Button>
             </div>
           </DialogHeader>
         </DialogContent>

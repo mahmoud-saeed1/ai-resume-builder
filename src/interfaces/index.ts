@@ -2,6 +2,15 @@
 //   className?: string;
 // }
 
-export interface IIcon{
+export interface IIcon {
   className?: string;
+}
+
+export interface IUserResume {
+  data: {
+    title: string;
+    resumeId: string;
+    userEmail: string | undefined;
+    userName: string | null | undefined;
+  };
 }
