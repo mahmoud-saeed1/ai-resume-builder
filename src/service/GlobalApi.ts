@@ -1,8 +1,6 @@
 import { IUserResume } from "@/interfaces";
 import axios from "axios"; // Use ES6 module import
 
-
-
 const API_Key = import.meta.env.VITE_STARPI_API_KEY; // Now TypeScript knows about import.meta.env
 
 const axiosClient = axios.create({
@@ -13,8 +11,16 @@ const axiosClient = axios.create({
   },
 });
 
-const createNewResume = (data:IUserResume) => axiosClient.post("/user-resumes", data);
+const createNewResume = (data: IUserResume) =>
+  axiosClient.post("/user-resumes", data);
+
+// const getUserResumes = (userEmail) => axiosClient.get("/user-resumes");
+
+// get user resumes list by email
+const getUserResumes = (userEmail: string | undefined) =>
+  axiosClient.get(`/user-resumes?filters[userEmail][$eq]=${userEmail}`);
 
 export default {
   createNewResume,
+  getUserResumes,
 };

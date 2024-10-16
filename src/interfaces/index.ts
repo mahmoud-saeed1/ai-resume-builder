@@ -14,3 +14,16 @@ export interface IUserResume {
     userName: string | null | undefined;
   };
 }
+
+export interface IReusme {
+  createdAt?: string;
+  documentId?: string;
+  id: number;
+  locale?: null;
+  publishedAt?: string;
+  resumeId?: string;
+  title?: string;
+  updatedAt?: string;
+  userEmail?: string;
+  userName?: string;
+}

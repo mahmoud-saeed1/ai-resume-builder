@@ -12,6 +12,7 @@ import { CirclePlus, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import GlobalApi from "@/service/GlobalApi"; // Corrected import path
+import { useNavigate } from "react-router-dom";
 
 const AddResume = () => {
   /*~~~~~~~~$ States $~~~~~~~~*/
@@ -19,6 +20,7 @@ const AddResume = () => {
   const [resumeTitle, setResumeTitle] = useState("");
   const { user } = useUser();
   const [loading, setLoading] = useState(false);
+  const naviagation = useNavigate();
 
   /*~~~~~~~~$ Handlers $~~~~~~~~*/
   const handleOpenDialog = () => {
@@ -50,6 +52,13 @@ const AddResume = () => {
     try {
       await GlobalApi.createNewResume(data).then((res) => {
         console.log(res);
+
+        if (res) {
+          setLoading(false);
+          naviagation(`/dashboard/resume/${uuid}/edit`);
+        }
+
+        handleCloseDialog();
       });
       console.log("Resume created successfully");
     } catch (error) {
