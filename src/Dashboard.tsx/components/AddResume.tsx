@@ -55,7 +55,7 @@ const AddResume = () => {
 
         if (res) {
           setLoading(false);
-          naviagation(`/dashboard/resume/${uuid}/edit`);
+          naviagation(`/dashboard/resume/${res.data.data.documentId}/edit`);
         }
 
         handleCloseDialog();

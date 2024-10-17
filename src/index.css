@@ -43,3 +43,96 @@ header{
 .resume:hover{
     @apply scale-105 transition-all duration-300 ease-linear
 }
+
+/*~~~~~~~~$ Resume Preview Styling $~~~~~~~~*/
+
+/* ResumePreview */
+.resumePreview {
+    @apply p-8 bg-white shadow-lg rounded-lg max-w-4xl mx-auto;
+  }
+  
+  /* PersonalDetails */
+  .resumePreview__personalDetails {
+    @apply text-center mb-8;
+  }
+  
+  .resumePreview__personalDetails--name {
+    @apply text-3xl font-bold;
+  }
+  
+  .resumePreview__personalDetails--jobTitle {
+    @apply text-xl text-gray-600;
+  }
+  
+  .resumePreview__personalDetails--contact {
+    @apply text-sm text-gray-500 mt-2;
+  }
+  
+  /* Summary */
+  .resumePreview__summary {
+    @apply mb-8;
+  }
+  
+  .resumePreview__summary--heading {
+    @apply text-2xl font-semibold border-b pb-2 mb-4;
+  }
+  
+  .resumePreview__summary--text {
+    @apply text-base text-gray-700;
+  }
+  
+  /* Professional Experience */
+  .resumePreview__experience {
+    @apply mb-8;
+  }
+  
+  .resumePreview__experience--heading {
+    @apply text-2xl font-semibold border-b pb-2 mb-4;
+  }
+  
+  .resumePreview__experience--job {
+    @apply mb-4;
+  }
+  
+  .resumePreview__experience--workSummery {
+    @apply text-sm text-gray-600 mt-2;
+  }
+  
+  /* Education */
+  .resumePreview__education {
+    @apply mb-8;
+  }
+  
+  .resumePreview__education--heading {
+    @apply text-2xl font-semibold border-b pb-2 mb-4;
+  }
+  
+  .resumePreview__education--item {
+    @apply mb-4;
+  }
+  
+  .resumePreview__education--description {
+    @apply text-sm text-gray-600 mt-2;
+  }
+  
+  /* Skills */
+  .resumePreview__skills {
+    @apply mb-8;
+  }
+  
+  .resumePreview__skills--heading {
+    @apply text-2xl font-semibold border-b pb-2 mb-4;
+  }
+  
+  .resumePreview__skills--list {
+    @apply grid grid-cols-2 gap-4;
+  }
+  
+  .resumePreview__skills--item {
+    @apply flex justify-between items-center;
+  }
+  
+  .resumePreview__skills--rating {
+    @apply text-sm text-gray-500;
+  }
+  

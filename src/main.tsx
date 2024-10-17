@@ -7,6 +7,7 @@ import Home from "./Home/index.tsx";
 import Dashboard from "./Dashboard.tsx/index.tsx";
 import App from "./App.tsx";
 import { ClerkProvider } from "@clerk/clerk-react";
+import EditResume from "./Dashboard.tsx/resume/[resumeId]/index.tsx";
 
 const router = createBrowserRouter([
   {
@@ -14,7 +15,7 @@ const router = createBrowserRouter([
     children: [
       { path: "/", element: <Home /> },
       { path: "/dashboard", element: <Dashboard /> },
-      { path: "/dashboard/resume/:id/edit", element: <h1>Edit Resume</h1> },
+      { path: "/dashboard/resume/:id/edit", element: <EditResume /> },
     ],
   },
   { path: "/auth/sign-in", element: <SignInPage /> },
