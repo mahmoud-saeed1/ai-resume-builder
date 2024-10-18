@@ -11,17 +11,16 @@ const EditResume = () => {
   const params = useParams();
   const [resumeInfo, setResumeInfo] = useState<IResumeInfo>(dummy);
 
-  
   /*~~~~~~~~$ Effects $~~~~~~~~*/
   useEffect(() => {
-    setResumeInfo(dummy); // Simulate fetching data by using dummy
+    setResumeInfo(dummy);
   }, [params]);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 place-items-center gap-10 p-10">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-10 p-10">
       <ResumeInfoContext.Provider value={{ resumeInfo, setResumeInfo }}>
         <FormSection />
-        <ResumePreview {...resumeInfo} />
+        <ResumePreview />
       </ResumeInfoContext.Provider>
     </div>
   );

@@ -28,6 +28,15 @@ export interface IReusme {
   userName?: string;
 }
 
+export interface IPersonalData {
+  firstName: string;
+  lastName: string;
+  jobTitle: string;
+  phone: string;
+  email: string;
+  address: string;
+}
+
 export interface IExperience {
   id: number;
   title: string;
@@ -89,12 +98,7 @@ export interface IReference {
 }
 
 export interface IResumeInfo {
-  firstName: string;
-  lastName: string;
-  jobTitle: string;
-  address: string;
-  phone: string;
-  email: string;
+  personalData: IPersonalData;
   themeColor: string;
   summery: string;
   experience: IExperience[];
@@ -106,5 +110,3 @@ export interface IResumeInfo {
   hobbies: IHobby[];
   references: IReference[];
 }
-
-
