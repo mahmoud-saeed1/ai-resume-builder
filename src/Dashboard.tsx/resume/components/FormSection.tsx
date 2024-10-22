@@ -1,6 +1,7 @@
 import Button from "@/ui/Button";
 import { ArrowLeft, LayoutGrid } from "lucide-react";
 import { useState } from "react";
+import PersonalDataFrom from "./forms/PersonalDataFrom";
 
 const FormSection = () => {
   /*~~~~~~~~$ States $~~~~~~~~*/
@@ -16,26 +17,40 @@ const FormSection = () => {
   };
 
   return (
-    <div className="flex items-start justify-between">
-      <Button variant={"outline"}  onClick={handlePrev}>
-        <LayoutGrid size="sm" />
-      </Button>
+    <div>
+      {/*~~~~~~~~$ Form Buttons $~~~~~~~~*/}
+      <div className="flex items-center justify-between">
+        <Button variant={"outline"} onClick={handlePrev}>
+          <LayoutGrid />
+        </Button>
 
-      <div className="flex items-center space-x-2">
-        {activeFromIdx > 1 && (
+        <div className="flex items-center space-x-2">
+          {activeFromIdx > 1 && (
+            <Button className="text-white capitalize tracking-wider text-lg">
+              <ArrowLeft />
+            </Button>
+          )}
           <Button
             className="text-white capitalize tracking-wider text-lg"
+            onClick={handleNext}
           >
-            <ArrowLeft />
+            next
           </Button>
-        )}
-        <Button
-          className="text-white capitalize tracking-wider text-lg"
-          onClick={handleNext}
-        >
-          next
-        </Button>
+        </div>
       </div>
+
+      {/*~~~~~~~~$ Personal Data Form $~~~~~~~~*/}
+      <PersonalDataFrom />
+
+      {/*~~~~~~~~$ Summery Form$~~~~~~~~*/}
+
+      {/*~~~~~~~~$ Professional Experience Form $~~~~~~~~*/}
+
+      {/*~~~~~~~~$ Education Form $~~~~~~~~*/}
+
+      {/*~~~~~~~~$ Skills Form $~~~~~~~~*/}
+
+      {/*~~~~~~~~$ Language Form $~~~~~~~~*/}
     </div>
   );
 };
