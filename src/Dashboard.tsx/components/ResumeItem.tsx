@@ -6,11 +6,15 @@ import { IReusme } from "@/interfaces";
 // Framer Motion animation variants for a cleaner, smoother layout
 const containerVariants = {
   hidden: { opacity: 0, scale: 0.95 },
-  visible: { opacity: 1, scale: 1, transition: { duration: 0.5, ease: "easeInOut" } },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: { duration: 0.5, ease: "easeInOut" },
+  },
   hover: { scale: 1.03, transition: { duration: 0.3, ease: "easeInOut" } },
 };
 
-const ResumeItem = ({ title,resumeId }: IReusme) => {
+const ResumeItem = ({ title, id }: IReusme) => {
   return (
     <motion.div
       variants={containerVariants}
@@ -25,7 +29,7 @@ const ResumeItem = ({ title,resumeId }: IReusme) => {
           <FileText className="text-blue-500" size={36} />
           <h2 className="text-2xl font-semibold text-gray-800">{title}</h2>
         </div>
-        <Link to={`/dashboard/resume/${resumeId}/edit`}>
+        <Link to={`/dashboard/resume/${id}/edit`}>
           <motion.button
             whileHover={{ scale: 1.1 }}
             className="px-4 py-2 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 transition"
@@ -49,8 +53,10 @@ const ResumeItem = ({ title,resumeId }: IReusme) => {
         {/* Add more details that would resemble a resume summary */}
         <div className="col-span-2 mt-4 text-gray-700">
           <p>
-            Experienced software developer skilled in React, TypeScript, and modern web technologies. 
-            Adept at creating user-centric web applications with a focus on functionality, design, and accessibility.
+            Experienced software developer skilled in React, TypeScript, and
+            modern web technologies. Adept at creating user-centric web
+            applications with a focus on functionality, design, and
+            accessibility.
           </p>
         </div>
       </div>
