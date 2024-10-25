@@ -23,7 +23,7 @@ const PersonalDataForm = ({
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   /*~~~~~~~~$ Context $~~~~~~~~*/
-  const { setResumeInfo } = useContext(ResumeInfoContext) ?? {};
+  const { resumeInfo,setResumeInfo } = useContext(ResumeInfoContext) ?? {};
 
   if (!setResumeInfo) {
     throw new Error("ResumeInfoContext is undefined");
@@ -111,6 +111,7 @@ const PersonalDataForm = ({
         placeholder={placeholder}
         {...register(name)}
         onChange={handleInputChange}
+        defaultValue={resumeInfo?.personalData[name]}
       />
       {errors[name] && <InputErrorMessage msg={errors[name].message} />}
     </div>
