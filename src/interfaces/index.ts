@@ -110,3 +110,20 @@ export interface IResumeInfo {
   hobbies: IHobby[];
   references: IReference[];
 }
+
+export interface IErrorResponse {
+  error: {
+    details?: {
+      errors: {
+        message: string;
+      }[];
+    };
+    message?: string;
+  };
+}
+
+export interface IPersonalDataForm {
+  enableNextBtn: boolean;
+  handleEnableNextBtn: () => void;
+  handleDisableNextBtn: () => void;
+}

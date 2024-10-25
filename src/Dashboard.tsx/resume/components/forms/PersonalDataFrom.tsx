@@ -1,33 +1,46 @@
-import { IPersonalData } from "@/interfaces";
-import Input from "@/ui/Input";
-import Label from "@/ui/Label";
+import { IErrorResponse, IPersonalData, IPersonalDataForm } from "@/interfaces";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { SPersonalData } from "@/validation";
-import InputErrorMessage from "@/ui/InputErrorMessage";
-import Button from "@/ui/Button";
 import { ResumeInfoContext } from "@/context/ResumeInfoContext";
-import { useContext } from "react";
+import { useContext, useState } from "react";
+import GlobalApi from "@/service/GlobalApi";
+import { useParams } from "react-router-dom";
+import { toast, Bounce } from "react-toastify";
+import Input from "@/ui/Input";
+import Label from "@/ui/Label";
+import Button from "@/ui/Button";
+import InputErrorMessage from "@/ui/InputErrorMessage";
+import { AxiosError } from "axios";
+import { TPersonalData } from "@/types";
 
-const PersonalDataFrom = () => {
+const PersonalDataForm = ({
+  enableNextBtn,
+  handleEnableNextBtn,
+  handleDisableNextBtn,
+}: IPersonalDataForm) => {
+  /*~~~~~~~~$ States $~~~~~~~~*/
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  /*~~~~~~~~$ Context $~~~~~~~~*/
+  const { setResumeInfo } = useContext(ResumeInfoContext) ?? {};
+
+  if (!setResumeInfo) {
+    throw new Error("ResumeInfoContext is undefined");
+  }
+
+  const params = useParams<{ id: string }>();
+
+  /*~~~~~~~~$ Form $~~~~~~~~*/
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
-  } = useForm<IPersonalData>({ resolver: yupResolver(SPersonalData) });
-  const onSubmit: SubmitHandler<IPersonalData> = (data) => console.log(data);
+  } = useForm<IPersonalData>({
+    resolver: yupResolver(SPersonalData),
+  });
 
-  console.log(watch("firstName")); 
-
-  // connect inputs changing with context
-  const resumeInfoContext = useContext(ResumeInfoContext);
-  if (!resumeInfoContext) {
-    throw new Error("ResumeInfoContext is undefined");
-  }
-  const { setResumeInfo } = resumeInfoContext;
-
-  // handle inputs changing with context
+  /*~~~~~~~~$ Handlers $~~~~~~~~*/
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setResumeInfo((prev) => ({
@@ -37,98 +50,89 @@ const PersonalDataFrom = () => {
         [name]: value,
       },
     }));
+    handleDisableNextBtn();
   };
- 
+
+  const handleOnSubmit: SubmitHandler<IPersonalData> = async (data) => {
+    // ** Loading case handling
+    setIsLoading(true);
+
+    if (!params?.id) {
+      toast.error("ID parameter is missing.", {
+        autoClose: 2000,
+        theme: "light",
+        transition: Bounce,
+      });
+      return;
+    }
+    try {
+      // ** fulfilled case handling
+      const { status } = await GlobalApi.UpdateResumeDetails(params.id, data);
+      if (status === 200) {
+        toast.success("Data saved successfully.", {
+          position: "top-right",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+        });
+
+        handleEnableNextBtn();
+      }
+    } catch (error) {
+      // ** rejected case handling
+      const errorObj = error as AxiosError<IErrorResponse>;
+
+      toast.error(`${errorObj.response?.data.error.message}`, {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const renderFormInput = (name: TPersonalData, placeholder: string) => (
+    <div>
+      <Label>{placeholder}</Label>
+      <Input
+        type="text"
+        placeholder={placeholder}
+        {...register(name)}
+        onChange={handleInputChange}
+      />
+      {errors[name] && <InputErrorMessage msg={errors[name].message} />}
+    </div>
+  );
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      {/*~~~~~~~~$ First Name $~~~~~~~~*/}
-      <div>
-        <Label htmlFor="firstName">First Name</Label>
-        <Input
-          id="firstName"
-          placeholder="Enter your first name"
-          {...register("firstName")}
-          onChange={handleInputChange}
-        />
-
-        {errors.firstName?.message && (
-          <InputErrorMessage msg={errors.firstName?.message} />
-        )}
-      </div>
-
-      {/*~~~~~~~~$ Last Name $~~~~~~~~*/}
-      <div>
-        <Label htmlFor="lastName">Last Name</Label>
-        <Input
-          id="lastName"
-          placeholder="Enter your last name"
-          {...register("lastName")}
-          onChange={handleInputChange}
-        />
-        {errors.lastName?.message && (
-          <InputErrorMessage msg={errors.lastName?.message} />
-        )}
-      </div>
-
-      {/*~~~~~~~~$ Job Title $~~~~~~~~*/}
-      <div>
-        <Label htmlFor="jobTitle">Job Title</Label>
-        <Input
-          id="jobTitle"
-          placeholder="Enter your job title"
-          {...register("jobTitle")}
-          onChange={handleInputChange}
-        />
-        {errors.jobTitle?.message && (
-          <InputErrorMessage msg={errors.jobTitle?.message} />
-        )}
-      </div>
-
-      {/*~~~~~~~~$ Phone $~~~~~~~~*/}
-      <div>
-        <Label htmlFor="phone">Phone</Label>
-        <Input
-          id="phone"
-          placeholder="Enter your phone number"
-          {...register("phone")}
-          onChange={handleInputChange}
-        />
-        {errors.phone?.message && (
-          <InputErrorMessage msg={errors.phone?.message} />
-        )}
-      </div>
-      {/*~~~~~~~~$ Email $~~~~~~~~*/}
-      <div>
-        <Label htmlFor="email">Email</Label>
-        <Input
-          id="email"
-          placeholder="Enter your email"
-          {...register("email")}
-          onChange={handleInputChange}
-        />
-        {errors.email?.message && (
-          <InputErrorMessage msg={errors.email?.message} />
-        )}
-      </div>
-
-      {/*~~~~~~~~$ Address $~~~~~~~~*/}
-      <div>
-        <Label htmlFor="address">Address</Label>
-        <Input
-          id="address"
-          placeholder="Enter your address"
-          {...register("address")}
-          onChange={handleInputChange}
-        />
-        {errors.address?.message && (
-          <InputErrorMessage msg={errors.address?.message} />
-        )}
-      </div>
-
-      <Button className="capitalize"> submit </Button>
+    <form onSubmit={handleSubmit(handleOnSubmit)}>
+      {renderFormInput("firstName", "First Name")}
+      {renderFormInput("lastName", "Last Name")}
+      {renderFormInput("jobTitle", "Job Title")}
+      {renderFormInput("phone", "Phone")}
+      {renderFormInput("email", "Email")}
+      {renderFormInput("address", "Address")}
+      <Button
+        className="capitalize"
+        isLoading={isLoading}
+        disabled={enableNextBtn}
+      >
+        save
+      </Button>
     </form>
   );
 };
 
-export default PersonalDataFrom;
+export default PersonalDataForm;

@@ -6,6 +6,7 @@ import PersonalDataFrom from "./forms/PersonalDataFrom";
 const FormSection = () => {
   /*~~~~~~~~$ States $~~~~~~~~*/
   const [activeFromIdx, setActiveFromIdx] = useState(1);
+  const [enableNextBtn, setEnableNextBtn] = useState(false);
 
   /*~~~~~~~~$ Handlers $~~~~~~~~*/
   const handleNext = () => {
@@ -15,6 +16,10 @@ const FormSection = () => {
   const handlePrev = () => {
     setActiveFromIdx((prev) => prev - 1);
   };
+
+  const handleEnableNextBtn = () => setEnableNextBtn(true);
+
+  const handleDisableNextBtn = () => setEnableNextBtn(false);
 
   return (
     <div>
@@ -33,6 +38,7 @@ const FormSection = () => {
           <Button
             className="text-white capitalize tracking-wider text-lg"
             onClick={handleNext}
+            disabled={!enableNextBtn}
           >
             next
           </Button>
@@ -40,7 +46,11 @@ const FormSection = () => {
       </div>
 
       {/*~~~~~~~~$ Personal Data Form $~~~~~~~~*/}
-      <PersonalDataFrom />
+      <PersonalDataFrom
+        enableNextBtn={enableNextBtn}
+        handleEnableNextBtn={handleEnableNextBtn}
+        handleDisableNextBtn={handleDisableNextBtn}
+      />
 
       {/*~~~~~~~~$ Summery Form$~~~~~~~~*/}
 

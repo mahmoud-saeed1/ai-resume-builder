@@ -14,7 +14,7 @@ const containerVariants = {
   hover: { scale: 1.03, transition: { duration: 0.3, ease: "easeInOut" } },
 };
 
-const ResumeItem = ({ title, id }: IReusme) => {
+const ResumeItem = ({ title, documentId }: IReusme) => {
   return (
     <motion.div
       variants={containerVariants}
@@ -29,7 +29,7 @@ const ResumeItem = ({ title, id }: IReusme) => {
           <FileText className="text-blue-500" size={36} />
           <h2 className="text-2xl font-semibold text-gray-800">{title}</h2>
         </div>
-        <Link to={`/dashboard/resume/${id}/edit`}>
+        <Link to={`/dashboard/resume/${documentId}/edit`}>
           <motion.button
             whileHover={{ scale: 1.1 }}
             className="px-4 py-2 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 transition"
