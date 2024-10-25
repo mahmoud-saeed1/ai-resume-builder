@@ -7,23 +7,17 @@ import { useContext, useState } from "react";
 import GlobalApi from "@/service/GlobalApi";
 import { useParams } from "react-router-dom";
 import { toast, Bounce } from "react-toastify";
-import Input from "@/ui/Input";
-import Label from "@/ui/Label";
 import Button from "@/ui/Button";
-import InputErrorMessage from "@/ui/InputErrorMessage";
 import { AxiosError } from "axios";
-import { TPersonalData } from "@/types";
+import FormInput from "./FormInputs";
 
 const PersonalDataForm = ({
   enableNextBtn,
   handleEnableNextBtn,
   handleDisableNextBtn,
 }: IPersonalDataForm) => {
-  /*~~~~~~~~$ States $~~~~~~~~*/
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  /*~~~~~~~~$ Context $~~~~~~~~*/
-  const { resumeInfo,setResumeInfo } = useContext(ResumeInfoContext) ?? {};
+  const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext) ?? {};
 
   if (!setResumeInfo) {
     throw new Error("ResumeInfoContext is undefined");
@@ -31,7 +25,6 @@ const PersonalDataForm = ({
 
   const params = useParams<{ id: string }>();
 
-  /*~~~~~~~~$ Form $~~~~~~~~*/
   const {
     register,
     handleSubmit,
@@ -40,7 +33,6 @@ const PersonalDataForm = ({
     resolver: yupResolver(SPersonalData),
   });
 
-  /*~~~~~~~~$ Handlers $~~~~~~~~*/
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setResumeInfo((prev) => ({
@@ -54,7 +46,6 @@ const PersonalDataForm = ({
   };
 
   const handleOnSubmit: SubmitHandler<IPersonalData> = async (data) => {
-    // ** Loading case handling
     setIsLoading(true);
 
     if (!params?.id) {
@@ -65,36 +56,21 @@ const PersonalDataForm = ({
       });
       return;
     }
+
     try {
-      // ** fulfilled case handling
       const { status } = await GlobalApi.UpdateResumeDetails(params.id, data);
       if (status === 200) {
         toast.success("Data saved successfully.", {
-          position: "top-right",
           autoClose: 1000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
           theme: "light",
           transition: Bounce,
         });
-
         handleEnableNextBtn();
       }
     } catch (error) {
-      // ** rejected case handling
       const errorObj = error as AxiosError<IErrorResponse>;
-
       toast.error(`${errorObj.response?.data.error.message}`, {
-        position: "top-right",
         autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
         theme: "light",
         transition: Bounce,
       });
@@ -103,34 +79,22 @@ const PersonalDataForm = ({
     }
   };
 
-  const renderFormInput = (name: TPersonalData, placeholder: string) => (
-    <div>
-      <Label>{placeholder}</Label>
-      <Input
-        type="text"
-        placeholder={placeholder}
-        {...register(name)}
-        onChange={handleInputChange}
-        defaultValue={resumeInfo?.personalData[name]}
-      />
-      {errors[name] && <InputErrorMessage msg={errors[name].message} />}
-    </div>
-  );
-
   return (
     <form onSubmit={handleSubmit(handleOnSubmit)}>
-      {renderFormInput("firstName", "First Name")}
-      {renderFormInput("lastName", "Last Name")}
-      {renderFormInput("jobTitle", "Job Title")}
-      {renderFormInput("phone", "Phone")}
-      {renderFormInput("email", "Email")}
-      {renderFormInput("address", "Address")}
-      <Button
-        className="capitalize"
-        isLoading={isLoading}
-        disabled={enableNextBtn}
-      >
-        save
+      {
+        Object.keys(resumeInfo?.personalData || {}).map((key) => (
+          <FormInput
+            key={key}
+            placeholder={key}
+            register={register(key as keyof IPersonalData)}
+            onChange={handleInputChange}
+            defaultValue={resumeInfo?.personalData[key as keyof IPersonalData]}
+            errorMessage={errors[key as keyof IPersonalData]}
+          />
+        ))
+      }
+      <Button isLoading={isLoading} disabled={enableNextBtn}>
+        Save
       </Button>
     </form>
   );

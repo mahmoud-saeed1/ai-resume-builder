@@ -1,30 +1,38 @@
-import Input from '@/ui/Input'
-import Label from '@/ui/Label'
+import React from "react";
+import { FieldError, UseFormRegisterReturn } from "react-hook-form";
+import Label from "@/ui/Label";
+import Input from "@/ui/Input";
+import InputErrorMessage from "@/ui/InputErrorMessage";
 
-// form inputs interface
-interface IFormInputs {
-  placeholder: string
-  name: string
-  resumeInfo: any
-  errors: any
-  register: any
-  handleInputChange: any
+interface FormInputProps {
+  placeholder: string;
+  register: UseFormRegisterReturn;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  defaultValue?: string;
+  errorMessage?: FieldError | undefined;
 }
 
-const FormInputs = () => {
+function FormInput({
+  placeholder,
+  register,
+  onChange,
+  defaultValue,
+  errorMessage,
+}: FormInputProps) {
   return (
     <div>
-      <Label>{placeholder}</Label>
+      <Label htmlFor={placeholder}>{placeholder}</Label>
       <Input
+        id={placeholder}
         type="text"
         placeholder={placeholder}
-        {...register(name)}
-        onChange={handleInputChange}
-        defaultValue={resumeInfo?.personalData[name]}
+        {...register}
+        onChange={onChange}
+        defaultValue={defaultValue}
       />
-      {errors[name] && <InputErrorMessage msg={errors[name].message} />}
+      {errorMessage && <InputErrorMessage msg={errorMessage.message} />}
     </div>
-  )
+  );
 }
 
-export default FormInputs
+export default FormInput;
