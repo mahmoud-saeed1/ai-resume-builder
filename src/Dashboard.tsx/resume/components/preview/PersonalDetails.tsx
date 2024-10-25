@@ -2,15 +2,19 @@ import { IPersonalData } from "@/interfaces";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 
-const PersonalDetails = (personalData: IPersonalData) => {
-  const { address, email, firstName, jobTitle, lastName, phone } = personalData;
-
+const PersonalDetails = ({
+  firstName,
+  lastName,
+  address,
+  email,
+  jobTitle,
+  phone,
+}: IPersonalData) => {
   const params = useParams<{ id: string }>();
 
   useEffect(() => {
-    console.log(params)
-  }, [])
-  
+    console.log(params);
+  }, []);
 
   return (
     <div className="resumePreview__personalDetails">

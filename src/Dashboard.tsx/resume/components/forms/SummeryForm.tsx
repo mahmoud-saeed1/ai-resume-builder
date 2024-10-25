@@ -1,65 +1,123 @@
+import { IErrorResponse, IFormProbs } from "@/interfaces";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { SSummery } from "@/validation";
-import { ISummary, IErrorResponse } from "@/interfaces";
-import { useContext, useState } from "react";
 import { ResumeInfoContext } from "@/context/ResumeInfoContext";
+import { useContext, useState } from "react";
 import GlobalApi from "@/service/GlobalApi";
+import { useParams } from "react-router-dom";
 import { toast, Bounce } from "react-toastify";
-import Input from "@/ui/Input";
-import Label from "@/ui/Label";
 import Button from "@/ui/Button";
-import InputErrorMessage from "@/ui/InputErrorMessage";
 import { AxiosError } from "axios";
+import { SSummery } from "@/validation";
+import Textarea from "@/ui/Textarea";
 
-interface ISummaryFormProps {
-  enableNextBtn: boolean;
-  handleEnableNextBtn: () => void;
-  handleDisableNextBtn: () => void;
-}
-
-const SummaryForm = ({
+const SummeryForm = ({
   enableNextBtn,
   handleEnableNextBtn,
   handleDisableNextBtn,
-}: ISummaryFormProps) => {
-  const { setResumeInfo } = useContext(ResumeInfoContext) ?? {};
-  if (!setResumeInfo) throw new Error("ResumeInfoContext is undefined");
+}: IFormProbs) => {
+  /*~~~~~~~~$ States $~~~~~~~~*/
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const [isLoading, setIsLoading] = useState(false);
+  /*~~~~~~~~$ Context $~~~~~~~~*/
+  const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext) ?? {};
 
-  const { register, handleSubmit, formState: { errors } } = useForm<ISummary>({
+  if (!setResumeInfo) {
+    throw new Error("ResumeInfoContext is undefined");
+  }
+
+  const params = useParams<{ id: string }>();
+
+  /*~~~~~~~~$ Form $~~~~~~~~*/
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<{ summery: string }>({
     resolver: yupResolver(SSummery),
   });
 
-  const onSubmit: SubmitHandler<ISummary> = async (data) => {
+  /*~~~~~~~~$ Handlers $~~~~~~~~*/
+  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const { value } = e.target;
+    setResumeInfo((prev) => ({
+      ...prev,
+      summery: value,
+    }));
+    handleDisableNextBtn();
+  };
+
+  const handleOnSubmit: SubmitHandler<{ summery: string }> = async (data) => {
     setIsLoading(true);
+
+    if (!params?.id) {
+      toast.error("ID parameter is missing.", {
+        autoClose: 2000,
+        theme: "light",
+        transition: Bounce,
+      });
+      setIsLoading(false);
+      return;
+    }
+
     try {
-      const response = await GlobalApi.updateSummary(data); // Update API call accordingly
-      toast.success("Summary updated!", { theme: "light", transition: Bounce });
-      handleEnableNextBtn();
-      setResumeInfo((prev) => ({ ...prev, summary: data.content }));
+      const { status } = await GlobalApi.UpdateResumeDetails(params.id, data);
+
+      if (status === 200) {
+        toast.success("Data saved successfully.", {
+          autoClose: 1000,
+          theme: "light",
+          transition: Bounce,
+        });
+        handleEnableNextBtn();
+      }
     } catch (error) {
-      const axiosError = error as AxiosError<IErrorResponse>;
-      toast.error(axiosError.response?.data.error.message, { theme: "light", transition: Bounce });
+      const err = error as AxiosError<IErrorResponse>;
+      if (err.response?.data.error.details) {
+        err.response.data.error.details.errors.forEach((e) => {
+          toast.error(e.message, {
+            autoClose: 2000,
+            theme: "light",
+            transition: Bounce,
+          });
+        });
+      } else {
+        toast.error(err.response?.data.error.message, {
+          autoClose: 2000,
+          theme: "light",
+          transition: Bounce,
+        });
+      }
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="form-summary">
-      <Label>Summary</Label>
-      <Input
-        type="text"
-        placeholder="Summary Content"
-        {...register("content")}
-        onChange={handleDisableNextBtn}
-      />
-      {errors.content && <InputErrorMessage msg={errors.content.message} />}
-      <Button isLoading={isLoading} disabled={enableNextBtn}>Save</Button>
+    <form onSubmit={handleSubmit(handleOnSubmit)}>
+      <div className="flex flex-col space-y-4">
+        <div>
+          <label htmlFor="summery" className="text-white">
+            Summery
+          </label>
+          <Textarea
+            {...register("summery")}
+            id="summery"
+            className="w-full p-2 bg-gray-800 rounded-md"
+            onChange={handleInputChange}
+            defaultValue={resumeInfo?.summery}
+          />
+          {errors.summery && (
+            <span className="text-red-500">{errors.summery.message}</span>
+          )}
+        </div>
+
+        <Button isLoading={isLoading} disabled={enableNextBtn}>
+          Save
+        </Button>
+      </div>
     </form>
   );
 };
 
-export default SummaryForm;
+export default SummeryForm;

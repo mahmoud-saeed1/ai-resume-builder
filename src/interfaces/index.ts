@@ -98,17 +98,22 @@ export interface IReference {
 }
 
 export interface IResumeInfo {
-  personalData: IPersonalData;
-  themeColor: string;
-  summery: string;
-  experience: IExperience[];
-  education: IEducation[];
-  skills: ISkill[];
-  certifications: ICertification[];
-  projects: IProject[];
-  languages: ILanguage[];
-  hobbies: IHobby[];
-  references: IReference[];
+  firstName?: string;
+  lastName?: string;
+  jobTitle?: string;
+  phone?: string;
+  email?: string;
+  address?: string;
+  themeColor?: string;
+  summery?: string;
+  experience?: IExperience[];
+  education?: IEducation[];
+  skills?: ISkill[];
+  certifications?: ICertification[];
+  projects?: IProject[];
+  languages?: ILanguage[];
+  hobbies?: IHobby[];
+  references?: IReference[];
 }
 
 export interface IErrorResponse {
@@ -122,7 +127,7 @@ export interface IErrorResponse {
   };
 }
 
-export interface IPersonalDataForm {
+export interface IFormProbs {
   enableNextBtn: boolean;
   handleEnableNextBtn: () => void;
   handleDisableNextBtn: () => void;

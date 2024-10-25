@@ -13,9 +13,21 @@ const ResumePreview = () => {
   return (
     <div className="resumePreview">
       {/*~~~~~~~~$ Personal Data Section $~~~~~~~~*/}
-      {resumeInfo?.resumeInfo.personalData && (
-        <PersonalDetails {...resumeInfo?.resumeInfo.personalData} />
-      )}
+      {resumeInfo?.resumeInfo.firstName &&
+        resumeInfo.resumeInfo.lastName &&
+        resumeInfo.resumeInfo.address &&
+        resumeInfo.resumeInfo.email &&
+        resumeInfo.resumeInfo.jobTitle &&
+        resumeInfo.resumeInfo.phone && (
+          <PersonalDetails
+            firstName={resumeInfo.resumeInfo.firstName}
+            lastName={resumeInfo.resumeInfo.lastName}
+            address={resumeInfo.resumeInfo.address}
+            email={resumeInfo.resumeInfo.email}
+            jobTitle={resumeInfo.resumeInfo.jobTitle}
+            phone={resumeInfo.resumeInfo.phone}
+          />
+        )}
 
       {/*~~~~~~~~$ Summery Section$~~~~~~~~*/}
       {resumeInfo?.resumeInfo.summery && (
