@@ -13,9 +13,9 @@ export const SPersonalData = yup
   })
   .required();
 
-// Summery Schema
-export const SSummery = yup.object({
-  summery: yup.string().required().min(10),
+// Summary Schema
+export const SSummary = yup.object({
+  summary: yup.string().required().min(10),
 }).required();
 
 // Experience Schema
@@ -27,7 +27,7 @@ export const SExperience = yup
     state: yup.string().required(),
     startDate: yup.string().required(),
     currentlyWorking: yup.boolean(),
-    workSummery: yup.string().required().min(10),
+    workSummary: yup.string().required().min(10),
   })
   .required();
 

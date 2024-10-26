@@ -6,7 +6,7 @@ export default {
   phone: "(123)-456-7890",
   email: "example@gmail.com",
   themeColor: "#ff6666",
-  summery: "Lorem ipsum dolor sit amet...",
+  summary: "Lorem ipsum dolor sit amet...", // Changed from 'summery' to 'summary'
   experience: [
     {
       id: 1,
@@ -16,7 +16,7 @@ export default {
       state: "NY",
       startDate: "Jan 2021",
       currentlyWorking: true,
-      workSummery:
+      workSummary: // Changed from 'workSummery' to 'workSummary'
         "Designed, developed, and maintained full-stack applications...",
     },
   ],

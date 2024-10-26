@@ -30,8 +30,8 @@ const ResumePreview = () => {
         )}
 
       {/*~~~~~~~~$ Summery Section$~~~~~~~~*/}
-      {resumeInfo?.resumeInfo.summery && (
-        <Summary summery={resumeInfo?.resumeInfo.summery} />
+      {resumeInfo?.resumeInfo.summary && (
+        <Summary summary={resumeInfo?.resumeInfo.summary} />
       )}
 
       {/*~~~~~~~~$ Professional Experience Section $~~~~~~~~*/}

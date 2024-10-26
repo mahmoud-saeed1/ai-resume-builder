@@ -1,29 +1,38 @@
 import Button from "@/ui/Button";
-import { ArrowLeft, LayoutGrid } from "lucide-react";
+import { ArrowLeft, ArrowRight, LayoutGrid } from "lucide-react";
 import { useState } from "react";
 import PersonalDataFrom from "./forms/PersonalDataFrom";
-import SummeryForm from "./forms/SummeryForm";
+import SummaryForm from "./forms/SummaryForm";
 
 const FormSection = () => {
   /*~~~~~~~~$ States $~~~~~~~~*/
-  const [activeFromIdx, setActiveFromIdx] = useState(1);
+  const [activeFromIdx, setActiveFromIdx] = useState(2);
   const [enableNextBtn, setEnableNextBtn] = useState(false);
 
   /*~~~~~~~~$ Handlers $~~~~~~~~*/
-  //! handle next button with plus 1 until the last form
-  const handleNext = () => {
-    if (activeFromIdx < 6) setActiveFromIdx((prev) => prev + 1);
-  };
-
-  //! handle previous button with minus 1 until the first form
-  const handlePrev = () => {
-    if (activeFromIdx > 1) setActiveFromIdx((prev) => prev - 1);
-  };
-
   const handleEnableNextBtn = () => setEnableNextBtn(true);
 
   const handleDisableNextBtn = () => setEnableNextBtn(false);
 
+  //! handle next button with plus 1 until the last form
+  const handleNext = () => {
+    if (activeFromIdx < 6) {
+      setActiveFromIdx((prev) => prev + 1);
+      handleEnableNextBtn();
+    } else {
+      handleDisableNextBtn();
+    }
+  };
+
+  //! handle previous button with minus 1 until the first form
+  const handlePrev = () => {
+    if (activeFromIdx > 1) {
+      setActiveFromIdx((prev) => prev - 1);
+      handleEnableNextBtn();
+    } else {
+      handleDisableNextBtn();
+    }
+  };
   return (
     <div>
       {/*~~~~~~~~$ Form Buttons $~~~~~~~~*/}
@@ -39,6 +48,7 @@ const FormSection = () => {
               onClick={handlePrev}
             >
               <ArrowLeft />
+              prev
             </Button>
           )}
           <Button
@@ -46,7 +56,7 @@ const FormSection = () => {
             onClick={handleNext}
             disabled={!enableNextBtn}
           >
-            next
+            next <ArrowRight />
           </Button>
         </div>
       </div>
@@ -62,7 +72,7 @@ const FormSection = () => {
 
       {/*~~~~~~~~$ Summery Form$~~~~~~~~*/}
       {activeFromIdx === 2 && (
-        <SummeryForm
+        <SummaryForm
           enableNextBtn={enableNextBtn}
           handleEnableNextBtn={handleEnableNextBtn}
           handleDisableNextBtn={handleDisableNextBtn}

@@ -46,7 +46,7 @@ export interface IExperience {
   startDate: string;
   endDate?: string; // Optional since it may not be applicable for currently employed
   currentlyWorking: boolean;
-  workSummery: string;
+  workSummary: string;
 }
 
 export interface IEducation {
@@ -105,7 +105,7 @@ export interface IResumeInfo {
   email?: string;
   address?: string;
   themeColor?: string;
-  summery?: string;
+  summary?: string;
   experience?: IExperience[];
   education?: IEducation[];
   skills?: ISkill[];
@@ -131,4 +131,9 @@ export interface IFormProbs {
   enableNextBtn: boolean;
   handleEnableNextBtn: () => void;
   handleDisableNextBtn: () => void;
+}
+
+export interface IGeneratedSummary {
+  summary: string;
+  experience_level: 'Fresher' | 'Mid-Level' | 'Senior';
 }
