@@ -2,6 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+
+/*~~~~~~~~$ react-simple-wysiwyg $~~~~~~~~*/
+.rsw-ce ul {
+  list-style: disc;
+  padding-left: 2em;
+}
+
+.rsw-ce ol {
+  list-style: decimal;
+  padding-left: 2em;
+}
+
 /*~~~~~~~~$ Global Styling $~~~~~~~~*/
 h1{
     @apply text-4xl font-bold capitalize
@@ -82,21 +94,55 @@ header{
   }
   
   /* Professional Experience */
-  .resumePreview__experience {
-    @apply mb-8;
+  .experience-form {
+    @apply grid gap-4;
   }
   
-  .resumePreview__experience--heading {
-    @apply text-2xl font-semibold border-b pb-2 mb-4;
+  .experience-form__item {
+    @apply border border-gray-300 p-4 rounded-md;
   }
   
-  .resumePreview__experience--job {
-    @apply mb-4;
+  .experience-form__header {
+    @apply flex justify-between items-center mb-2;
   }
   
-  .resumePreview__experience--workSummery {
-    @apply text-sm text-gray-600 mt-2;
+  .experience-form__order {
+    @apply font-semibold text-lg;
   }
+  
+  .experience-form__btn {
+    @apply px-2 py-1 bg-gray-200 rounded hover:bg-gray-300;
+  }
+  
+  .experience-form__btn--top {
+    @apply text-blue-500;
+  }
+  
+  .experience-form__btn--bottom {
+    @apply text-green-500;
+  }
+  
+  .experience-form__btn--delete {
+    @apply text-red-500;
+  }
+  
+  .experience-form__input {
+    @apply w-full p-2 border border-gray-300 rounded mb-2;
+  }
+  
+  .experience-form__rich-text {
+    @apply mt-2 mb-4;
+  }
+  
+  .experience-form__label {
+    @apply flex items-center space-x-2 mt-2;
+  }
+  
+  .experience-form__add-btn,
+  .experience-form__save-btn {
+    @apply w-full mt-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600;
+  }
+  
   
   /* Education */
   .resumePreview__education {

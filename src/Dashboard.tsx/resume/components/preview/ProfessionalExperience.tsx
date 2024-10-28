@@ -9,7 +9,7 @@ const ProfessionalExperience = ({ experience }: { experience: IResumeInfo["exper
           <h3>{job.title}</h3>
           <p>{job.companyName} - {job.city}, {job.state}</p>
           <p>{job.startDate} - {job.currentlyWorking ? "Present" : job.endDate}</p>
-          <p className="resumePreview__experience--workSummery">{job.workSummery}</p>
+          <p className="resumePreview__experience--workSummery">{job.workSummary}</p>
         </div>
       ))}
     </div>

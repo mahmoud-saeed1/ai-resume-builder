@@ -10,6 +10,7 @@ interface FormInputProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   defaultValue?: string;
   errorMessage?: FieldError | undefined;
+  type?: string;
 }
 
 function FormInput({
@@ -18,13 +19,14 @@ function FormInput({
   onChange,
   defaultValue,
   errorMessage,
+  type = "text",
 }: FormInputProps) {
   return (
     <div>
       <Label htmlFor={placeholder}>{placeholder}</Label>
       <Input
         id={placeholder}
-        type="text"
+        type={type}
         placeholder={placeholder}
         {...register}
         onChange={onChange}

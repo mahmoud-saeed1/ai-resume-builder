@@ -38,7 +38,7 @@ export interface IPersonalData {
 }
 
 export interface IExperience {
-  id: number;
+  id: string;
   title: string;
   companyName: string;
   city: string;
@@ -136,4 +136,16 @@ export interface IFormProbs {
 export interface IGeneratedSummary {
   summary: string;
   experience_level: 'Fresher' | 'Mid-Level' | 'Senior';
+}
+
+// interfaces.ts
+export interface IExperienceField {
+  title: string;
+  companyName: string;
+  city: string;
+  workSummary: string;
+}
+
+export interface IExperienceForm {
+  experience: IExperienceField[];
 }

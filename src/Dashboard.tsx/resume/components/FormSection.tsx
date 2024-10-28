@@ -3,10 +3,11 @@ import { ArrowLeft, ArrowRight, LayoutGrid } from "lucide-react";
 import { useState } from "react";
 import PersonalDataFrom from "./forms/PersonalDataFrom";
 import SummaryForm from "./forms/SummaryForm";
+import ExperienceForm from "./forms/ExperienceForm";
 
 const FormSection = () => {
   /*~~~~~~~~$ States $~~~~~~~~*/
-  const [activeFromIdx, setActiveFromIdx] = useState(2);
+  const [activeFromIdx, setActiveFromIdx] = useState(3);
   const [enableNextBtn, setEnableNextBtn] = useState(false);
 
   /*~~~~~~~~$ Handlers $~~~~~~~~*/
@@ -80,7 +81,13 @@ const FormSection = () => {
       )}
 
       {/*~~~~~~~~$ Professional Experience Form $~~~~~~~~*/}
-      {activeFromIdx === 3 && <div>Professional Experience</div>}
+      {activeFromIdx === 3 && (
+        <ExperienceForm
+          enableNextBtn={enableNextBtn}
+          handleEnableNextBtn={handleEnableNextBtn}
+          handleDisableNextBtn={handleDisableNextBtn}
+        />
+      )}
 
       {/*~~~~~~~~$ Education Form $~~~~~~~~*/}
       {activeFromIdx === 4 && <div>Education</div>}

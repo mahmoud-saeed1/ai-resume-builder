@@ -93,62 +93,21 @@ const PersonalDataForm = ({
 
   return (
     <form onSubmit={handleSubmit(handleOnSubmit)}>
-      {/* {Object.keys(resumeInfo?.personalData || {}).map((key) => (
-        <FormInput
-          key={key}
-          placeholder={key}
-          register={register(key as keyof IPersonalData)}
-          onChange={handleInputChange}
-          defaultValue={resumeInfo?.personalData[key as keyof IPersonalData]}
-          errorMessage={errors[key as keyof IPersonalData]}
-        />
-      ))} */}
+    {["firstName", "lastName", "jobTitle", "phone", "email", "address"].map((field) => (
       <FormInput
-        placeholder="First Name"
-        register={register("firstName")}
+        key={field}
+        placeholder={field.replace(/^\w/, (c) => c.toUpperCase())}
+        register={register(field as keyof IPersonalData)}
         onChange={handleInputChange}
-        defaultValue={resumeInfo?.firstName}
-        errorMessage={errors.firstName}
+        defaultValue={resumeInfo?.[field as keyof IPersonalData]}
+        errorMessage={errors[field as keyof IPersonalData]}
+      
       />
-      <FormInput
-        placeholder="Last Name"
-        register={register("lastName")}
-        onChange={handleInputChange}
-        defaultValue={resumeInfo?.lastName}
-        errorMessage={errors.lastName}
-      />
-      <FormInput
-        placeholder="Job Title"
-        register={register("jobTitle")}
-        onChange={handleInputChange}
-        defaultValue={resumeInfo?.jobTitle}
-        errorMessage={errors.jobTitle}
-      />
-      <FormInput
-        placeholder="Phone"
-        register={register("phone")}
-        onChange={handleInputChange}
-        defaultValue={resumeInfo?.phone}
-        errorMessage={errors.phone}
-      />
-      <FormInput
-        placeholder="Email"
-        register={register("email")}
-        onChange={handleInputChange}
-        defaultValue={resumeInfo?.email}
-        errorMessage={errors.email}
-      />
-      <FormInput
-        placeholder="Address"
-        register={register("address")}
-        onChange={handleInputChange}
-        defaultValue={resumeInfo?.address}
-        errorMessage={errors.address}
-      />
-      <Button isLoading={isLoading} disabled={enableNextBtn}>
-        Save
-      </Button>
-    </form>
+    ))}
+    <Button isLoading={isLoading} disabled={enableNextBtn}>
+      Save
+    </Button>
+  </form>
   );
 };
 
