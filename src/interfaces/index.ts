@@ -44,8 +44,8 @@ export interface IExperience {
   city: string;
   state: string;
   startDate: string;
-  endDate?: string; // Optional since it may not be applicable for currently employed
-  currentlyWorking: boolean;
+  endDate?: string | null;
+  currentlyWorking?: boolean;
   workSummary: string;
 }
 
@@ -135,7 +135,7 @@ export interface IFormProbs {
 
 export interface IGeneratedSummary {
   summary: string;
-  experience_level: 'Fresher' | 'Mid-Level' | 'Senior';
+  experience_level: "Fresher" | "Mid-Level" | "Senior";
 }
 
 // interfaces.ts

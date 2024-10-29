@@ -4,32 +4,65 @@ import * as yup from "yup";
 // Personal Data Schema
 export const SPersonalData = yup
   .object({
-    firstName: yup.string().required().matches(/^[a-zA-Z\s]+$/).min(3),
-    lastName: yup.string().required().matches(/^[a-zA-Z\s]+$/).min(3),
-    jobTitle: yup.string().required().matches(/^[a-zA-Z\s]+$/).min(3),
-    phone: yup.string().required().matches(/^(012|015|010)\d{8}$/),
-    email: yup.string().email().required().matches(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/),
-    address: yup.string().required().matches(/^[#.0-9a-zA-Z\u0600-\u06FF\s,-]+$/),
+    firstName: yup
+      .string()
+      .required()
+      .matches(/^[a-zA-Z\s]+$/)
+      .min(3),
+    lastName: yup
+      .string()
+      .required()
+      .matches(/^[a-zA-Z\s]+$/)
+      .min(3),
+    jobTitle: yup
+      .string()
+      .required()
+      .matches(/^[a-zA-Z\s]+$/)
+      .min(3),
+    phone: yup
+      .string()
+      .required()
+      .matches(/^(012|015|010)\d{8}$/),
+    email: yup
+      .string()
+      .email()
+      .required()
+      .matches(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/),
+    address: yup
+      .string()
+      .required()
+      .matches(/^[#.0-9a-zA-Z\u0600-\u06FF\s,-]+$/),
   })
   .required();
 
 // Summary Schema
-export const SSummary = yup.object({
-  summary: yup.string().required().min(10),
-}).required();
-
-// Experience Schema
-export const SExperience = yup
+export const SSummary = yup
   .object({
-    title: yup.string().required().min(3),
-    companyName: yup.string().required().min(3),
-    city: yup.string().required(),
-    state: yup.string().required(),
-    startDate: yup.string().required(),
-    currentlyWorking: yup.boolean(),
-    workSummary: yup.string().required().min(10),
+    summary: yup.string().required().min(10),
   })
   .required();
+
+// Experience Schema
+
+export const SExperience = yup.object().shape({
+  id: yup.string().required("ID is required"),
+
+  title: yup.string().required("Job title is required"),
+
+  companyName: yup.string().required("Company name is required"),
+
+  city: yup.string().required("City is required"),
+
+  state: yup.string().required("State is required"),
+
+  startDate: yup.string().required("Start date is required"),
+
+  endDate: yup.string().nullable(),
+
+  currentlyWorking: yup.boolean(),
+
+  workSummary: yup.string().required("Work summary is required"),
+});
 
 // Education Schema
 export const SEducation = yup
@@ -44,40 +77,51 @@ export const SEducation = yup
   .required();
 
 // Skills Schema
-export const SSkills = yup.object({
-  name: yup.string().required().min(2),
-  rating: yup.number().required().min(0).max(100),
-}).required();
+export const SSkills = yup
+  .object({
+    name: yup.string().required().min(2),
+    rating: yup.number().required().min(0).max(100),
+  })
+  .required();
 
 // Certifications Schema
-export const SCertifications = yup.object({
-  title: yup.string().required(),
-  issuer: yup.string().required(),
-  date: yup.string().required(),
-}).required();
+export const SCertifications = yup
+  .object({
+    title: yup.string().required(),
+    issuer: yup.string().required(),
+    date: yup.string().required(),
+  })
+  .required();
 
 // Projects Schema
-export const SProjects = yup.object({
-  title: yup.string().required(),
-  description: yup.string().required(),
-}).required();
+export const SProjects = yup
+  .object({
+    title: yup.string().required(),
+    description: yup.string().required(),
+  })
+  .required();
 
 // Languages Schema
-export const SLanguages = yup.object({
-  name: yup.string().required(),
-  proficiency: yup.string().required(),
-}).required();
+export const SLanguages = yup
+  .object({
+    name: yup.string().required(),
+    proficiency: yup.string().required(),
+  })
+  .required();
 
 // Hobbies Schema
-export const SHobbies = yup.object({
-  name: yup.string().required(),
-}).required();
+export const SHobbies = yup
+  .object({
+    name: yup.string().required(),
+  })
+  .required();
 
 // References Schema
-export const SReferences = yup.object({
-  name: yup.string().required(),
-  position: yup.string().required(),
-  company: yup.string().required(),
-  contact: yup.string().required(),
-}).required();
-
+export const SReferences = yup
+  .object({
+    name: yup.string().required(),
+    position: yup.string().required(),
+    company: yup.string().required(),
+    contact: yup.string().required(),
+  })
+  .required();

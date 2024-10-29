@@ -65,7 +65,9 @@ const RichTextEditor = ({
     setLoading(true);
     try {
       const result = await AIChatSession.sendMessage(prompt);
+      console.log(result)
       const response = await result.response.text();
+      console.log(response)
       const formattedResponse = response.replace("[", "").replace("]", "");
       setValue(formattedResponse);
       onRichTextEditorChange(formattedResponse);
