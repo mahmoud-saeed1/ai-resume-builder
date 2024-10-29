@@ -50,6 +50,8 @@ const PersonalDataForm = ({
   const handleOnSubmit: SubmitHandler<IPersonalData> = async (data) => {
     setIsLoading(true);
 
+    console.log(data)
+
     if (!params?.id) {
       toast.error("ID parameter is missing.", {
         autoClose: 2000,
@@ -93,21 +95,25 @@ const PersonalDataForm = ({
 
   return (
     <form onSubmit={handleSubmit(handleOnSubmit)}>
-    {["firstName", "lastName", "jobTitle", "phone", "email", "address"].map((field) => (
-      <FormInput
-        key={field}
-        placeholder={field.replace(/^\w/, (c) => c.toUpperCase())}
-        register={register(field as keyof IPersonalData)}
-        onChange={handleInputChange}
-        defaultValue={resumeInfo?.[field as keyof IPersonalData]}
-        errorMessage={errors[field as keyof IPersonalData]}
-      
-      />
-    ))}
-    <Button isLoading={isLoading} disabled={enableNextBtn}>
-      Save
-    </Button>
-  </form>
+      {["firstName", "lastName", "jobTitle", "phone", "email", "address"].map(
+        (field) => (
+          <FormInput
+            id={field}
+            name={field}
+            label={field}
+            key={field}
+            placeholder={field.replace(/^\w/, (c) => c.toUpperCase())}
+            register={register(field as keyof IPersonalData)}
+            onChange={handleInputChange}
+            defaultValue={resumeInfo?.[field as keyof IPersonalData]}
+            errorMessage={errors[field as keyof IPersonalData]?.message}
+          />
+        )
+      )}
+      <Button isLoading={isLoading} disabled={enableNextBtn}>
+        Save
+      </Button>
+    </form>
   );
 };
 

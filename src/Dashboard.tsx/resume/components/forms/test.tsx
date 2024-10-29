@@ -1,16 +1,18 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
+import { ResumeInfoContext } from "@/context/ResumeInfoContext";
+import { IExperience, IErrorResponse } from "@/interfaces";
+import RichTextEditor from "./RichTextEditor";
+import { motion, AnimatePresence } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { ChevronDown, ChevronUp, Trash2 } from "lucide-react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { IExperience, IErrorResponse } from "@/interfaces";
-import { useParams } from "react-router-dom";
-import { SExperience } from "@/validation";
 import { Bounce, toast } from "react-toastify";
-
-import { motion } from "framer-motion";
-import { ResumeInfoContext } from "@/context/ResumeInfoContext";
 import GlobalApi from "@/service/GlobalApi";
 import { AxiosError } from "axios";
 import FormInput from "./FormInputs";
+import { useParams } from "react-router-dom";
+import { SExperience } from "@/validation";
 
 const ExperienceForm = () => {
   /*~~~~~~~~$ States $~~~~~~~~*/
@@ -18,7 +20,7 @@ const ExperienceForm = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   /*~~~~~~~~$ Context $~~~~~~~~*/
-  const { setResumeInfo } = useContext(ResumeInfoContext) ?? {};
+  const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext) ?? {};
   if (!setResumeInfo) throw new Error("ResumeInfoContext is undefined");
 
   const params = useParams<{ id: string }>();
@@ -33,19 +35,20 @@ const ExperienceForm = () => {
   });
 
   /*~~~~~~~~$ Handlers $~~~~~~~~*/
-  const handleInputChange = (
-    id: string,
-    field: keyof IExperience,
-    value: string | boolean
-  ) => {
-    setExperience((prev) =>
-      prev.map((exp) => (exp.id === id ? { ...exp, [field]: value } : exp))
-    );
-    setResumeInfo((prev) => ({
-      ...prev,
-      experience,
-    }));
+  const handleInputChange = (id: string, key: string, value: string | boolean) => {
+    setExperience((prevExperience) => {
+      const updatedExperience = prevExperience.map((exp) =>
+        exp.id === id ? { ...exp, [key]: value } : exp
+      );
+      setResumeInfo((prev) => ({
+        ...prev,
+        experience: updatedExperience,
+      }));
+      return updatedExperience;
+    });
   };
+  
+  
 
   const handleAddExperience = () => {
     const newExperience: IExperience = {
@@ -59,20 +62,28 @@ const ExperienceForm = () => {
       currentlyWorking: false,
       workSummary: "",
     };
-    setExperience((prev) => [...prev, newExperience]);
-    setResumeInfo((prev) => ({
-      ...prev,
-      experience: [...experience, newExperience],
-    }));
+    setExperience((prev) => {
+      const updatedExperience = [...prev, newExperience];
+      setResumeInfo((resume) => ({
+        ...resume,
+        experience: updatedExperience,
+      }));
+      return updatedExperience;
+    });
   };
+  
 
   const handleRemoveExperience = (id: string) => {
-    setExperience((prev) => prev.filter((exp) => exp.id !== id));
-    setResumeInfo((prev) => ({
-      ...prev,
-      experience: experience.filter((exp) => exp.id !== id),
-    }));
+    setExperience((prev) => {
+      const updatedExperience = prev.filter((exp) => exp.id !== id);
+      setResumeInfo((resume) => ({
+        ...resume,
+        experience: updatedExperience,
+      }));
+      return updatedExperience;
+    });
   };
+  
 
   const handleMoveExperience = (index: number, direction: "up" | "down") => {
     const newIndex = direction === "up" ? index - 1 : index + 1;
@@ -143,144 +154,236 @@ const ExperienceForm = () => {
     console.log("Experience Form: ", experience);
   }, [experience]);
 
-  /*~~~~~~~~$ JSX $~~~~~~~~*/
   return (
-    <motion.div
-      initial="initial"
-      animate="animate"
-      exit="exit"
-      variants={animationVariants}
-      className="experience-form"
-    >
-      <form onSubmit={handleSubmit(handleOnSubmit)}>
-        {experience.map((exp, index) => (
-          <div key={exp.id} className="experience-section">
-            <FormInput
-              label="Job Title"
-              name="title"
-              placeholder="Enter job title"
-              register={register("title")}
-              errorMessage={errors.title?.message}
-              onChange={(e) =>
-                handleInputChange(exp.id, "title", e.target.value)
-              }
-            />
-            <FormInput
-              label="Company Name"
-              name="companyName"
-              placeholder="Enter company name"
-              register={register("companyName")}
-              errorMessage={errors.companyName?.message}
-              onChange={(e) =>
-                handleInputChange(exp.id, "companyName", e.target.value)
-              }
-            />
-            <FormInput
-              label="City"
-              name="city"
-              placeholder="Enter city"
-              register={register("city")}
-              errorMessage={errors.city?.message}
-              onChange={(e) =>
-                handleInputChange(exp.id, "city", e.target.value)
-              }
-            />
-            <FormInput
-              label="State"
-              name="state"
-              placeholder="Enter state"
-              register={register("state")}
-              errorMessage={errors.state?.message}
-              onChange={(e) =>
-                handleInputChange(exp.id, "state", e.target.value)
-              }
-            />
-            <FormInput
-              label="Start Date"
-              name="startDate"
-              placeholder="YYYY-MM-DD"
-              register={register("startDate")}
-              errorMessage={errors.startDate?.message}
-              onChange={(e) =>
-                handleInputChange(exp.id, "startDate", e.target.value)
-              }
-            />
-            <FormInput
-              label="End Date"
-              name="endDate"
-              placeholder="YYYY-MM-DD"
-              register={register("endDate")}
-              errorMessage={errors.endDate?.message}
-              onChange={(e) =>
-                handleInputChange(exp.id, "endDate", e.target.value)
-              }
-            />
-            <label className="flex items-center space-x-2">
-              <input
-                type="checkbox"
-                checked={exp.currentlyWorking}
-                onChange={(e) =>
-                  handleInputChange(
-                    exp.id,
-                    "currentlyWorking",
-                    e.target.checked
-                  )
-                }
-              />
-              <span>Currently Working</span>
-            </label>
-            <FormInput
-              label="Work Summary"
-              name="workSummary"
-              placeholder="Describe your role"
-              register={register("workSummary")}
-              errorMessage={errors.workSummary?.message}
-              onChange={(e) =>
-                handleInputChange(exp.id, "workSummary", e.target.value)
-              }
-            />
+    <div className="grid gap-4 p-4">
+      <h2 className="text-lg font-semibold">Experience</h2>
 
-            {/* Control Buttons */}
-            <div className="flex space-x-2">
-              <button
-                type="button"
-                onClick={() => handleMoveExperience(index, "up")}
-                disabled={index === 0}
-              >
-                Move Up
-              </button>
-              <button
-                type="button"
-                onClick={() => handleMoveExperience(index, "down")}
-                disabled={index === experience.length - 1}
-              >
-                Move Down
-              </button>
-              <button
-                type="button"
-                onClick={() => handleRemoveExperience(exp.id)}
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        ))}
-        <button
-          type="button"
-          onClick={handleAddExperience}
-          className="btn-primary"
+      {experience.length === 0 ? (
+        <motion.div
+          variants={animationVariants}
+          initial="initial"
+          animate="animate"
+          exit="exit"
+          className="border p-4 rounded-lg shadow-md"
         >
-          Add Experience
-        </button>
-        <button type="submit" disabled={isLoading} className="btn-primary">
-          {isLoading ? "Saving..." : "Save Experience"}
-        </button>
-      </form>
-    </motion.div>
+          <p className="text-center">No experience added yet</p>
+        </motion.div>
+      ) : (
+        <AnimatePresence>
+          {experience.map((exp, index) => (
+            <motion.div
+              key={exp.id}
+              variants={animationVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              className="border p-4 rounded-lg shadow-md space-y-4"
+            >
+              <div className="flex justify-between items-center mb-2">
+                <h4 className="font-semibold text-sm">
+                  Experience #{index + 1}
+                </h4>
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    disabled={index === 0}
+                    onClick={() => handleMoveExperience(index, "up")}
+                  >
+                    <ChevronUp className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleMoveExperience(index, "down")}
+                    disabled={
+                      index === (resumeInfo?.experience ?? []).length - 1
+                    }
+                  >
+                    <ChevronDown className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleRemoveExperience(exp.id)}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+
+              <form onSubmit={handleSubmit(handleOnSubmit)}>
+                {experience.map((exp, index) => (
+                  <div key={exp.id} className="experience-section">
+                    <FormInput
+                      id={`title-${exp.id}`}
+                      label="Job Title"
+                      name="title"
+                      placeholder="Enter job title"
+                      register={register("title")}
+                      errorMessage={errors.title?.message}
+                      onChange={(e) =>
+                        handleInputChange(exp.id, "title", e.target.value)
+                      }
+                    />
+                    <FormInput
+                      id={`title-${exp.id}`}
+                      label="Company Name"
+                      name="companyName"
+                      placeholder="Enter company name"
+                      register={register("companyName")}
+                      errorMessage={errors.companyName?.message}
+                      onChange={(e) =>
+                        handleInputChange(exp.id, "companyName", e.target.value)
+                      }
+                    />
+                    <FormInput
+                      id={`title-${exp.id}`}
+                      label="City"
+                      name="city"
+                      placeholder="Enter city"
+                      register={register("city")}
+                      errorMessage={errors.city?.message}
+                      onChange={(e) =>
+                        handleInputChange(exp.id, "city", e.target.value)
+                      }
+                    />
+                    <FormInput
+                      id={`title-${exp.id}`}
+                      label="State"
+                      name="state"
+                      placeholder="Enter state"
+                      register={register("state")}
+                      errorMessage={errors.state?.message}
+                      onChange={(e) =>
+                        handleInputChange(exp.id, "state", e.target.value)
+                      }
+                    />
+                    <div className="flex gap-4">
+                      <FormInput
+                        id={`title-${exp.id}`}
+                        label="Start Date"
+                        name="startDate"
+                        type="date"
+                        placeholder="Enter start date"
+                        register={register("startDate")}
+                        errorMessage={errors.startDate?.message}
+                        onChange={(e) =>
+                          handleInputChange(exp.id, "startDate", e.target.value)
+                        }
+                      />
+                      <FormInput
+                        id={`title-${exp.id}`}
+                        label="End Date"
+                        name="endDate"
+                        type="date"
+                        placeholder="Enter end date"
+                        register={register("endDate")}
+                        errorMessage={errors.endDate?.message}
+                        onChange={(e) =>
+                          handleInputChange(exp.id, "endDate", e.target.value)
+                        }
+                      />
+                    </div>
+
+                    <label className="flex items-center space-x-2">
+                      <input
+                        type="checkbox"
+                        checked={exp.currentlyWorking}
+                        onChange={(e) =>
+                          handleInputChange(
+                            exp.id,
+                            "currentlyWorking",
+                            e.target.checked
+                          )
+                        }
+                      />
+                      <span>Currently Working</span>
+                    </label>
+                    <FormInput
+                      id={`title-${exp.id}`}
+                      label="Work Summary"
+                      name="workSummary"
+                      placeholder="Describe your role"
+                      register={register("workSummary")}
+                      errorMessage={errors.workSummary?.message}
+                      onChange={(e) =>
+                        handleInputChange(exp.id, "workSummary", e.target.value)
+                      }
+                    />
+
+                    {/* Control Buttons */}
+                    <div className="flex space-x-2">
+                      <button
+                        type="button"
+                        onClick={() => handleMoveExperience(index, "up")}
+                        disabled={index === 0}
+                      >
+                        Move Up
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleMoveExperience(index, "down")}
+                        disabled={index === experience.length - 1}
+                      >
+                        Move Down
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveExperience(exp.id)}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                ))}
+                <button
+                  type="button"
+                  onClick={handleAddExperience}
+                  className="btn-primary"
+                >
+                  Add Experience
+                </button>
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="btn-primary"
+                >
+                  {isLoading ? "Saving..." : "Save Experience"}
+                </button>
+              </form>
+
+              <RichTextEditor
+                index={index}
+                onRichTextEditorChange={(content) =>
+                  handleInputChange(exp.id, "workSummary", content)
+                }
+                defaultValue={exp.workSummary}
+              />
+
+              <div className="flex justify-end">
+                <Button
+                  variant={"destructive"}
+                  size="sm"
+                  onClick={() => handleRemoveExperience(exp.id)}
+                >
+                  Remove
+                </Button>
+              </div>
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      )}
+
+      <Button onClick={handleAddExperience} variant="outline" className="mb-4">
+        Add Experience
+      </Button>
+    </div>
   );
 };
 
 export default ExperienceForm;
+
 
 // import { useContext, useEffect, useState } from "react";
 // import { ResumeInfoContext } from "@/context/ResumeInfoContext";

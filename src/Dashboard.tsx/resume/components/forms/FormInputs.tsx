@@ -5,6 +5,7 @@ import Input from "@/ui/Input";
 import InputErrorMessage from "@/ui/InputErrorMessage";
 
 interface FormInputProps {
+  id: string;
   label: string;
   name: string;
   placeholder: string;
@@ -16,6 +17,7 @@ interface FormInputProps {
 }
 
 function FormInput({
+  id,
   placeholder,
   register,
   onChange,
@@ -25,9 +27,9 @@ function FormInput({
 }: FormInputProps) {
   return (
     <div>
-      <Label htmlFor={placeholder}>{placeholder}</Label>
+      <Label htmlFor={id}>{placeholder}</Label>
       <Input
-        id={placeholder}
+        id={id}
         type={type}
         placeholder={placeholder}
         {...register}
