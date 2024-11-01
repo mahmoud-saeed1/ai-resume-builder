@@ -7,10 +7,11 @@ import ExperienceForm from "./forms/ExperienceForm";
 import EducationForm from "./forms/EducationForm";
 import SkillsForm from "./forms/SkillsForm";
 import CertificationForm from "./forms/CertificationForm";
+import ProjectForm from "./forms/ProjectForm";
 
 const FormSection = () => {
   /*~~~~~~~~$ States $~~~~~~~~*/
-  const [activeFromIdx, setActiveFromIdx] = useState(6);
+  const [activeFromIdx, setActiveFromIdx] = useState(7);
   const [enableNextBtn, setEnableNextBtn] = useState(false);
 
   /*~~~~~~~~$ Handlers $~~~~~~~~*/
@@ -94,6 +95,9 @@ const FormSection = () => {
 
       {/*~~~~~~~~$ Language Form $~~~~~~~~*/}
       {activeFromIdx === 6 && <CertificationForm />}
+
+      {/*~~~~~~~~$ Project Form $~~~~~~~~*/}
+      {activeFromIdx === 7 && <ProjectForm />}
     </div>
   );
 };
