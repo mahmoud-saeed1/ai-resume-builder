@@ -50,7 +50,7 @@ export interface IExperience {
 }
 
 export interface IEducation {
-  id: number;
+  edId: string;
   universityName: string;
   startDate: string;
   endDate?: string;

@@ -4,10 +4,11 @@ import { useState } from "react";
 import PersonalDataFrom from "./forms/PersonalDataFrom";
 import SummaryForm from "./forms/SummaryForm";
 import ExperienceForm from "./forms/ExperienceForm";
+import EducationForm from "./forms/EducationForm";
 
 const FormSection = () => {
   /*~~~~~~~~$ States $~~~~~~~~*/
-  const [activeFromIdx, setActiveFromIdx] = useState(3);
+  const [activeFromIdx, setActiveFromIdx] = useState(4);
   const [enableNextBtn, setEnableNextBtn] = useState(false);
 
   /*~~~~~~~~$ Handlers $~~~~~~~~*/
@@ -81,16 +82,10 @@ const FormSection = () => {
       )}
 
       {/*~~~~~~~~$ Professional Experience Form $~~~~~~~~*/}
-      {activeFromIdx === 3 && (
-        <ExperienceForm
-          enableNextBtn={enableNextBtn}
-          handleEnableNextBtn={handleEnableNextBtn}
-          handleDisableNextBtn={handleDisableNextBtn}
-        />
-      )}
+      {activeFromIdx === 3 && <ExperienceForm />}
 
       {/*~~~~~~~~$ Education Form $~~~~~~~~*/}
-      {activeFromIdx === 4 && <div>Education</div>}
+      {activeFromIdx === 4 && <EducationForm />}
 
       {/*~~~~~~~~$ Skills Form $~~~~~~~~*/}
       {activeFromIdx === 5 && <div>Skills</div>}
