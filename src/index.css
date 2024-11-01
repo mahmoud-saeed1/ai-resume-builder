@@ -182,3 +182,16 @@ header{
     @apply text-sm text-gray-500;
   }
   
+  /* ***************************** */
+  .summary {
+    border-left: 4px solid #1a73e8; /* Accent border */
+  }
+  
+  .summary__heading {
+    color: #1a73e8;
+  }
+  
+  .summary__text {
+    line-height: 1.6;
+  }
+  

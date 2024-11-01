@@ -121,6 +121,7 @@ const SummaryForm = ({
     try {
       const { response } = await AIChatSession.sendMessage(prompt);
       const responseText = await response.text();
+      console.log(responseText)
 
       //** Check if the response text is valid JSON
       if (responseText) {

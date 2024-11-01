@@ -38,7 +38,7 @@ const ExperienceForm = () => {
   const handleInputChange = (id: string, key: string, value: string | boolean) => {
     setExperience((prevExperience) => {
       const updatedExperience = prevExperience.map((exp) =>
-        exp.id === id ? { ...exp, [key]: value } : exp
+        exp.exId === id ? { ...exp, [key]: value } : exp
       );
       setResumeInfo((prev) => ({
         ...prev,
@@ -52,7 +52,7 @@ const ExperienceForm = () => {
 
   const handleAddExperience = () => {
     const newExperience: IExperience = {
-      id: Date.now().toString(),
+      exId: Date.now().toString(),
       title: "",
       companyName: "",
       city: "",
@@ -75,7 +75,7 @@ const ExperienceForm = () => {
 
   const handleRemoveExperience = (id: string) => {
     setExperience((prev) => {
-      const updatedExperience = prev.filter((exp) => exp.id !== id);
+      const updatedExperience = prev.filter((exp) => exp.exId !== id);
       setResumeInfo((resume) => ({
         ...resume,
         experience: updatedExperience,
@@ -172,7 +172,7 @@ const ExperienceForm = () => {
         <AnimatePresence>
           {experience.map((exp, index) => (
             <motion.div
-              key={exp.id}
+              key={exp.exId}
               variants={animationVariants}
               initial="initial"
               animate="animate"
@@ -205,7 +205,7 @@ const ExperienceForm = () => {
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => handleRemoveExperience(exp.id)}
+                    onClick={() => handleRemoveExperience(exp.exId)}
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>
@@ -214,54 +214,54 @@ const ExperienceForm = () => {
 
               <form onSubmit={handleSubmit(handleOnSubmit)}>
                 {experience.map((exp, index) => (
-                  <div key={exp.id} className="experience-section">
+                  <div key={exp.exId} className="experience-section">
                     <FormInput
-                      id={`title-${exp.id}`}
+                      id={`title-${exp.exId}`}
                       label="Job Title"
                       name="title"
                       placeholder="Enter job title"
                       register={register("title")}
                       errorMessage={errors.title?.message}
                       onChange={(e) =>
-                        handleInputChange(exp.id, "title", e.target.value)
+                        handleInputChange(exp.exId, "title", e.target.value)
                       }
                     />
                     <FormInput
-                      id={`title-${exp.id}`}
+                      id={`title-${exp.exId}`}
                       label="Company Name"
                       name="companyName"
                       placeholder="Enter company name"
                       register={register("companyName")}
                       errorMessage={errors.companyName?.message}
                       onChange={(e) =>
-                        handleInputChange(exp.id, "companyName", e.target.value)
+                        handleInputChange(exp.exId, "companyName", e.target.value)
                       }
                     />
                     <FormInput
-                      id={`title-${exp.id}`}
+                      id={`title-${exp.exId}`}
                       label="City"
                       name="city"
                       placeholder="Enter city"
                       register={register("city")}
                       errorMessage={errors.city?.message}
                       onChange={(e) =>
-                        handleInputChange(exp.id, "city", e.target.value)
+                        handleInputChange(exp.exId, "city", e.target.value)
                       }
                     />
                     <FormInput
-                      id={`title-${exp.id}`}
+                      id={`title-${exp.exId}`}
                       label="State"
                       name="state"
                       placeholder="Enter state"
                       register={register("state")}
                       errorMessage={errors.state?.message}
                       onChange={(e) =>
-                        handleInputChange(exp.id, "state", e.target.value)
+                        handleInputChange(exp.exId, "state", e.target.value)
                       }
                     />
                     <div className="flex gap-4">
                       <FormInput
-                        id={`title-${exp.id}`}
+                        id={`title-${exp.exId}`}
                         label="Start Date"
                         name="startDate"
                         type="date"
@@ -269,11 +269,11 @@ const ExperienceForm = () => {
                         register={register("startDate")}
                         errorMessage={errors.startDate?.message}
                         onChange={(e) =>
-                          handleInputChange(exp.id, "startDate", e.target.value)
+                          handleInputChange(exp.exId, "startDate", e.target.value)
                         }
                       />
                       <FormInput
-                        id={`title-${exp.id}`}
+                        id={`title-${exp.exId}`}
                         label="End Date"
                         name="endDate"
                         type="date"
@@ -281,7 +281,7 @@ const ExperienceForm = () => {
                         register={register("endDate")}
                         errorMessage={errors.endDate?.message}
                         onChange={(e) =>
-                          handleInputChange(exp.id, "endDate", e.target.value)
+                          handleInputChange(exp.exId, "endDate", e.target.value)
                         }
                       />
                     </div>
@@ -292,7 +292,7 @@ const ExperienceForm = () => {
                         checked={exp.currentlyWorking}
                         onChange={(e) =>
                           handleInputChange(
-                            exp.id,
+                            exp.exId,
                             "currentlyWorking",
                             e.target.checked
                           )
@@ -301,14 +301,14 @@ const ExperienceForm = () => {
                       <span>Currently Working</span>
                     </label>
                     <FormInput
-                      id={`title-${exp.id}`}
+                      id={`title-${exp.exId}`}
                       label="Work Summary"
                       name="workSummary"
                       placeholder="Describe your role"
                       register={register("workSummary")}
                       errorMessage={errors.workSummary?.message}
                       onChange={(e) =>
-                        handleInputChange(exp.id, "workSummary", e.target.value)
+                        handleInputChange(exp.exId, "workSummary", e.target.value)
                       }
                     />
 
@@ -330,7 +330,7 @@ const ExperienceForm = () => {
                       </button>
                       <button
                         type="button"
-                        onClick={() => handleRemoveExperience(exp.id)}
+                        onClick={() => handleRemoveExperience(exp.exId)}
                       >
                         Delete
                       </button>
@@ -356,7 +356,7 @@ const ExperienceForm = () => {
               <RichTextEditor
                 index={index}
                 onRichTextEditorChange={(content) =>
-                  handleInputChange(exp.id, "workSummary", content)
+                  handleInputChange(exp.exId, "workSummary", content)
                 }
                 defaultValue={exp.workSummary}
               />
@@ -365,7 +365,7 @@ const ExperienceForm = () => {
                 <Button
                   variant={"destructive"}
                   size="sm"
-                  onClick={() => handleRemoveExperience(exp.id)}
+                  onClick={() => handleRemoveExperience(exp.exId)}
                 >
                   Remove
                 </Button>

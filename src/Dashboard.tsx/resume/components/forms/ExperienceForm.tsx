@@ -9,6 +9,7 @@ import { Bounce, toast } from "react-toastify";
 import { AxiosError } from "axios";
 import GlobalApi from "@/service/GlobalApi";
 import Button from "@/ui/Button";
+import { v4 as uuidv4 } from "uuid";
 
 const ExperienceForm = () => {
   const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext)!;
@@ -18,15 +19,14 @@ const ExperienceForm = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const params = useParams<{ id: string }>();
-
   /*~~~~~~~~$ Handlers $~~~~~~~~*/
   const handleInputChange = (
-    id: string,
+    exId: string,
     field: keyof IExperience,
     value: string | boolean
   ) => {
     setExperience((prev) =>
-      prev.map((exp) => (exp.id === id ? { ...exp, [field]: value } : exp))
+      prev.map((exp) => (exp.exId === exId ? { ...exp, [field]: value } : exp))
     );
     setResumeInfo((prev) => ({
       ...prev,
@@ -46,11 +46,11 @@ const ExperienceForm = () => {
       return;
     }
 
-    const experienceListString = JSON.stringify(experience);
+    // const experienceListString = JSON.stringify(experience);
 
     try {
       const { status } = await GlobalApi.UpdateResumeDetails(params.id, {
-        experience: experienceListString,
+        experience,
       });
 
       if (status === 200) {
@@ -85,7 +85,7 @@ const ExperienceForm = () => {
 
   const handleAddExperience = () => {
     const newExperience: IExperience = {
-      id: Date.now().toString(),
+      exId: uuidv4(),
       title: "",
       companyName: "",
       city: "",
@@ -102,11 +102,11 @@ const ExperienceForm = () => {
     }));
   };
 
-  const handleRemoveExperience = (id: string) => {
-    setExperience((prev) => prev.filter((exp) => exp.id !== id));
+  const handleRemoveExperience = (exId: string) => {
+    setExperience((prev) => prev.filter((exp) => exp.exId !== exId));
     setResumeInfo((prev) => ({
       ...prev,
-      experience: experience.filter((exp) => exp.id !== id),
+      experience: experience.filter((exp) => exp.exId !== exId),
     }));
   };
 
@@ -150,7 +150,7 @@ const ExperienceForm = () => {
         <AnimatePresence>
           {experience.map((exp, index) => (
             <motion.div
-              key={exp.id}
+              key={exp.exId}
               variants={animationVariants}
               initial="initial"
               animate="animate"
@@ -183,7 +183,7 @@ const ExperienceForm = () => {
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => handleRemoveExperience(exp.id)}
+                    onClick={() => handleRemoveExperience(exp.exId)}
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>
@@ -196,7 +196,7 @@ const ExperienceForm = () => {
                   placeholder="Position Title"
                   value={exp.title}
                   onChange={(e) =>
-                    handleInputChange(exp.id, "title", e.target.value)
+                    handleInputChange(exp.exId, "title", e.target.value)
                   }
                   className="w-full p-2 border rounded"
                 />
@@ -205,7 +205,7 @@ const ExperienceForm = () => {
                   placeholder="Company Name"
                   value={exp.companyName}
                   onChange={(e) =>
-                    handleInputChange(exp.id, "companyName", e.target.value)
+                    handleInputChange(exp.exId, "companyName", e.target.value)
                   }
                   className="w-full p-2 border rounded"
                 />
@@ -214,7 +214,7 @@ const ExperienceForm = () => {
                   placeholder="City"
                   value={exp.city}
                   onChange={(e) =>
-                    handleInputChange(exp.id, "city", e.target.value)
+                    handleInputChange(exp.exId, "city", e.target.value)
                   }
                   className="w-full p-2 border rounded"
                 />
@@ -224,7 +224,7 @@ const ExperienceForm = () => {
                     placeholder="Start Date"
                     value={exp.startDate}
                     onChange={(e) =>
-                      handleInputChange(exp.id, "startDate", e.target.value)
+                      handleInputChange(exp.exId, "startDate", e.target.value)
                     }
                     className="w-full p-2 border rounded"
                   />
@@ -234,7 +234,7 @@ const ExperienceForm = () => {
                       placeholder="End Date"
                       value={exp.endDate || ""}
                       onChange={(e) =>
-                        handleInputChange(exp.id, "endDate", e.target.value)
+                        handleInputChange(exp.exId, "endDate", e.target.value)
                       }
                       className="w-full p-2 border rounded"
                     />
@@ -247,7 +247,7 @@ const ExperienceForm = () => {
                     checked={exp.currentlyWorking}
                     onChange={(e) =>
                       handleInputChange(
-                        exp.id,
+                        exp.exId,
                         "currentlyWorking",
                         e.target.checked
                       )
@@ -260,7 +260,7 @@ const ExperienceForm = () => {
               <RichTextEditor
                 index={index}
                 onRichTextEditorChange={(content) =>
-                  handleInputChange(exp.id, "workSummary", content)
+                  handleInputChange(exp.exId, "workSummary", content)
                 }
                 defaultValue={exp.workSummary}
               />
@@ -270,7 +270,7 @@ const ExperienceForm = () => {
                   type="button"
                   variant={"danger"}
                   size="sm"
-                  onClick={() => handleRemoveExperience(exp.id)}
+                  onClick={() => handleRemoveExperience(exp.exId)}
                 >
                   Remove
                 </Button>

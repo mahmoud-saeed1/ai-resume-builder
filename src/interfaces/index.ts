@@ -38,7 +38,7 @@ export interface IPersonalData {
 }
 
 export interface IExperience {
-  id: string;
+  exId: string;
   title: string;
   companyName: string;
   city: string;
@@ -53,9 +53,11 @@ export interface IEducation {
   id: number;
   universityName: string;
   startDate: string;
-  endDate: string;
+  endDate?: string;
+  currentlyStudy?: boolean;
   degree: string;
   major: string;
+  minor?: string;
   description: string;
 }
 
@@ -107,24 +109,6 @@ export interface IResumeInfo {
   themeColor?: string;
   summary?: string;
   experience?: IExperience[];
-  education?: IEducation[];
-  skills?: ISkill[];
-  certifications?: ICertification[];
-  projects?: IProject[];
-  languages?: ILanguage[];
-  hobbies?: IHobby[];
-  references?: IReference[];
-}
-export interface IResumeInfoApi {
-  firstName?: string;
-  lastName?: string;
-  jobTitle?: string;
-  phone?: string;
-  email?: string;
-  address?: string;
-  themeColor?: string;
-  summary?: string;
-  experience?: string;
   education?: IEducation[];
   skills?: ISkill[];
   certifications?: ICertification[];
