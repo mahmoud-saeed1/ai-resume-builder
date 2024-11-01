@@ -62,7 +62,7 @@ export interface IEducation {
 }
 
 export interface ISkill {
-  id: number;
+  id: string;
   name: string;
   rating: number;
 }
