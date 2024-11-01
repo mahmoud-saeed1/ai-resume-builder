@@ -68,31 +68,31 @@ export interface ISkill {
 }
 
 export interface ICertification {
-  id: number;
+  id: string;
   title: string;
   issuer: string;
   date: string;
 }
 
 export interface IProject {
-  id: number;
+  id: string;
   title: string;
   description: string;
 }
 
 export interface ILanguage {
-  id: number;
+  id: string;
   name: string;
   proficiency: string;
 }
 
 export interface IHobby {
-  id: number;
+  id: string;
   name: string;
 }
 
 export interface IReference {
-  id: number;
+  id: string;
   name: string;
   position: string;
   company: string;

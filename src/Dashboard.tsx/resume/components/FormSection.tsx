@@ -6,10 +6,11 @@ import SummaryForm from "./forms/SummaryForm";
 import ExperienceForm from "./forms/ExperienceForm";
 import EducationForm from "./forms/EducationForm";
 import SkillsForm from "./forms/SkillsForm";
+import CertificationForm from "./forms/CertificationForm";
 
 const FormSection = () => {
   /*~~~~~~~~$ States $~~~~~~~~*/
-  const [activeFromIdx, setActiveFromIdx] = useState(5);
+  const [activeFromIdx, setActiveFromIdx] = useState(6);
   const [enableNextBtn, setEnableNextBtn] = useState(false);
 
   /*~~~~~~~~$ Handlers $~~~~~~~~*/
@@ -92,7 +93,7 @@ const FormSection = () => {
       {activeFromIdx === 5 && <SkillsForm />}
 
       {/*~~~~~~~~$ Language Form $~~~~~~~~*/}
-      {activeFromIdx === 6 && <div>Language</div>}
+      {activeFromIdx === 6 && <CertificationForm />}
     </div>
   );
 };
