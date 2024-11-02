@@ -1,8 +1,8 @@
 import { useContext, useEffect, useState } from "react";
 import { ResumeInfoContext } from "@/context/ResumeInfoContext";
-import { ILanguages, IErrorResponse } from "@/interfaces";
+import { ILanguages, IErrorResponse, IFormProbs } from "@/interfaces";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, ChevronUp, Trash2 } from "lucide-react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import { useParams } from "react-router-dom";
 import { Bounce, toast } from "react-toastify";
 import { AxiosError } from "axios";
@@ -13,9 +13,13 @@ import { v4 as uuidv4 } from "uuid";
 
 const proficiencyLevels = ["Beginner", "Intermediate", "Advanced", "Fluent"];
 
-const LanguagesForm = () => {
+const LanguagesForm = ({
+  enableNextBtn,
+  handleEnableNextBtn,
+  handleDisableNextBtn,
+}: IFormProbs) => {
   const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext)!;
-  const [languages, setLanguages] = useState<ILanguages[]>(resumeInfo.languages || []);
+  const [languagesList, setLanguagesList] = useState<ILanguages[]>(resumeInfo.languages || []);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const params = useParams<{ id: string }>();
@@ -26,13 +30,15 @@ const LanguagesForm = () => {
     field: keyof ILanguages,
     value: string
   ) => {
-    setLanguages((prev) =>
+    setLanguagesList((prev) =>
       prev.map((lang) => (lang.laId === langId ? { ...lang, [field]: value } : lang))
     );
     setResumeInfo((prev) => ({
       ...prev,
-      languages,
+      languages: languagesList,
     }));
+
+    handleDisableNextBtn();
   };
 
   const handleOnSubmit = async () => {
@@ -48,7 +54,7 @@ const LanguagesForm = () => {
     }
 
     try {
-      const { status } = await GlobalApi.UpdateResumeDetails(params.id, { languages });
+      const { status } = await GlobalApi.UpdateResumeDetails(params.id, { languages: languagesList });
 
       if (status === 200) {
         toast.success("Languages saved successfully.", {
@@ -57,6 +63,8 @@ const LanguagesForm = () => {
           transition: Bounce,
         });
       }
+
+      handleEnableNextBtn();
     } catch (error) {
       const err = error as AxiosError<IErrorResponse>;
       if (err.response?.data.error.details) {
@@ -85,27 +93,27 @@ const LanguagesForm = () => {
       name: "",
       proficiency: "",
     };
-    setLanguages((prev) => [...prev, newLanguage]);
+    setLanguagesList((prev) => [...prev, newLanguage]);
     setResumeInfo((prev) => ({
       ...prev,
-      languages: [...languages, newLanguage],
+      languages: [...languagesList, newLanguage],
     }));
   };
 
   const handleRemoveLanguage = (langId: string) => {
-    setLanguages((prev) => prev.filter((lang) => lang.laId !== langId));
+    setLanguagesList((prev) => prev.filter((lang) => lang.laId !== langId));
     setResumeInfo((prev) => ({
       ...prev,
-      languages: languages.filter((lang) => lang.laId !== langId),
+      languages: languagesList.filter((lang) => lang.laId !== langId),
     }));
   };
 
   const handleMoveLanguage = (index: number, direction: "up" | "down") => {
     const newIndex = direction === "up" ? index - 1 : index + 1;
-    const updatedLanguages = [...languages];
+    const updatedLanguages = [...languagesList];
     const movedLanguage = updatedLanguages.splice(index, 1);
     updatedLanguages.splice(newIndex, 0, movedLanguage[0]);
-    setLanguages(updatedLanguages);
+    setLanguagesList(updatedLanguages);
     setResumeInfo((prev) => ({
       ...prev,
       languages: updatedLanguages,
@@ -119,14 +127,14 @@ const LanguagesForm = () => {
   };
 
   useEffect(() => {
-    console.log("Languages Component: ", languages);
-  }, [languages]);
+    console.log("Languages Component: ", languagesList);
+  }, [languagesList]);
 
   return (
     <div className="grid gap-4 p-4">
       <h2 className="text-lg font-semibold">Languages</h2>
 
-      {languages.length === 0 ? (
+      {languagesList.length === 0 ? (
         <motion.div
           variants={animationVariants}
           initial="initial"
@@ -138,7 +146,7 @@ const LanguagesForm = () => {
         </motion.div>
       ) : (
         <AnimatePresence>
-          {languages.map((lang, index) => (
+          {languagesList.map((lang, index) => (
             <motion.div
               key={lang.laId}
               variants={animationVariants}
@@ -162,16 +170,9 @@ const LanguagesForm = () => {
                     variant="outline"
                     size="sm"
                     onClick={() => handleMoveLanguage(index, "down")}
-                    disabled={index === languages.length - 1}
+                    disabled={index === languagesList.length - 1}
                   >
                     <ChevronDown className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleRemoveLanguage(lang.laId)}
-                  >
-                    <Trash2 className="h-4 w-4" />
                   </Button>
                 </div>
               </div>
@@ -229,8 +230,9 @@ const LanguagesForm = () => {
         variant="success"
         isLoading={isLoading}
         onClick={handleOnSubmit}
+        disabled={enableNextBtn}
       >
-        Save
+        Save Languages
       </Button>
     </div>
   );

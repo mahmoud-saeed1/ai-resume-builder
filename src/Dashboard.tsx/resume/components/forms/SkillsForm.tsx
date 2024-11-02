@@ -3,7 +3,7 @@ import { ResumeInfoContext } from "@/context/ResumeInfoContext";
 import { IErrorResponse, IFormProbs, ISkills } from "@/interfaces";
 import { v4 as uuidv4 } from "uuid";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, ChevronUp, Trash2 } from "lucide-react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import Button from "@/ui/Button";
 import StarRatings from "react-star-ratings"; // Importing the react-star-ratings library
 import { useParams } from "react-router-dom";
@@ -160,13 +160,6 @@ const SkillsForm = ({
                   >
                     <ChevronDown className="h-4 w-4" />
                   </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleRemoveSkill(skill.skId)}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
                 </div>
               </div>
 
@@ -197,6 +190,17 @@ const SkillsForm = ({
                   starSpacing="5px"
                 />
               </form>
+
+              <div className="flex justify-end">
+                <Button
+                  type="button"
+                  variant="danger"
+                  size="sm"
+                  onClick={() => handleRemoveSkill(skill.skId)}
+                >
+                  Remove
+                </Button>
+              </div>
             </motion.div>
           ))}
         </AnimatePresence>

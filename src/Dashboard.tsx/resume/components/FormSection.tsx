@@ -87,7 +87,7 @@ const FormSection = () => {
       )}
 
       {/*~~~~~~~~$ Education Form $~~~~~~~~*/}
-      {activeFromIdx === 4 && (
+      {activeFromIdx === 3 && (
         <EducationForm
           enableNextBtn={enableNextBtn}
           handleEnableNextBtn={handleEnableNextBtn}
@@ -96,7 +96,7 @@ const FormSection = () => {
       )}
 
       {/*~~~~~~~~$ Professional Experience Form $~~~~~~~~*/}
-      {activeFromIdx === 3 && (
+      {activeFromIdx === 4 && (
         <ExperienceForm
           enableNextBtn={enableNextBtn}
           handleEnableNextBtn={handleEnableNextBtn}
@@ -105,13 +105,13 @@ const FormSection = () => {
       )}
 
       {/*~~~~~~~~$ Project Form $~~~~~~~~*/}
-      {activeFromIdx === 7 && <ProjectForm />}
+      {activeFromIdx === 5 && <ProjectForm />}
 
       {/*~~~~~~~~$ Certification Form $~~~~~~~~*/}
-      {activeFromIdx === 8 && <CertificationForm />}
+      {activeFromIdx === 6 && <CertificationForm />}
 
       {/*~~~~~~~~$ Skills Form $~~~~~~~~*/}
-      {activeFromIdx === 5 && (
+      {activeFromIdx === 7 && (
         <SkillsForm
           enableNextBtn={enableNextBtn}
           handleEnableNextBtn={handleEnableNextBtn}
@@ -120,7 +120,13 @@ const FormSection = () => {
       )}
 
       {/*~~~~~~~~$ Language Form $~~~~~~~~*/}
-      {activeFromIdx === 6 && <LanguagesForm />}
+      {activeFromIdx === 8 && (
+        <LanguagesForm
+          enableNextBtn={enableNextBtn}
+          handleEnableNextBtn={handleEnableNextBtn}
+          handleDisableNextBtn={handleDisableNextBtn}
+        />
+      )}
 
       {/*~~~~~~~~$ References Form $~~~~~~~~*/}
       {activeFromIdx === 9 && <ReferenceForm />}
