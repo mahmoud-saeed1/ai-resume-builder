@@ -308,7 +308,7 @@ const EducationForm = ({
         onClick={handleOnSubmit}
         disabled={enableNextBtn}
       >
-        Save
+        Save Education
       </Button>
     </div>
   );

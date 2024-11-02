@@ -111,7 +111,13 @@ const FormSection = () => {
       {activeFromIdx === 8 && <CertificationForm />}
 
       {/*~~~~~~~~$ Skills Form $~~~~~~~~*/}
-      {activeFromIdx === 5 && <SkillsForm />}
+      {activeFromIdx === 5 && (
+        <SkillsForm
+          enableNextBtn={enableNextBtn}
+          handleEnableNextBtn={handleEnableNextBtn}
+          handleDisableNextBtn={handleDisableNextBtn}
+        />
+      )}
 
       {/*~~~~~~~~$ Language Form $~~~~~~~~*/}
       {activeFromIdx === 6 && <LanguagesForm />}

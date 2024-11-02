@@ -61,7 +61,7 @@ export interface IEducation {
   description: string;
 }
 
-export interface ISkill {
+export interface ISkills {
   skId: string;
   name: string;
   rating: number;
@@ -110,7 +110,7 @@ export interface IResumeInfo {
   summary?: string;
   experience?: IExperience[];
   education?: IEducation[];
-  skills?: ISkill[];
+  skills?: ISkills[];
   certifications?: ICertification[];
   projects?: IProjects[];
   languages?: ILanguages[];

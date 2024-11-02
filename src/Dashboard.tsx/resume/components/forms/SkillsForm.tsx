@@ -1,43 +1,99 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ResumeInfoContext } from "@/context/ResumeInfoContext";
-import { ISkill } from "@/interfaces";
+import { IErrorResponse, IFormProbs, ISkills } from "@/interfaces";
 import { v4 as uuidv4 } from "uuid";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, ChevronUp, Trash2 } from "lucide-react";
 import Button from "@/ui/Button";
-import StarRatings from 'react-star-ratings'; // Importing the react-star-ratings library
+import StarRatings from "react-star-ratings"; // Importing the react-star-ratings library
+import { useParams } from "react-router-dom";
+import { VForm } from "@/animation";
+import { Bounce, toast } from "react-toastify";
+import GlobalApi from "@/service/GlobalApi";
+import { AxiosError } from "axios";
 
-const SkillsForm = () => {
+const SkillsForm = ({
+  enableNextBtn,
+  handleEnableNextBtn,
+  handleDisableNextBtn,
+}: IFormProbs) => {
   const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext)!;
-  const [skills, setSkills] = useState<ISkill[]>(resumeInfo.skills || []);
+  const [skillsList, setSkillsList] = useState<ISkills[]>(
+    resumeInfo.skills || []
+  );
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const params = useParams<{ id: string }>();
 
-  const handleInputChange = (skillId: string, field: keyof ISkill, value: string | number) => {
-    const updatedSkills = skills.map((skill) =>
-      skill.id === skillId ? { ...skill, [field]: value } : skill
+  const handleInputChange = (
+    skillId: string,
+    field: keyof ISkills,
+    value: string | number
+  ) => {
+    const updatedSkills = skillsList.map((skill) =>
+      skill.skId === skillId ? { ...skill, [field]: value } : skill
     );
-    setSkills(updatedSkills);
+    setSkillsList(updatedSkills);
     setResumeInfo((prev) => ({
       ...prev,
       skills: updatedSkills,
     }));
+
+    handleDisableNextBtn();
+  };
+
+  const handleOnSubmit = async () => {
+    setIsLoading(true);
+    if (!params?.id) {
+      toast.error("ID parameter is missing.", {
+        autoClose: 2000,
+        theme: "light",
+        transition: Bounce,
+      });
+      setIsLoading(false);
+      return;
+    }
+    try {
+      const { status } = await GlobalApi.UpdateResumeDetails(params.id, {
+        skills: skillsList,
+      });
+
+      if (status === 200) {
+        toast.success("Education saved successfully.", {
+          autoClose: 1000,
+          theme: "light",
+          transition: Bounce,
+        });
+      }
+
+      handleEnableNextBtn();
+    } catch (error) {
+      const err = error as AxiosError<IErrorResponse>;
+      toast.error(err.response?.data.error.message, {
+        autoClose: 2000,
+        theme: "light",
+        transition: Bounce,
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleAddSkill = () => {
-    const newSkill: ISkill = {
-      id: uuidv4(),
+    const newSkill: ISkills = {
+      skId: uuidv4(),
       name: "",
-      rating: 0, // Initial rating
+      rating: 0,
     };
-    setSkills([...skills, newSkill]);
+    setSkillsList([...skillsList, newSkill]);
     setResumeInfo((prev) => ({
       ...prev,
-      skills: [...skills, newSkill],
+      skills: [...skillsList, newSkill],
     }));
   };
 
   const handleRemoveSkill = (skillId: string) => {
-    const updatedSkills = skills.filter((skill) => skill.id !== skillId);
-    setSkills(updatedSkills);
+    const updatedSkills = skillsList.filter((skill) => skill.skId !== skillId);
+    setSkillsList(updatedSkills);
     setResumeInfo((prev) => ({
       ...prev,
       skills: updatedSkills,
@@ -46,34 +102,27 @@ const SkillsForm = () => {
 
   const handleMoveSkill = (index: number, direction: "up" | "down") => {
     const newIndex = direction === "up" ? index - 1 : index + 1;
-    const updatedSkills = [...skills];
+    const updatedSkills = [...skillsList];
     const movedSkill = updatedSkills.splice(index, 1);
     updatedSkills.splice(newIndex, 0, movedSkill[0]);
-    setSkills(updatedSkills);
+    setSkillsList(updatedSkills);
     setResumeInfo((prev) => ({
       ...prev,
       skills: updatedSkills,
     }));
   };
 
-  const animationVariants = {
-    initial: { opacity: 0, y: -10 },
-    animate: { opacity: 1, y: 0 },
-    exit: { opacity: 0, y: 10 },
-  };
-
   useEffect(() => {
-   console.log(skills)
-  }, [skills])
-  
+    console.log(skillsList);
+  }, [skillsList]);
 
   return (
     <div className="grid gap-4 p-4">
       <h2 className="text-lg font-semibold">Skills</h2>
 
-      {skills.length === 0 ? (
+      {skillsList.length === 0 ? (
         <motion.div
-          variants={animationVariants}
+          variants={VForm}
           initial="initial"
           animate="animate"
           exit="exit"
@@ -83,10 +132,10 @@ const SkillsForm = () => {
         </motion.div>
       ) : (
         <AnimatePresence>
-          {skills.map((skill, index) => (
+          {skillsList.map((skill, index) => (
             <motion.div
-              key={skill.id}
-              variants={animationVariants}
+              key={skill.skId}
+              variants={VForm}
               initial="initial"
               animate="animate"
               exit="exit"
@@ -107,14 +156,14 @@ const SkillsForm = () => {
                     variant="outline"
                     size="sm"
                     onClick={() => handleMoveSkill(index, "down")}
-                    disabled={index === skills.length - 1}
+                    disabled={index === skillsList.length - 1}
                   >
                     <ChevronDown className="h-4 w-4" />
                   </Button>
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => handleRemoveSkill(skill.id)}
+                    onClick={() => handleRemoveSkill(skill.skId)}
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>
@@ -126,7 +175,9 @@ const SkillsForm = () => {
                   type="text"
                   placeholder="Skill Name"
                   value={skill.name}
-                  onChange={(e) => handleInputChange(skill.id, "name", e.target.value)}
+                  onChange={(e) =>
+                    handleInputChange(skill.skId, "name", e.target.value)
+                  }
                   className="w-full p-2 border rounded"
                 />
 
@@ -137,9 +188,11 @@ const SkillsForm = () => {
                   rating={skill.rating}
                   starRatedColor="gold"
                   starHoverColor="gold"
-                  changeRating={(newRating) => handleInputChange(skill.id, "rating", newRating)}
+                  changeRating={(newRating) =>
+                    handleInputChange(skill.skId, "rating", newRating)
+                  }
                   numberOfStars={5}
-                  name='rating'
+                  name="rating"
                   starDimension="20px"
                   starSpacing="5px"
                 />
@@ -156,6 +209,15 @@ const SkillsForm = () => {
         className="mb-4"
       >
         Add Skill
+      </Button>
+      <Button
+        type="submit"
+        variant="success"
+        isLoading={isLoading}
+        onClick={handleOnSubmit}
+        disabled={enableNextBtn}
+      >
+        Save Skills
       </Button>
     </div>
   );
