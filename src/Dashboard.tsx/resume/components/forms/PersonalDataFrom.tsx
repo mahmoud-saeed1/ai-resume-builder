@@ -99,7 +99,6 @@ const PersonalDataForm = ({
         (field) => (
           <FormInput
             id={field}
-            name={field}
             label={field}
             key={field}
             placeholder={field.replace(/^\w/, (c) => c.toUpperCase())}

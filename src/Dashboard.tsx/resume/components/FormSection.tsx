@@ -9,10 +9,11 @@ import SkillsForm from "./forms/SkillsForm";
 import CertificationForm from "./forms/CertificationForm";
 import ProjectForm from "./forms/ProjectForm";
 import LanguagesForm from "./forms/LanguagesForm";
+import ReferenceForm from "./forms/ReferenceForm";
 
 const FormSection = () => {
   /*~~~~~~~~$ States $~~~~~~~~*/
-  const [activeFromIdx, setActiveFromIdx] = useState(6);
+  const [activeFromIdx, setActiveFromIdx] = useState(3);
   const [enableNextBtn, setEnableNextBtn] = useState(false);
 
   /*~~~~~~~~$ Handlers $~~~~~~~~*/
@@ -85,11 +86,23 @@ const FormSection = () => {
         />
       )}
 
-      {/*~~~~~~~~$ Professional Experience Form $~~~~~~~~*/}
-      {activeFromIdx === 3 && <ExperienceForm />}
-
       {/*~~~~~~~~$ Education Form $~~~~~~~~*/}
       {activeFromIdx === 4 && <EducationForm />}
+
+      {/*~~~~~~~~$ Professional Experience Form $~~~~~~~~*/}
+      {activeFromIdx === 3 && (
+        <ExperienceForm
+          enableNextBtn={enableNextBtn}
+          handleEnableNextBtn={handleEnableNextBtn}
+          handleDisableNextBtn={handleDisableNextBtn}
+        />
+      )}
+
+      {/*~~~~~~~~$ Project Form $~~~~~~~~*/}
+      {activeFromIdx === 7 && <ProjectForm />}
+
+      {/*~~~~~~~~$ Certification Form $~~~~~~~~*/}
+      {activeFromIdx === 8 && <CertificationForm />}
 
       {/*~~~~~~~~$ Skills Form $~~~~~~~~*/}
       {activeFromIdx === 5 && <SkillsForm />}
@@ -97,8 +110,8 @@ const FormSection = () => {
       {/*~~~~~~~~$ Language Form $~~~~~~~~*/}
       {activeFromIdx === 6 && <LanguagesForm />}
 
-      {/*~~~~~~~~$ Project Form $~~~~~~~~*/}
-      {activeFromIdx === 7 && <ProjectForm />}
+      {/*~~~~~~~~$ References Form $~~~~~~~~*/}
+      {activeFromIdx === 9 && <ReferenceForm />}
     </div>
   );
 };

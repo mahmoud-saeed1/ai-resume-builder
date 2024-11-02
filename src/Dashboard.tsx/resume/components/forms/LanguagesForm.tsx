@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { ResumeInfoContext } from "@/context/ResumeInfoContext";
-import { ILanguage, IErrorResponse } from "@/interfaces";
+import { ILanguages, IErrorResponse } from "@/interfaces";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, ChevronUp, Trash2 } from "lucide-react";
 import { useParams } from "react-router-dom";
@@ -15,7 +15,7 @@ const proficiencyLevels = ["Beginner", "Intermediate", "Advanced", "Fluent"];
 
 const LanguagesForm = () => {
   const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext)!;
-  const [languages, setLanguages] = useState<ILanguage[]>(resumeInfo.languages || []);
+  const [languages, setLanguages] = useState<ILanguages[]>(resumeInfo.languages || []);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const params = useParams<{ id: string }>();
@@ -23,11 +23,11 @@ const LanguagesForm = () => {
   /*~~~~~~~~$ Handlers $~~~~~~~~*/
   const handleInputChange = (
     langId: string,
-    field: keyof ILanguage,
+    field: keyof ILanguages,
     value: string
   ) => {
     setLanguages((prev) =>
-      prev.map((lang) => (lang.id === langId ? { ...lang, [field]: value } : lang))
+      prev.map((lang) => (lang.laId === langId ? { ...lang, [field]: value } : lang))
     );
     setResumeInfo((prev) => ({
       ...prev,
@@ -80,8 +80,8 @@ const LanguagesForm = () => {
   };
 
   const handleAddLanguage = () => {
-    const newLanguage: ILanguage = {
-      id: uuidv4(),
+    const newLanguage: ILanguages = {
+      laId: uuidv4(),
       name: "",
       proficiency: "",
     };
@@ -93,10 +93,10 @@ const LanguagesForm = () => {
   };
 
   const handleRemoveLanguage = (langId: string) => {
-    setLanguages((prev) => prev.filter((lang) => lang.id !== langId));
+    setLanguages((prev) => prev.filter((lang) => lang.laId !== langId));
     setResumeInfo((prev) => ({
       ...prev,
-      languages: languages.filter((lang) => lang.id !== langId),
+      languages: languages.filter((lang) => lang.laId !== langId),
     }));
   };
 
@@ -140,7 +140,7 @@ const LanguagesForm = () => {
         <AnimatePresence>
           {languages.map((lang, index) => (
             <motion.div
-              key={lang.id}
+              key={lang.laId}
               variants={animationVariants}
               initial="initial"
               animate="animate"
@@ -169,7 +169,7 @@ const LanguagesForm = () => {
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => handleRemoveLanguage(lang.id)}
+                    onClick={() => handleRemoveLanguage(lang.laId)}
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>
@@ -181,12 +181,12 @@ const LanguagesForm = () => {
                   type="text"
                   placeholder="Language Name"
                   value={lang.name}
-                  onChange={(e) => handleInputChange(lang.id, "name", e.target.value)}
+                  onChange={(e) => handleInputChange(lang.laId, "name", e.target.value)}
                   className="w-full p-2 border rounded"
                 />
                 <Select
                   value={lang.proficiency}
-                  onChange={(e) => handleInputChange(lang.id, "proficiency", e.target.value)}
+                  onChange={(e) => handleInputChange(lang.laId, "proficiency", e.target.value)}
                   className="w-full p-2"
                 >
                   <option value="" disabled>
@@ -205,7 +205,7 @@ const LanguagesForm = () => {
                   type="button"
                   variant="danger"
                   size="sm"
-                  onClick={() => handleRemoveLanguage(lang.id)}
+                  onClick={() => handleRemoveLanguage(lang.laId)}
                 >
                   Remove
                 </Button>

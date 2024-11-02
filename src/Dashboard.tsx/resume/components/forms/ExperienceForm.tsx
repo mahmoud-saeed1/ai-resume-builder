@@ -1,19 +1,26 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { ResumeInfoContext } from "@/context/ResumeInfoContext";
-import { IErrorResponse, IExperience } from "@/interfaces";
+import { IErrorResponse, IExperience, IFormProbs } from "@/interfaces";
 import RichTextEditor from "./RichTextEditor";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, ChevronUp, Trash2 } from "lucide-react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import { useParams } from "react-router-dom";
 import { Bounce, toast } from "react-toastify";
 import { AxiosError } from "axios";
 import GlobalApi from "@/service/GlobalApi";
 import Button from "@/ui/Button";
 import { v4 as uuidv4 } from "uuid";
+import { VFrom } from "@/animation";
+import Input from "@/ui/Input";
+import FormInput from "./FormInputs";
 
-const ExperienceForm = () => {
+const ExperienceForm = ({
+  enableNextBtn,
+  handleEnableNextBtn,
+  handleDisableNextBtn,
+}: IFormProbs) => {
   const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext)!;
-  const [experience, setExperience] = useState<IExperience[]>(
+  const [experienceList, setExperienceList] = useState<IExperience[]>(
     resumeInfo.experience || []
   );
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -25,13 +32,15 @@ const ExperienceForm = () => {
     field: keyof IExperience,
     value: string | boolean
   ) => {
-    setExperience((prev) =>
+    setExperienceList((prev) =>
       prev.map((exp) => (exp.exId === exId ? { ...exp, [field]: value } : exp))
     );
     setResumeInfo((prev) => ({
       ...prev,
-      experience,
+      experience: experienceList,
     }));
+
+    handleDisableNextBtn();
   };
 
   const handleOnSubmit = async () => {
@@ -46,11 +55,9 @@ const ExperienceForm = () => {
       return;
     }
 
-    // const experienceListString = JSON.stringify(experience);
-
     try {
       const { status } = await GlobalApi.UpdateResumeDetails(params.id, {
-        experience,
+        experience: experienceList,
       });
 
       if (status === 200) {
@@ -60,24 +67,16 @@ const ExperienceForm = () => {
           transition: Bounce,
         });
       }
+
+      handleEnableNextBtn();
     } catch (error) {
       const err = error as AxiosError<IErrorResponse>;
       console.log("Error", err);
-      if (err.response?.data.error.details) {
-        err.response.data.error.details.errors.forEach((e) => {
-          toast.error(e.message, {
-            autoClose: 2000,
-            theme: "light",
-            transition: Bounce,
-          });
-        });
-      } else {
-        toast.error(err.response?.data.error.message, {
-          autoClose: 2000,
-          theme: "light",
-          transition: Bounce,
-        });
-      }
+      toast.error(err.response?.data.error.message, {
+        autoClose: 2000,
+        theme: "light",
+        transition: Bounce,
+      });
     } finally {
       setIsLoading(false);
     }
@@ -95,50 +94,40 @@ const ExperienceForm = () => {
       currentlyWorking: false,
       workSummary: "",
     };
-    setExperience((prev) => [...prev, newExperience]);
+    setExperienceList((prev) => [...prev, newExperience]);
     setResumeInfo((prev) => ({
       ...prev,
-      experience: [...experience, newExperience],
+      experience: [...experienceList, newExperience],
     }));
   };
 
   const handleRemoveExperience = (exId: string) => {
-    setExperience((prev) => prev.filter((exp) => exp.exId !== exId));
+    setExperienceList((prev) => prev.filter((exp) => exp.exId !== exId));
     setResumeInfo((prev) => ({
       ...prev,
-      experience: experience.filter((exp) => exp.exId !== exId),
+      experience: experienceList.filter((exp) => exp.exId !== exId),
     }));
   };
 
   const handleMoveExperience = (index: number, direction: "up" | "down") => {
     const newIndex = direction === "up" ? index - 1 : index + 1;
-    const updatedExperience = [...experience];
+    const updatedExperience = [...experienceList];
     const movedExperience = updatedExperience.splice(index, 1);
     updatedExperience.splice(newIndex, 0, movedExperience[0]);
-    setExperience(updatedExperience);
+    setExperienceList(updatedExperience);
     setResumeInfo((prev) => ({
       ...prev,
       experience: updatedExperience,
     }));
   };
 
-  const animationVariants = {
-    initial: { opacity: 0, y: -10 },
-    animate: { opacity: 1, y: 0 },
-    exit: { opacity: 0, y: 10 },
-  };
-
-  useEffect(() => {
-    console.log("Experience Form: ", experience);
-  }, [experience]);
-
   return (
     <div className="grid gap-4 p-4">
       <h2 className="text-lg font-semibold">Experience</h2>
 
-      {experience.length === 0 ? (
+      {experienceList.length === 0 ? (
         <motion.div
-          variants={animationVariants}
+          variants={VFrom}
           initial="initial"
           animate="animate"
           exit="exit"
@@ -148,10 +137,10 @@ const ExperienceForm = () => {
         </motion.div>
       ) : (
         <AnimatePresence>
-          {experience.map((exp, index) => (
+          {experienceList.map((exp, index) => (
             <motion.div
               key={exp.exId}
-              variants={animationVariants}
+              variants={VFrom}
               initial="initial"
               animate="animate"
               exit="exit"
@@ -180,68 +169,72 @@ const ExperienceForm = () => {
                   >
                     <ChevronDown className="h-4 w-4" />
                   </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleRemoveExperience(exp.exId)}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
                 </div>
               </div>
 
               <form>
-                <input
-                  type="text"
-                  placeholder="Position Title"
-                  value={exp.title}
+                <FormInput
+                  id={uuidv4()}
+                  label="Title"
+                  placeholder="Enter Title"
+                  defaultValue={exp.title}
                   onChange={(e) =>
                     handleInputChange(exp.exId, "title", e.target.value)
                   }
-                  className="w-full p-2 border rounded"
+                  required
                 />
-                <input
-                  type="text"
-                  placeholder="Company Name"
-                  value={exp.companyName}
+
+                <FormInput
+                  id={uuidv4()}
+                  label="Company Name"
+                  placeholder="Enter Company Name"
+                  defaultValue={exp.companyName}
                   onChange={(e) =>
                     handleInputChange(exp.exId, "companyName", e.target.value)
                   }
-                  className="w-full p-2 border rounded"
+                  required
                 />
-                <input
-                  type="text"
-                  placeholder="City"
-                  value={exp.city}
+
+                <FormInput
+                  id={uuidv4()}
+                  label="City"
+                  placeholder="Enter City"
+                  defaultValue={exp.city}
                   onChange={(e) =>
                     handleInputChange(exp.exId, "city", e.target.value)
                   }
-                  className="w-full p-2 border rounded"
+                  required
                 />
+
                 <div className="flex gap-4">
-                  <input
+                  <FormInput
+                    id={uuidv4()}
                     type="date"
-                    placeholder="Start Date"
-                    value={exp.startDate}
+                    label="Start Date"
+                    placeholder="Enter Start Date"
+                    defaultValue={exp.startDate}
                     onChange={(e) =>
                       handleInputChange(exp.exId, "startDate", e.target.value)
                     }
-                    className="w-full p-2 border rounded"
+                    required
                   />
                   {!exp.currentlyWorking && (
-                    <input
+                    <FormInput
+                      id={uuidv4()}
                       type="date"
-                      placeholder="End Date"
-                      value={exp.endDate || ""}
+                      label="End Date"
+                      placeholder="Enter End Date"
+                      defaultValue={exp.endDate ?? ""}
                       onChange={(e) =>
                         handleInputChange(exp.exId, "endDate", e.target.value)
                       }
-                      className="w-full p-2 border rounded"
+                      required
                     />
                   )}
                 </div>
                 <div className="flex items-center gap-2">
-                  <input
+                  <Input
+                    id={uuidv4()}
                     type="checkbox"
                     title="Currently Working"
                     checked={exp.currentlyWorking}
@@ -252,6 +245,7 @@ const ExperienceForm = () => {
                         e.target.checked
                       )
                     }
+                    required
                   />
                   <label>Currently Working</label>
                 </div>
@@ -294,6 +288,7 @@ const ExperienceForm = () => {
         variant="success"
         isLoading={isLoading}
         onClick={handleOnSubmit}
+        disabled={enableNextBtn}
       >
         Save
       </Button>

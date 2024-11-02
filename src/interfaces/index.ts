@@ -62,26 +62,26 @@ export interface IEducation {
 }
 
 export interface ISkill {
-  id: string;
+  skId: string;
   name: string;
   rating: number;
 }
 
 export interface ICertification {
-  id: string;
+  ceId: string;
   title: string;
   issuer: string;
   date: string;
 }
 
-export interface IProject {
-  id: string;
+export interface IProjects {
+  prId: string;
   title: string;
   description: string;
 }
 
-export interface ILanguage {
-  id: string;
+export interface ILanguages {
+  laId: string;
   name: string;
   proficiency: string;
 }
@@ -91,8 +91,8 @@ export interface IHobby {
   name: string;
 }
 
-export interface IReference {
-  id: string;
+export interface IReferences {
+  reId: string;
   name: string;
   position: string;
   company: string;
@@ -112,10 +112,10 @@ export interface IResumeInfo {
   education?: IEducation[];
   skills?: ISkill[];
   certifications?: ICertification[];
-  projects?: IProject[];
-  languages?: ILanguage[];
+  projects?: IProjects[];
+  languages?: ILanguages[];
   hobbies?: IHobby[];
-  references?: IReference[];
+  references?: IReferences[];
 }
 
 export interface IErrorResponse {

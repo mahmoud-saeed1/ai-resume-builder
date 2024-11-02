@@ -1,7 +1,7 @@
 // preview/References.tsx
-import { IReference } from "@/interfaces";
+import { IReferences } from "@/interfaces";
 
-const References = ({ references }: { references: IReference[] }) => {
+const References = ({ references }: { references: IReferences[] }) => {
   return (
     <div className="resumePreview__references">
       <h2 className="resumePreview__references--heading">References</h2>

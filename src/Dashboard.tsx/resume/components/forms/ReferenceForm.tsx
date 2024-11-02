@@ -1,6 +1,6 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ResumeInfoContext } from "@/context/ResumeInfoContext";
-import { IErrorResponse, IProjects } from "@/interfaces";
+import { IReferences, IErrorResponse } from "@/interfaces";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, ChevronUp, Trash2 } from "lucide-react";
 import { useParams } from "react-router-dom";
@@ -10,25 +10,27 @@ import GlobalApi from "@/service/GlobalApi";
 import Button from "@/ui/Button";
 import { v4 as uuidv4 } from "uuid";
 
-const ProjectForm = () => {
+const ReferenceForm = () => {
   const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext)!;
-  const [projects, setProjects] = useState<IProjects[]>(resumeInfo.projects || []);
+  const [references, setReferences] = useState<IReferences[]>(
+    resumeInfo.references || []
+  );
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const params = useParams<{ id: string }>();
 
   /*~~~~~~~~$ Handlers $~~~~~~~~*/
   const handleInputChange = (
-    projectId: string,
-    field: keyof IProjects,
+    refId: string,
+    field: keyof IReferences,
     value: string
   ) => {
-    setProjects((prev) =>
-      prev.map((project) => (project.id === projectId ? { ...project, [field]: value } : project))
+    setReferences((prev) =>
+      prev.map((ref) => (ref.reId === refId ? { ...ref, [field]: value } : ref))
     );
     setResumeInfo((prev) => ({
       ...prev,
-      projects,
+      references,
     }));
   };
 
@@ -45,10 +47,12 @@ const ProjectForm = () => {
     }
 
     try {
-      const { status } = await GlobalApi.UpdateResumeDetails(params.id, { projects });
+      const { status } = await GlobalApi.UpdateResumeDetails(params.id, {
+        references,
+      });
 
       if (status === 200) {
-        toast.success("Projects saved successfully.", {
+        toast.success("References saved successfully.", {
           autoClose: 1000,
           theme: "light",
           transition: Bounce,
@@ -76,36 +80,38 @@ const ProjectForm = () => {
     }
   };
 
-  const handleAddProject = () => {
-    const newProject: IProjects = {
-      id: uuidv4(),
-      title: "",
-      description: "",
+  const handleAddReference = () => {
+    const newReference: IReferences = {
+      reId: uuidv4(),
+      name: "",
+      position: "",
+      company: "",
+      contact: "",
     };
-    setProjects((prev) => [...prev, newProject]);
+    setReferences((prev) => [...prev, newReference]);
     setResumeInfo((prev) => ({
       ...prev,
-      projects: [...projects, newProject],
+      references: [...references, newReference],
     }));
   };
 
-  const handleRemoveProject = (projectId: string) => {
-    setProjects((prev) => prev.filter((project) => project.id !== projectId));
+  const handleRemoveReference = (refId: string) => {
+    setReferences((prev) => prev.filter((ref) => ref.reId !== refId));
     setResumeInfo((prev) => ({
       ...prev,
-      projects: projects.filter((project) => project.id !== projectId),
+      references: references.filter((ref) => ref.reId !== refId),
     }));
   };
 
-  const handleMoveProject = (index: number, direction: "up" | "down") => {
+  const handleMoveReference = (index: number, direction: "up" | "down") => {
     const newIndex = direction === "up" ? index - 1 : index + 1;
-    const updatedProjects = [...projects];
-    const movedProject = updatedProjects.splice(index, 1);
-    updatedProjects.splice(newIndex, 0, movedProject[0]);
-    setProjects(updatedProjects);
+    const updatedReferences = [...references];
+    const movedReference = updatedReferences.splice(index, 1);
+    updatedReferences.splice(newIndex, 0, movedReference[0]);
+    setReferences(updatedReferences);
     setResumeInfo((prev) => ({
       ...prev,
-      projects: updatedProjects,
+      references: updatedReferences,
     }));
   };
 
@@ -116,14 +122,14 @@ const ProjectForm = () => {
   };
 
   useEffect(() => {
-    console.log("Project Component: ", projects);
-  }, [projects]);
+    console.log("References Component: ", references);
+  }, [references]);
 
   return (
     <div className="grid gap-4 p-4">
-      <h2 className="text-lg font-semibold">Projects</h2>
+      <h2 className="text-lg font-semibold">References</h2>
 
-      {projects.length === 0 ? (
+      {references.length === 0 ? (
         <motion.div
           variants={animationVariants}
           initial="initial"
@@ -131,13 +137,13 @@ const ProjectForm = () => {
           exit="exit"
           className="border p-4 rounded-lg shadow-md"
         >
-          <p className="text-center">No projects added yet</p>
+          <p className="text-center">No references added yet</p>
         </motion.div>
       ) : (
         <AnimatePresence>
-          {projects.map((project, index) => (
+          {references.map((ref, index) => (
             <motion.div
-              key={project.id}
+              key={ref.reId}
               variants={animationVariants}
               initial="initial"
               animate="animate"
@@ -145,28 +151,30 @@ const ProjectForm = () => {
               className="border p-4 rounded-lg shadow-md space-y-4"
             >
               <div className="flex justify-between items-center mb-2">
-                <h4 className="font-semibold text-sm">Project #{index + 1}</h4>
+                <h4 className="font-semibold text-sm">
+                  Reference #{index + 1}
+                </h4>
                 <div className="flex gap-2">
                   <Button
                     variant="outline"
                     size="sm"
                     disabled={index === 0}
-                    onClick={() => handleMoveProject(index, "up")}
+                    onClick={() => handleMoveReference(index, "up")}
                   >
                     <ChevronUp className="h-4 w-4" />
                   </Button>
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => handleMoveProject(index, "down")}
-                    disabled={index === projects.length - 1}
+                    onClick={() => handleMoveReference(index, "down")}
+                    disabled={index === references.length - 1}
                   >
                     <ChevronDown className="h-4 w-4" />
                   </Button>
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => handleRemoveProject(project.id)}
+                    onClick={() => handleRemoveReference(ref.reId)}
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>
@@ -176,18 +184,38 @@ const ProjectForm = () => {
               <form>
                 <input
                   type="text"
-                  placeholder="Project Title"
-                  value={project.title}
+                  placeholder="Name"
+                  value={ref.name}
                   onChange={(e) =>
-                    handleInputChange(project.id, "title", e.target.value)
+                    handleInputChange(ref.reId, "name", e.target.value)
                   }
-                  className="w-full p-2 border rounded"
+                  className="w-full p-2 border rounded mb-2"
                 />
-                <textarea
-                  placeholder="Description"
-                  value={project.description}
+                <input
+                  type="text"
+                  placeholder="Position"
+                  value={ref.position}
                   onChange={(e) =>
-                    handleInputChange(project.id, "description", e.target.value)
+                    handleInputChange(ref.reId, "position", e.target.value)
+                  }
+                  className="w-full p-2 border rounded mb-2"
+                />
+                <input
+                  type="text"
+                  placeholder="Company"
+                  value={ref.company}
+                  onChange={(e) =>
+                    handleInputChange(ref.reId, "company", e.target.value)
+                  }
+                  className="w-full p-2 border rounded mb-2"
+                />
+
+                <input
+                  type="text"
+                  placeholder="Contact"
+                  value={ref.contact}
+                  onChange={(e) =>
+                    handleInputChange(ref.reId, "contact", e.target.value)
                   }
                   className="w-full p-2 border rounded"
                 />
@@ -196,9 +224,9 @@ const ProjectForm = () => {
               <div className="flex justify-end">
                 <Button
                   type="button"
-                  variant={"danger"}
+                  variant="danger"
                   size="sm"
-                  onClick={() => handleRemoveProject(project.id)}
+                  onClick={() => handleRemoveReference(ref.reId)}
                 >
                   Remove
                 </Button>
@@ -210,11 +238,11 @@ const ProjectForm = () => {
 
       <Button
         type="button"
-        onClick={handleAddProject}
+        onClick={handleAddReference}
         variant="outline"
         className="mb-4"
       >
-        Add Project
+        Add Reference
       </Button>
 
       <Button
@@ -229,4 +257,4 @@ const ProjectForm = () => {
   );
 };
 
-export default ProjectForm;
+export default ReferenceForm;

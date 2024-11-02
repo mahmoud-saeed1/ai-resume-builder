@@ -1,7 +1,7 @@
 // preview/Projects.tsx
-import { IProject } from "@/interfaces";
+import { IProjects } from "@/interfaces";
 
-const Projects = ({ projects }: { projects: IProject[] }) => {
+const Projects = ({ projects }: { projects: IProjects[] }) => {
   return (
     <div className="resumePreview__projects">
       <h2 className="resumePreview__projects--heading">Projects</h2>

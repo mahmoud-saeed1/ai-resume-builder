@@ -9,7 +9,7 @@ export default {
   summary: "Lorem ipsum dolor sit amet...", // Changed from 'summery' to 'summary'
   experience: [
     {
-      id: 1,
+      exId: "1",
       title: "Full Stack Developer",
       companyName: "Amazon",
       city: "New York",

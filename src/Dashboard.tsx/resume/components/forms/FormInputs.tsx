@@ -7,9 +7,9 @@ import InputErrorMessage from "@/ui/InputErrorMessage";
 interface FormInputProps {
   id: string;
   label: string;
-  name: string;
   placeholder: string;
-  register: UseFormRegisterReturn;
+  register?: UseFormRegisterReturn;
+  required?: boolean;
   errorMessage?: string;
   type?: string;
   defaultValue?: string;
@@ -18,8 +18,10 @@ interface FormInputProps {
 
 function FormInput({
   id,
+  label,
   placeholder,
   register,
+  required = false,
   onChange,
   defaultValue,
   errorMessage,
@@ -27,7 +29,7 @@ function FormInput({
 }: FormInputProps) {
   return (
     <div>
-      <Label htmlFor={id}>{placeholder}</Label>
+      <Label htmlFor={id}>{label}</Label>
       <Input
         id={id}
         type={type}
@@ -35,6 +37,7 @@ function FormInput({
         {...register}
         onChange={onChange}
         defaultValue={defaultValue}
+        required={required}
       />
       {errorMessage && <InputErrorMessage msg={errorMessage} />}
     </div>
