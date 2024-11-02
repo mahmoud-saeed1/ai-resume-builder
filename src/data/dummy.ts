@@ -22,28 +22,30 @@ export default {
   ],
   education: [
     {
-      id: 1,
+      edId: "1",
       universityName: "Western Illinois University",
       startDate: "Aug 2018",
       endDate: "Dec 2019",
+      currentlyStudy: false,
       degree: "Master",
       major: "Computer Science",
+      minor: "Business Administration",
       description: "Lorem ipsum dolor sit amet...",
     },
   ],
   skills: [
-    { id: 1, name: "Angular", rating: 80 },
-    { id: 2, name: "React", rating: 100 },
+    { skId: "1", name: "Angular", rating: 80 },
+    { skId: "2", name: "React", rating: 100 },
   ],
   certifications: [
     {
-      id: 1,
+      ceId: "1",
       title: "AWS Certified Developer",
       issuer: "Amazon Web Services",
       date: "Jun 2020",
     },
     {
-      id: 2,
+      ceId: "2",
       title: "AWS Certified Solutions Architect",
       issuer: "Amazon Web Services",
       date: "Aug 2023",
@@ -51,12 +53,12 @@ export default {
   ],
   projects: [
     {
-      id: 1,
+      prId: "1",
       title: "E-commerce Website",
       description: "Built a full-stack e-commerce website...",
     },
     {
-      id: 2,
+      prId: "2",
       title: "AI Resume Builder",
       description:
         "An AI-powered tool that generates resumes based on user input with various templates.",
@@ -64,33 +66,33 @@ export default {
   ],
   languages: [
     {
-      id: 1,
+      laId: "1",
       name: "English",
       proficiency: "Fluent",
     },
     {
-      id: 2,
+      laId: "2",
       name: "Spanish",
       proficiency: "Intermediate",
     },
   ],
   hobbies: [
     {
-      id: 1,
+      hoId: "1",
       name: "Photography",
     },
     {
-      id: 2,
+      hoId: "2",
       name: "Traveling",
     },
     {
-      id: 3,
+      hoId: "3",
       name: "Reading",
     },
   ],
   references: [
     {
-      id: 1,
+      reId: "1",
       name: "John Doe",
       position: "Senior Developer",
       company: "Google",

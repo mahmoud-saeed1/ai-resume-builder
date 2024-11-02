@@ -87,7 +87,13 @@ const FormSection = () => {
       )}
 
       {/*~~~~~~~~$ Education Form $~~~~~~~~*/}
-      {activeFromIdx === 4 && <EducationForm />}
+      {activeFromIdx === 4 && (
+        <EducationForm
+          enableNextBtn={enableNextBtn}
+          handleEnableNextBtn={handleEnableNextBtn}
+          handleDisableNextBtn={handleDisableNextBtn}
+        />
+      )}
 
       {/*~~~~~~~~$ Professional Experience Form $~~~~~~~~*/}
       {activeFromIdx === 3 && (

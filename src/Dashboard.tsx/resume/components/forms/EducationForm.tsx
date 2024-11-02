@@ -1,18 +1,28 @@
 import { useContext, useEffect, useState } from "react";
 import { ResumeInfoContext } from "@/context/ResumeInfoContext";
-import { IErrorResponse, IEducation } from "@/interfaces";
+import { IErrorResponse, IEducation, IFormProbs } from "@/interfaces";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, ChevronUp, Trash2 } from "lucide-react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import { useParams } from "react-router-dom";
 import { Bounce, toast } from "react-toastify";
 import { AxiosError } from "axios";
 import GlobalApi from "@/service/GlobalApi";
 import Button from "@/ui/Button";
 import { v4 as uuidv4 } from "uuid";
+import { VForm } from "@/animation";
+import FormInput from "./FormInputs";
+import Select from "@/ui/Select";
+import Textarea from "@/ui/Textarea";
 
-const EducationForm = () => {
+const EducationForm = ({
+  enableNextBtn,
+  handleEnableNextBtn,
+  handleDisableNextBtn,
+}: IFormProbs) => {
   const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext)!;
-  const [education, setEducation] = useState<IEducation[]>(resumeInfo.education || []);
+  const [educationList, setEducationList] = useState<IEducation[]>(
+    resumeInfo.education || []
+  );
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const params = useParams<{ id: string }>();
@@ -23,13 +33,15 @@ const EducationForm = () => {
     field: keyof IEducation,
     value: string | boolean
   ) => {
-    setEducation((prev) =>
+    setEducationList((prev) =>
       prev.map((edu) => (edu.edId === eduId ? { ...edu, [field]: value } : edu))
     );
     setResumeInfo((prev) => ({
       ...prev,
-      education,
+      education: educationList,
     }));
+
+    handleDisableNextBtn();
   };
 
   const handleOnSubmit = async () => {
@@ -45,7 +57,9 @@ const EducationForm = () => {
     }
 
     try {
-      const { status } = await GlobalApi.UpdateResumeDetails(params.id, { education });
+      const { status } = await GlobalApi.UpdateResumeDetails(params.id, {
+        education: educationList,
+      });
 
       if (status === 200) {
         toast.success("Education saved successfully.", {
@@ -54,23 +68,15 @@ const EducationForm = () => {
           transition: Bounce,
         });
       }
+
+      handleEnableNextBtn();
     } catch (error) {
       const err = error as AxiosError<IErrorResponse>;
-      if (err.response?.data.error.details) {
-        err.response.data.error.details.errors.forEach((e) => {
-          toast.error(e.message, {
-            autoClose: 2000,
-            theme: "light",
-            transition: Bounce,
-          });
-        });
-      } else {
-        toast.error(err.response?.data.error.message, {
-          autoClose: 2000,
-          theme: "light",
-          transition: Bounce,
-        });
-      }
+      toast.error(err.response?.data.error.message, {
+        autoClose: 2000,
+        theme: "light",
+        transition: Bounce,
+      });
     } finally {
       setIsLoading(false);
     }
@@ -88,50 +94,44 @@ const EducationForm = () => {
       minor: "",
       description: "",
     };
-    setEducation((prev) => [...prev, newEducation]);
+    setEducationList((prev) => [...prev, newEducation]);
     setResumeInfo((prev) => ({
       ...prev,
-      education: [...education, newEducation],
+      education: [...educationList, newEducation],
     }));
   };
 
   const handleRemoveEducation = (eduId: string) => {
-    setEducation((prev) => prev.filter((edu) => edu.edId !== eduId));
+    setEducationList((prev) => prev.filter((edu) => edu.edId !== eduId));
     setResumeInfo((prev) => ({
       ...prev,
-      education: education.filter((edu) => edu.edId !== eduId),
+      education: educationList.filter((edu) => edu.edId !== eduId),
     }));
   };
 
   const handleMoveEducation = (index: number, direction: "up" | "down") => {
     const newIndex = direction === "up" ? index - 1 : index + 1;
-    const updatedEducation = [...education];
+    const updatedEducation = [...educationList];
     const movedEducation = updatedEducation.splice(index, 1);
     updatedEducation.splice(newIndex, 0, movedEducation[0]);
-    setEducation(updatedEducation);
+    setEducationList(updatedEducation);
     setResumeInfo((prev) => ({
       ...prev,
       education: updatedEducation,
     }));
   };
 
-  const animationVariants = {
-    initial: { opacity: 0, y: -10 },
-    animate: { opacity: 1, y: 0 },
-    exit: { opacity: 0, y: 10 },
-  };
-
   useEffect(() => {
-    console.log("Education Component: ", education);
-  }, [education]);
+    console.log("Education Component: ", educationList);
+  }, [educationList]);
 
   return (
     <div className="grid gap-4 p-4">
       <h2 className="text-lg font-semibold">Education</h2>
 
-      {education.length === 0 ? (
+      {educationList.length === 0 ? (
         <motion.div
-          variants={animationVariants}
+          variants={VForm}
           initial="initial"
           animate="animate"
           exit="exit"
@@ -141,17 +141,19 @@ const EducationForm = () => {
         </motion.div>
       ) : (
         <AnimatePresence>
-          {education.map((edu, index) => (
+          {educationList.map((edu, index) => (
             <motion.div
               key={edu.edId}
-              variants={animationVariants}
+              variants={VForm}
               initial="initial"
               animate="animate"
               exit="exit"
               className="border p-4 rounded-lg shadow-md space-y-4"
             >
               <div className="flex justify-between items-center mb-2">
-                <h4 className="font-semibold text-sm">Education #{index + 1}</h4>
+                <h4 className="font-semibold text-sm">
+                  Education #{index + 1}
+                </h4>
                 <div className="flex gap-2">
                   <Button
                     variant="outline"
@@ -169,72 +171,83 @@ const EducationForm = () => {
                   >
                     <ChevronDown className="h-4 w-4" />
                   </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleRemoveEducation(edu.edId)}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
                 </div>
               </div>
 
               <form>
-                <input
-                  type="text"
+                <FormInput
+                  id={uuidv4()}
+                  label="University Name"
                   placeholder="University Name"
-                  value={edu.universityName}
+                  defaultValue={edu.universityName}
                   onChange={(e) =>
-                    handleInputChange(edu.edId, "universityName", e.target.value)
+                    handleInputChange(
+                      edu.edId,
+                      "universityName",
+                      e.target.value
+                    )
                   }
-                  className="w-full p-2 border rounded"
+                  required
                 />
-                <input
-                  type="text"
-                  placeholder="Degree"
-                  value={edu.degree}
+
+                <Select
+                  id={uuidv4()}
+                  defaultValue={edu.degree}
                   onChange={(e) =>
                     handleInputChange(edu.edId, "degree", e.target.value)
                   }
-                  className="w-full p-2 border rounded"
-                />
-                <input
-                  type="text"
+                  required
+                >
+                  <option value="Associate">Associate</option>
+                  <option value="Bachelor">Bachelor</option>
+                  <option value="Master">Master</option>
+                  <option value="Doctorate">Doctorate</option>
+                </Select>
+
+                <FormInput
+                  id={uuidv4()}
+                  label="Major"
                   placeholder="Major"
-                  value={edu.major}
+                  defaultValue={edu.major}
                   onChange={(e) =>
                     handleInputChange(edu.edId, "major", e.target.value)
                   }
-                  className="w-full p-2 border rounded"
+                  required
                 />
-                <input
-                  type="text"
-                  placeholder="Minor (Optional)"
-                  value={edu.minor || ""}
+
+                <FormInput
+                  id={uuidv4()}
+                  label="Minor"
+                  placeholder="Minor"
+                  defaultValue={edu.minor}
                   onChange={(e) =>
                     handleInputChange(edu.edId, "minor", e.target.value)
                   }
-                  className="w-full p-2 border rounded"
                 />
+
                 <div className="flex gap-4">
-                  <input
+                  <FormInput
+                    id={uuidv4()}
                     type="date"
+                    label="Start Date"
                     placeholder="Start Date"
-                    value={edu.startDate}
+                    defaultValue={edu.startDate}
                     onChange={(e) =>
                       handleInputChange(edu.edId, "startDate", e.target.value)
                     }
-                    className="w-full p-2 border rounded"
+                    required
                   />
                   {!edu.currentlyStudy && (
-                    <input
+                    <FormInput
+                      id={uuidv4()}
                       type="date"
+                      label="End Date"
                       placeholder="End Date"
-                      value={edu.endDate || ""}
+                      defaultValue={edu.endDate}
                       onChange={(e) =>
                         handleInputChange(edu.edId, "endDate", e.target.value)
                       }
-                      className="w-full p-2 border rounded"
+                      required
                     />
                   )}
                 </div>
@@ -244,12 +257,17 @@ const EducationForm = () => {
                     title="Currently Studying"
                     checked={edu.currentlyStudy}
                     onChange={(e) =>
-                      handleInputChange(edu.edId, "currentlyStudy", e.target.checked)
+                      handleInputChange(
+                        edu.edId,
+                        "currentlyStudy",
+                        e.target.checked
+                      )
                     }
                   />
                   <label>Currently Studying</label>
                 </div>
-                <textarea
+                <Textarea
+                  id={uuidv4()}
                   placeholder="Description"
                   value={edu.description}
                   onChange={(e) =>
@@ -288,6 +306,7 @@ const EducationForm = () => {
         variant="success"
         isLoading={isLoading}
         onClick={handleOnSubmit}
+        disabled={enableNextBtn}
       >
         Save
       </Button>

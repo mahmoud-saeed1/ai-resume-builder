@@ -10,8 +10,7 @@ import { AxiosError } from "axios";
 import GlobalApi from "@/service/GlobalApi";
 import Button from "@/ui/Button";
 import { v4 as uuidv4 } from "uuid";
-import { VFrom } from "@/animation";
-import Input from "@/ui/Input";
+import { VForm } from "@/animation";
 import FormInput from "./FormInputs";
 
 const ExperienceForm = ({
@@ -127,7 +126,7 @@ const ExperienceForm = ({
 
       {experienceList.length === 0 ? (
         <motion.div
-          variants={VFrom}
+          variants={VForm}
           initial="initial"
           animate="animate"
           exit="exit"
@@ -140,7 +139,7 @@ const ExperienceForm = ({
           {experienceList.map((exp, index) => (
             <motion.div
               key={exp.exId}
-              variants={VFrom}
+              variants={VForm}
               initial="initial"
               animate="animate"
               exit="exit"
@@ -232,8 +231,8 @@ const ExperienceForm = ({
                     />
                   )}
                 </div>
-                <div className="flex items-center gap-2">
-                  <Input
+                <div className="flex items-center space-x-2">
+                  <input
                     id={uuidv4()}
                     type="checkbox"
                     title="Currently Working"
