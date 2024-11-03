@@ -1,5 +1,5 @@
-import PersonalData from "./preview/PersonalData";
-import Summary from "./preview/Summary";
+import PersonalDataPreview from "./preview/PersonalDataPreview";
+import SummaryPreview from "./preview/SummaryPreview";
 import ProfessionalExperience from "./preview/ProfessionalExperience";
 import Education from "./preview/EducationPreview";
 import Skills from "./preview/Skills";
@@ -14,12 +14,12 @@ const ResumePreview = () => {
     <div className="resumePreview">
       {/*~~~~~~~~$ Personal Data Section $~~~~~~~~*/}
       {resumeInfo?.resumeInfo.personalData && (
-        <PersonalData personalData={resumeInfo?.resumeInfo.personalData} />
+        <PersonalDataPreview personalData={resumeInfo?.resumeInfo.personalData} />
       )}
 
       {/*~~~~~~~~$ Summery Section$~~~~~~~~*/}
       {resumeInfo?.resumeInfo.summary && (
-        <Summary summary={resumeInfo?.resumeInfo.summary} />
+        <SummaryPreview summary={resumeInfo?.resumeInfo.summary} />
       )}
 
       {/*~~~~~~~~$ Professional Experience Section $~~~~~~~~*/}

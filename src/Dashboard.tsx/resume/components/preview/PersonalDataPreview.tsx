@@ -1,6 +1,6 @@
 import { IPersonalData } from "@/interfaces";
 
-const PersonalData = ({personalData}: {personalData:IPersonalData[]}) => {
+const PersonalDataPreview = ({personalData}: {personalData:IPersonalData[]}) => {
 
   return (
     <>
@@ -20,4 +20,4 @@ const PersonalData = ({personalData}: {personalData:IPersonalData[]}) => {
   );
 };
 
-export default PersonalData;
+export default PersonalDataPreview;
