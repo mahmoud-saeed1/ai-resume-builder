@@ -2,7 +2,7 @@ import PersonalDataPreview from "./preview/PersonalDataPreview";
 import SummaryPreview from "./preview/SummaryPreview";
 import ProfessionalExperience from "./preview/ExperiencePreview";
 import Education from "./preview/EducationPreview";
-import Skills from "./preview/Skills";
+import SkillsPreview from "./preview/SkillsPreview";
 import { useContext } from "react";
 import { ResumeInfoContext } from "@/context/ResumeInfoContext";
 import Languages from "./preview/Languages";
@@ -36,7 +36,7 @@ const ResumePreview = () => {
 
       {/*~~~~~~~~$ Skills Section $~~~~~~~~*/}
       {resumeInfo?.resumeInfo.skills && (
-        <Skills skills={resumeInfo?.resumeInfo.skills} />
+        <SkillsPreview skills={resumeInfo?.resumeInfo.skills} />
       )}
 
       {/*~~~~~~~~$ Language Section $~~~~~~~~*/}
