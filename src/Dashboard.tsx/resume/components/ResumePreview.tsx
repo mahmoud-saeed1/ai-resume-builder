@@ -1,7 +1,7 @@
-import PersonalDetails from "./preview/PersonalDetails";
+import PersonalData from "./preview/PersonalData";
 import Summary from "./preview/Summary";
 import ProfessionalExperience from "./preview/ProfessionalExperience";
-import Education from "./preview/Education";
+import Education from "./preview/EducationPreview";
 import Skills from "./preview/Skills";
 import { useContext } from "react";
 import { ResumeInfoContext } from "@/context/ResumeInfoContext";
@@ -13,21 +13,9 @@ const ResumePreview = () => {
   return (
     <div className="resumePreview">
       {/*~~~~~~~~$ Personal Data Section $~~~~~~~~*/}
-      {resumeInfo?.resumeInfo.firstName &&
-        resumeInfo.resumeInfo.lastName &&
-        resumeInfo.resumeInfo.address &&
-        resumeInfo.resumeInfo.email &&
-        resumeInfo.resumeInfo.jobTitle &&
-        resumeInfo.resumeInfo.phone && (
-          <PersonalDetails
-            firstName={resumeInfo.resumeInfo.firstName}
-            lastName={resumeInfo.resumeInfo.lastName}
-            address={resumeInfo.resumeInfo.address}
-            email={resumeInfo.resumeInfo.email}
-            jobTitle={resumeInfo.resumeInfo.jobTitle}
-            phone={resumeInfo.resumeInfo.phone}
-          />
-        )}
+      {resumeInfo?.resumeInfo.personalData && (
+        <PersonalData personalData={resumeInfo?.resumeInfo.personalData} />
+      )}
 
       {/*~~~~~~~~$ Summery Section$~~~~~~~~*/}
       {resumeInfo?.resumeInfo.summary && (
