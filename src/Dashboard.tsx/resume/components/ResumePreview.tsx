@@ -59,6 +59,8 @@ const ResumePreview = () => {
       {resumeInfo?.resumeInfo.projects && (
         <ProjectsPreview projects={resumeInfo?.resumeInfo.projects} />
       )}
+
+      
     </div>
   );
 };

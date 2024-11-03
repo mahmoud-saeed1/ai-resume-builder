@@ -1,4 +1,3 @@
-// preview/Projects.tsx
 import { IProjects } from "@/interfaces";
 
 const ProjectsPreview = ({ projects }: { projects: IProjects[] }) => {
