@@ -50,7 +50,6 @@ const PersonalDataForm = ({
   const handleOnSubmit: SubmitHandler<IPersonalData> = async (data) => {
     setIsLoading(true);
 
-    console.log(data)
 
     if (!params?.id) {
       toast.error("ID parameter is missing.", {
@@ -62,7 +61,9 @@ const PersonalDataForm = ({
     }
 
     try {
-      const { status } = await GlobalApi.UpdateResumeDetails(params.id, data);
+      const { status } = await GlobalApi.UpdateResumeDetails(params.id, {
+        personalData: [data],
+      });
       if (status === 200) {
         toast.success("Data saved successfully.", {
           autoClose: 1000,
@@ -73,21 +74,11 @@ const PersonalDataForm = ({
       }
     } catch (error) {
       const err = error as AxiosError<IErrorResponse>;
-      if (err.response?.data.error.details) {
-        err.response.data.error.details.errors.forEach((e) => {
-          toast.error(e.message, {
-            autoClose: 2000,
-            theme: "light",
-            transition: Bounce,
-          });
-        });
-      } else {
-        toast.error(err.response?.data.error.message, {
-          autoClose: 2000,
-          theme: "light",
-          transition: Bounce,
-        });
-      }
+      toast.error(err.response?.data.error.message, {
+        autoClose: 2000,
+        theme: "light",
+        transition: Bounce,
+      });
     } finally {
       setIsLoading(false);
     }
@@ -104,7 +95,9 @@ const PersonalDataForm = ({
             placeholder={field.replace(/^\w/, (c) => c.toUpperCase())}
             register={register(field as keyof IPersonalData)}
             onChange={handleInputChange}
-            defaultValue={resumeInfo?.[field as keyof IPersonalData]}
+            defaultValue={
+              resumeInfo?.personalData[0]?.[field as keyof IPersonalData] ?? ""
+            }
             errorMessage={errors[field as keyof IPersonalData]?.message}
           />
         )

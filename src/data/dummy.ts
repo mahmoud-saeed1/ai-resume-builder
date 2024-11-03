@@ -1,10 +1,14 @@
 export default {
-  firstName: "James",
-  lastName: "Carter",
-  jobTitle: "Full Stack Developer",
-  address: "525 N Tryon Street, NC 28117",
-  phone: "(123)-456-7890",
-  email: "example@gmail.com",
+  personalData: [
+    {
+      firstName: "James",
+      lastName: "Carter",
+      jobTitle: "Full Stack Developer",
+      address: "525 N Tryon Street, NC 28117",
+      phone: "(123)-456-7890",
+      email: "example@gmail.com",
+    },
+  ],
   themeColor: "#ff6666",
   summary: "Lorem ipsum dolor sit amet...", // Changed from 'summery' to 'summary'
   experience: [
@@ -16,7 +20,8 @@ export default {
       state: "NY",
       startDate: "Jan 2021",
       currentlyWorking: true,
-      workSummary: // Changed from 'workSummery' to 'workSummary'
+      // Changed from 'workSummery' to 'workSummary'
+      workSummary:
         "Designed, developed, and maintained full-stack applications...",
     },
   ],

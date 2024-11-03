@@ -13,7 +13,7 @@ import ReferenceForm from "./forms/ReferenceForm";
 
 const FormSection = () => {
   /*~~~~~~~~$ States $~~~~~~~~*/
-  const [activeFromIdx, setActiveFromIdx] = useState(9);
+  const [activeFromIdx, setActiveFromIdx] = useState(3);
   const [enableNextBtn, setEnableNextBtn] = useState(false);
 
   /*~~~~~~~~$ Handlers $~~~~~~~~*/

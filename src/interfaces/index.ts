@@ -100,12 +100,7 @@ export interface IReferences {
 }
 
 export interface IResumeInfo {
-  firstName?: string;
-  lastName?: string;
-  jobTitle?: string;
-  phone?: string;
-  email?: string;
-  address?: string;
+  personalData: IPersonalData[];
   themeColor?: string;
   summary?: string;
   experience?: IExperience[];
