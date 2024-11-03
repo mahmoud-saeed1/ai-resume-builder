@@ -7,6 +7,7 @@ import { useContext } from "react";
 import { ResumeInfoContext } from "@/context/ResumeInfoContext";
 import Languages from "./preview/Languages";
 import CertificationsPreview from "./preview/CertificationsPreview";
+import ProjectsPreview from "./preview/ProjectsPreview";
 
 const ResumePreview = () => {
   const resumeInfo = useContext(ResumeInfoContext);
@@ -15,7 +16,9 @@ const ResumePreview = () => {
     <div className="resumePreview">
       {/*~~~~~~~~$ Personal Data Section $~~~~~~~~*/}
       {resumeInfo?.resumeInfo.personalData && (
-        <PersonalDataPreview personalData={resumeInfo?.resumeInfo.personalData} />
+        <PersonalDataPreview
+          personalData={resumeInfo?.resumeInfo.personalData}
+        />
       )}
 
       {/*~~~~~~~~$ Summery Section$~~~~~~~~*/}
@@ -47,7 +50,14 @@ const ResumePreview = () => {
 
       {/*~~~~~~~~$ Certification Section $~~~~~~~~*/}
       {resumeInfo?.resumeInfo.certifications && (
-        <CertificationsPreview certifications={resumeInfo.resumeInfo.certifications} />
+        <CertificationsPreview
+          certifications={resumeInfo.resumeInfo.certifications}
+        />
+      )}
+
+      {/*~~~~~~~~$ Projects Section $~~~~~~~~*/}
+      {resumeInfo?.resumeInfo.projects && (
+        <ProjectsPreview projects={resumeInfo?.resumeInfo.projects} />
       )}
     </div>
   );
