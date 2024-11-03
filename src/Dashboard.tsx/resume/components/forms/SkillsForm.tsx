@@ -11,6 +11,7 @@ import { VForm } from "@/animation";
 import { Bounce, toast } from "react-toastify";
 import GlobalApi from "@/service/GlobalApi";
 import { AxiosError } from "axios";
+import FormInput from "./FormInputs";
 
 const SkillsForm = ({
   enableNextBtn,
@@ -63,9 +64,9 @@ const SkillsForm = ({
           theme: "light",
           transition: Bounce,
         });
-      }
 
-      handleEnableNextBtn();
+        handleEnableNextBtn();
+      }
     } catch (error) {
       const err = error as AxiosError<IErrorResponse>;
       toast.error(err.response?.data.error.message, {
@@ -134,7 +135,7 @@ const SkillsForm = ({
         <AnimatePresence>
           {skillsList.map((skill, index) => (
             <motion.div
-              key={skill.skId}
+              key={index}
               variants={VForm}
               initial="initial"
               animate="animate"
@@ -164,19 +165,17 @@ const SkillsForm = ({
               </div>
 
               <form>
-                <input
-                  type="text"
+                <FormInput
+                  id={uuidv4()}
                   placeholder="Skill Name"
-                  value={skill.name}
+                  label="Skill Name"
+                  type="text"
+                  defaultValue={skill.name}
                   onChange={(e) =>
                     handleInputChange(skill.skId, "name", e.target.value)
                   }
-                  className="w-full p-2 border rounded"
                 />
 
-                <label className="block mt-2">Rating:</label>
-
-                {/* Using react-star-ratings */}
                 <StarRatings
                   rating={skill.rating}
                   starRatedColor="gold"

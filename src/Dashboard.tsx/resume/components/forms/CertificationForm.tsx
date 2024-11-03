@@ -1,16 +1,21 @@
 import { useContext, useEffect, useState } from "react";
 import { ResumeInfoContext } from "@/context/ResumeInfoContext";
-import { ICertification, IErrorResponse } from "@/interfaces";
+import { ICertification, IErrorResponse, IFormProbs } from "@/interfaces";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, ChevronUp, Trash2 } from "lucide-react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import { useParams } from "react-router-dom";
 import { Bounce, toast } from "react-toastify";
 import { AxiosError } from "axios";
 import GlobalApi from "@/service/GlobalApi";
 import Button from "@/ui/Button";
 import { v4 as uuidv4 } from "uuid";
+import FormInput from "./FormInputs";
 
-const CertificationForm = () => {
+const CertificationForm = ({
+  enableNextBtn,
+  handleEnableNextBtn,
+  handleDisableNextBtn,
+}: IFormProbs) => {
   const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext)!;
   const [certifications, setCertifications] = useState<ICertification[]>(
     resumeInfo.certifications || []
@@ -26,13 +31,15 @@ const CertificationForm = () => {
   ) => {
     setCertifications((prev) =>
       prev.map((cert) =>
-        cert.id === certId ? { ...cert, [field]: value } : cert
+        cert.ceId === certId ? { ...cert, [field]: value } : cert
       )
     );
     setResumeInfo((prev) => ({
       ...prev,
       certifications,
     }));
+
+    handleDisableNextBtn();
   };
 
   const handleOnSubmit = async () => {
@@ -58,6 +65,8 @@ const CertificationForm = () => {
           theme: "light",
           transition: Bounce,
         });
+
+        handleEnableNextBtn();
       }
     } catch (error) {
       const err = error as AxiosError<IErrorResponse>;
@@ -83,7 +92,7 @@ const CertificationForm = () => {
 
   const handleAddCertification = () => {
     const newCertification: ICertification = {
-      id: uuidv4(),
+      ceId: uuidv4(),
       title: "",
       issuer: "",
       date: "",
@@ -96,10 +105,10 @@ const CertificationForm = () => {
   };
 
   const handleRemoveCertification = (certId: string) => {
-    setCertifications((prev) => prev.filter((cert) => cert.id !== certId));
+    setCertifications((prev) => prev.filter((cert) => cert.ceId !== certId));
     setResumeInfo((prev) => ({
       ...prev,
-      certifications: certifications.filter((cert) => cert.id !== certId),
+      certifications: certifications.filter((cert) => cert.ceId !== certId),
     }));
   };
 
@@ -143,7 +152,7 @@ const CertificationForm = () => {
         <AnimatePresence>
           {certifications.map((cert, index) => (
             <motion.div
-              key={cert.id}
+              key={cert.ceId}
               variants={animationVariants}
               initial="initial"
               animate="animate"
@@ -171,44 +180,43 @@ const CertificationForm = () => {
                   >
                     <ChevronDown className="h-4 w-4" />
                   </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleRemoveCertification(cert.id)}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
                 </div>
               </div>
 
               <form>
-                <input
+                <FormInput
+                  id={uuidv4()}
+                  label={"Title"}
                   type="text"
-                  placeholder="Certification Title"
-                  value={cert.title}
+                  placeholder="Title"
+                  defaultValue={cert.title}
                   onChange={(e) =>
-                    handleInputChange(cert.id, "title", e.target.value)
+                    handleInputChange(cert.ceId, "title", e.target.value)
                   }
-                  className="w-full p-2 border rounded"
                 />
-                <input
+                
+                <FormInput
+                  id={uuidv4()}
+                  label={"Issuer"}
                   type="text"
                   placeholder="Issuer"
-                  value={cert.issuer}
+                  defaultValue={cert.issuer}
                   onChange={(e) =>
-                    handleInputChange(cert.id, "issuer", e.target.value)
+                    handleInputChange(cert.ceId, "issuer", e.target.value)
                   }
-                  className="w-full p-2 border rounded"
                 />
-                <input
+                
+                <FormInput
+                  id={uuidv4()}
+                  label={"Date"}
                   type="date"
                   placeholder="Date"
-                  value={cert.date}
+                  defaultValue={cert.date}
                   onChange={(e) =>
-                    handleInputChange(cert.id, "date", e.target.value)
+                    handleInputChange(cert.ceId, "date", e.target.value)
                   }
-                  className="w-full p-2 border rounded"
                 />
+                
               </form>
 
               <div className="flex justify-end">
@@ -216,7 +224,7 @@ const CertificationForm = () => {
                   type="button"
                   variant={"danger"}
                   size="sm"
-                  onClick={() => handleRemoveCertification(cert.id)}
+                  onClick={() => handleRemoveCertification(cert.ceId)}
                 >
                   Remove
                 </Button>
@@ -240,8 +248,9 @@ const CertificationForm = () => {
         variant="success"
         isLoading={isLoading}
         onClick={handleOnSubmit}
+        disabled={enableNextBtn}
       >
-        Save
+        Save Certifications
       </Button>
     </div>
   );

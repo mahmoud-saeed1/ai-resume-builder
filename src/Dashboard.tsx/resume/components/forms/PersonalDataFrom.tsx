@@ -110,7 +110,7 @@ const PersonalDataForm = ({
         )
       )}
       <Button isLoading={isLoading} disabled={enableNextBtn}>
-        Save
+        Save Personal Data
       </Button>
     </form>
   );

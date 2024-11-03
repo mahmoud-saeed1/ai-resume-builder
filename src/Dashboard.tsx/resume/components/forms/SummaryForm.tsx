@@ -9,11 +9,11 @@ import { toast, Bounce } from "react-toastify";
 import Button from "@/ui/Button";
 import { AxiosError } from "axios";
 import { SSummary } from "@/validation";
-import Textarea from "@/ui/Textarea";
 import { Sparkles } from "lucide-react";
 import { AIChatSession } from "@/service/AIModal";
 import { motion } from "framer-motion";
 import { Vsummary } from "@/animation";
+import FormTextarea from "./FormTextArea";
 
 const SummaryForm = ({
   enableNextBtn,
@@ -84,31 +84,11 @@ const SummaryForm = ({
       }
     } catch (error) {
       const err = error as AxiosError<IErrorResponse>;
-
-      // If error details exist, loop through and display each error
-      if (err.response?.data.error?.details?.errors) {
-        err.response.data.error.details.errors.forEach((e) =>
-          toast.error(e.message, {
-            autoClose: 2000,
-            theme: "light",
-            transition: Bounce,
-          })
-        );
-      } else if (err.response?.data.error?.message) {
-        // Otherwise, show the main error message
-        toast.error(err.response.data.error.message, {
-          autoClose: 2000,
-          theme: "light",
-          transition: Bounce,
-        });
-      } else {
-        console.error("Unknown error:", err);
-        toast.error("An unexpected error occurred.", {
-          autoClose: 2000,
-          theme: "light",
-          transition: Bounce,
-        });
-      }
+      toast.error(err.response?.data.error.message, {
+        autoClose: 2000,
+        theme: "light",
+        transition: Bounce,
+      });
     } finally {
       setIsLoading(false);
     }
@@ -121,7 +101,7 @@ const SummaryForm = ({
     try {
       const { response } = await AIChatSession.sendMessage(prompt);
       const responseText = await response.text();
-      console.log(responseText)
+      console.log(responseText);
 
       //** Check if the response text is valid JSON
       if (responseText) {
@@ -191,21 +171,15 @@ const SummaryForm = ({
       )}
 
       <form onSubmit={handleSubmit(handleOnSubmit)}>
-        <div className="space-y-2">
-          <label htmlFor="summary" className="text-gray-700 font-semibold">
-            Summary
-          </label>
-          <Textarea
-            {...register("summary")}
-            id="summary"
-            className="w-full p-2 bg-gray-50 border rounded-md focus:ring focus:ring-indigo-300"
-            onChange={handleInputChange}
-            defaultValue={resumeInfo?.summary}
-          />
-          {errors.summary && (
-            <span className="text-red-500">{errors.summary.message}</span>
-          )}
-        </div>
+        <FormTextarea
+          id="summary"
+          label="Summary"
+          placeholder="Write a summary about yourself"
+          register={register("summary")}
+          onChange={handleInputChange}
+          defaultValue={resumeInfo?.summary}
+          errorMessage={errors.summary?.message}
+        />
 
         <Button
           fullWidth
@@ -213,7 +187,7 @@ const SummaryForm = ({
           disabled={enableNextBtn}
           className="mt-4"
         >
-          Save
+          Save Summary
         </Button>
       </form>
     </div>

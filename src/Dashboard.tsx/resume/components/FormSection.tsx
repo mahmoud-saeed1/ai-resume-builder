@@ -13,7 +13,7 @@ import ReferenceForm from "./forms/ReferenceForm";
 
 const FormSection = () => {
   /*~~~~~~~~$ States $~~~~~~~~*/
-  const [activeFromIdx, setActiveFromIdx] = useState(3);
+  const [activeFromIdx, setActiveFromIdx] = useState(9);
   const [enableNextBtn, setEnableNextBtn] = useState(false);
 
   /*~~~~~~~~$ Handlers $~~~~~~~~*/
@@ -105,10 +105,22 @@ const FormSection = () => {
       )}
 
       {/*~~~~~~~~$ Project Form $~~~~~~~~*/}
-      {activeFromIdx === 5 && <ProjectForm />}
+      {activeFromIdx === 5 && (
+        <ProjectForm
+          enableNextBtn={enableNextBtn}
+          handleEnableNextBtn={handleEnableNextBtn}
+          handleDisableNextBtn={handleDisableNextBtn}
+        />
+      )}
 
       {/*~~~~~~~~$ Certification Form $~~~~~~~~*/}
-      {activeFromIdx === 6 && <CertificationForm />}
+      {activeFromIdx === 6 && (
+        <CertificationForm
+          enableNextBtn={enableNextBtn}
+          handleEnableNextBtn={handleEnableNextBtn}
+          handleDisableNextBtn={handleDisableNextBtn}
+        />
+      )}
 
       {/*~~~~~~~~$ Skills Form $~~~~~~~~*/}
       {activeFromIdx === 7 && (
@@ -129,7 +141,13 @@ const FormSection = () => {
       )}
 
       {/*~~~~~~~~$ References Form $~~~~~~~~*/}
-      {activeFromIdx === 9 && <ReferenceForm />}
+      {activeFromIdx === 9 && (
+        <ReferenceForm
+          enableNextBtn={enableNextBtn}
+          handleEnableNextBtn={handleEnableNextBtn}
+          handleDisableNextBtn={handleDisableNextBtn}
+        />
+      )}
     </div>
   );
 };

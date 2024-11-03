@@ -8,8 +8,9 @@ import { Bounce, toast } from "react-toastify";
 import { AxiosError } from "axios";
 import GlobalApi from "@/service/GlobalApi";
 import Button from "@/ui/Button";
-import Select from "@/ui/Select"; // Import your custom Select component
 import { v4 as uuidv4 } from "uuid";
+import FormInput from "./FormInputs";
+import FormSelect from "./FormSelect";
 
 const proficiencyLevels = ["Beginner", "Intermediate", "Advanced", "Fluent"];
 
@@ -19,7 +20,9 @@ const LanguagesForm = ({
   handleDisableNextBtn,
 }: IFormProbs) => {
   const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext)!;
-  const [languagesList, setLanguagesList] = useState<ILanguages[]>(resumeInfo.languages || []);
+  const [languagesList, setLanguagesList] = useState<ILanguages[]>(
+    resumeInfo.languages || []
+  );
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const params = useParams<{ id: string }>();
@@ -31,7 +34,9 @@ const LanguagesForm = ({
     value: string
   ) => {
     setLanguagesList((prev) =>
-      prev.map((lang) => (lang.laId === langId ? { ...lang, [field]: value } : lang))
+      prev.map((lang) =>
+        lang.laId === langId ? { ...lang, [field]: value } : lang
+      )
     );
     setResumeInfo((prev) => ({
       ...prev,
@@ -54,7 +59,9 @@ const LanguagesForm = ({
     }
 
     try {
-      const { status } = await GlobalApi.UpdateResumeDetails(params.id, { languages: languagesList });
+      const { status } = await GlobalApi.UpdateResumeDetails(params.id, {
+        languages: languagesList,
+      });
 
       if (status === 200) {
         toast.success("Languages saved successfully.", {
@@ -62,9 +69,9 @@ const LanguagesForm = ({
           theme: "light",
           transition: Bounce,
         });
-      }
 
-      handleEnableNextBtn();
+        handleEnableNextBtn();
+      }
     } catch (error) {
       const err = error as AxiosError<IErrorResponse>;
       if (err.response?.data.error.details) {
@@ -178,27 +185,31 @@ const LanguagesForm = ({
               </div>
 
               <form>
-                <input
+                <FormInput
+                  id={uuidv4()}
+                  placeholder="Language"
+                  label="Language"
                   type="text"
-                  placeholder="Language Name"
-                  value={lang.name}
-                  onChange={(e) => handleInputChange(lang.laId, "name", e.target.value)}
-                  className="w-full p-2 border rounded"
+                  defaultValue={lang.name}
+                  onChange={(e) =>
+                    handleInputChange(lang.laId, "name", e.target.value)
+                  }
                 />
-                <Select
-                  value={lang.proficiency}
-                  onChange={(e) => handleInputChange(lang.laId, "proficiency", e.target.value)}
-                  className="w-full p-2"
+
+                <FormSelect
+                  id={uuidv4()}
+                  label="Proficiency"
+                  defaultValue={lang.proficiency}
+                  onChange={(e) =>
+                    handleInputChange(lang.laId, "proficiency", e.target.value)
+                  }
                 >
-                  <option value="" disabled>
-                    Select Proficiency
-                  </option>
                   {proficiencyLevels.map((level) => (
                     <option key={level} value={level}>
                       {level}
                     </option>
                   ))}
-                </Select>
+                </FormSelect>
               </form>
 
               <div className="flex justify-end">

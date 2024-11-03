@@ -1,16 +1,21 @@
 import { useContext, useEffect, useState } from "react";
 import { ResumeInfoContext } from "@/context/ResumeInfoContext";
-import { IReferences, IErrorResponse } from "@/interfaces";
+import { IReferences, IErrorResponse, IFormProbs } from "@/interfaces";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, ChevronUp, Trash2 } from "lucide-react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import { useParams } from "react-router-dom";
 import { Bounce, toast } from "react-toastify";
 import { AxiosError } from "axios";
 import GlobalApi from "@/service/GlobalApi";
 import Button from "@/ui/Button";
 import { v4 as uuidv4 } from "uuid";
+import FormInput from "./FormInputs";
 
-const ReferenceForm = () => {
+const ReferenceForm = ({
+  enableNextBtn,
+  handleEnableNextBtn,
+  handleDisableNextBtn,
+}: IFormProbs) => {
   const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext)!;
   const [references, setReferences] = useState<IReferences[]>(
     resumeInfo.references || []
@@ -32,6 +37,8 @@ const ReferenceForm = () => {
       ...prev,
       references,
     }));
+
+    handleDisableNextBtn();
   };
 
   const handleOnSubmit = async () => {
@@ -57,6 +64,8 @@ const ReferenceForm = () => {
           theme: "light",
           transition: Bounce,
         });
+
+        handleEnableNextBtn();
       }
     } catch (error) {
       const err = error as AxiosError<IErrorResponse>;
@@ -171,53 +180,52 @@ const ReferenceForm = () => {
                   >
                     <ChevronDown className="h-4 w-4" />
                   </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleRemoveReference(ref.reId)}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
                 </div>
               </div>
 
               <form>
-                <input
+                <FormInput
+                  id={uuidv4()}
+                  label="Name"
                   type="text"
                   placeholder="Name"
-                  value={ref.name}
+                  defaultValue={ref.name}
                   onChange={(e) =>
                     handleInputChange(ref.reId, "name", e.target.value)
                   }
-                  className="w-full p-2 border rounded mb-2"
                 />
-                <input
+
+                <FormInput
+                  id={uuidv4()}
+                  label="Position"
                   type="text"
                   placeholder="Position"
-                  value={ref.position}
+                  defaultValue={ref.position}
                   onChange={(e) =>
                     handleInputChange(ref.reId, "position", e.target.value)
                   }
-                  className="w-full p-2 border rounded mb-2"
                 />
-                <input
+
+                <FormInput
+                  id={uuidv4()}
+                  label="Company"
                   type="text"
                   placeholder="Company"
-                  value={ref.company}
+                  defaultValue={ref.company}
                   onChange={(e) =>
                     handleInputChange(ref.reId, "company", e.target.value)
                   }
-                  className="w-full p-2 border rounded mb-2"
                 />
 
-                <input
+                <FormInput
+                  id={uuidv4()}
+                  label="Contact"
                   type="text"
                   placeholder="Contact"
-                  value={ref.contact}
+                  defaultValue={ref.contact}
                   onChange={(e) =>
                     handleInputChange(ref.reId, "contact", e.target.value)
                   }
-                  className="w-full p-2 border rounded"
                 />
               </form>
 
@@ -250,8 +258,9 @@ const ReferenceForm = () => {
         variant="success"
         isLoading={isLoading}
         onClick={handleOnSubmit}
+        disabled={enableNextBtn}
       >
-        Save
+        Save References
       </Button>
     </div>
   );

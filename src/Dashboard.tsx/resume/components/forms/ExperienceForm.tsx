@@ -65,9 +65,8 @@ const ExperienceForm = ({
           theme: "light",
           transition: Bounce,
         });
+        handleEnableNextBtn();
       }
-
-      handleEnableNextBtn();
     } catch (error) {
       const err = error as AxiosError<IErrorResponse>;
       console.log("Error", err);

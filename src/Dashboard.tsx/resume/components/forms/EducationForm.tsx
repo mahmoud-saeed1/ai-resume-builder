@@ -11,8 +11,10 @@ import Button from "@/ui/Button";
 import { v4 as uuidv4 } from "uuid";
 import { VForm } from "@/animation";
 import FormInput from "./FormInputs";
-import Select from "@/ui/Select";
-import Textarea from "@/ui/Textarea";
+
+import Label from "@/ui/Label";
+import FormTextarea from "./FormTextArea";
+import FormSelect from "./FormSelect";
 
 const EducationForm = ({
   enableNextBtn,
@@ -67,9 +69,8 @@ const EducationForm = ({
           theme: "light",
           transition: Bounce,
         });
+        handleEnableNextBtn();
       }
-
-      handleEnableNextBtn();
     } catch (error) {
       const err = error as AxiosError<IErrorResponse>;
       toast.error(err.response?.data.error.message, {
@@ -190,19 +191,27 @@ const EducationForm = ({
                   required
                 />
 
-                <Select
+                <FormSelect
                   id={uuidv4()}
+                  label="Degree"
                   defaultValue={edu.degree}
                   onChange={(e) =>
                     handleInputChange(edu.edId, "degree", e.target.value)
                   }
                   required
                 >
-                  <option value="Associate">Associate</option>
+                  <option value="" disabled>
+                    Select Degree
+                  </option>
                   <option value="Bachelor">Bachelor</option>
                   <option value="Master">Master</option>
                   <option value="Doctorate">Doctorate</option>
-                </Select>
+                  <option value="Associate">Associate</option>
+                  <option value="Diploma">Diploma</option>
+                  <option value="Certificate">Certificate</option>
+                  <option value="High School">High School</option>
+                  <option value="Vocational">Vocational</option>
+                </FormSelect>
 
                 <FormInput
                   id={uuidv4()}
@@ -264,16 +273,17 @@ const EducationForm = ({
                       )
                     }
                   />
-                  <label>Currently Studying</label>
+                  <Label>Currently Studying</Label>
                 </div>
-                <Textarea
+
+                <FormTextarea
                   id={uuidv4()}
+                  label="Description"
                   placeholder="Description"
-                  value={edu.description}
+                  defaultValue={edu.description}
                   onChange={(e) =>
                     handleInputChange(edu.edId, "description", e.target.value)
                   }
-                  className="w-full p-2 border rounded"
                 />
               </form>
 

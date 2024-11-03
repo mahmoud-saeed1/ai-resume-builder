@@ -11,7 +11,7 @@ const Certifications = ({
     <div className="resumePreview__certifications">
       <h2 className="resumePreview__certifications--heading">Certifications</h2>
       {certifications.map((cert) => (
-        <div key={cert.id} className="resumePreview__certifications--item">
+        <div key={cert.ceId} className="resumePreview__certifications--item">
           <p className="font-semibold">{cert.title}</p>
           <p className="text-gray-500">
             {cert.issuer} - {cert.date}

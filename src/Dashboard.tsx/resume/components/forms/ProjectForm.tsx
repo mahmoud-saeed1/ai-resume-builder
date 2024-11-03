@@ -1,18 +1,26 @@
 import { useContext, useState, useEffect } from "react";
 import { ResumeInfoContext } from "@/context/ResumeInfoContext";
-import { IErrorResponse, IProjects } from "@/interfaces";
+import { IErrorResponse, IFormProbs, IProjects } from "@/interfaces";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, ChevronUp, Trash2 } from "lucide-react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import { useParams } from "react-router-dom";
 import { Bounce, toast } from "react-toastify";
 import { AxiosError } from "axios";
 import GlobalApi from "@/service/GlobalApi";
 import Button from "@/ui/Button";
 import { v4 as uuidv4 } from "uuid";
+import FormInput from "./FormInputs";
+import FormTextarea from "./FormTextArea";
 
-const ProjectForm = () => {
+const ProjectForm = ({
+  enableNextBtn,
+  handleEnableNextBtn,
+  handleDisableNextBtn,
+}: IFormProbs) => {
   const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext)!;
-  const [projects, setProjects] = useState<IProjects[]>(resumeInfo.projects || []);
+  const [projects, setProjects] = useState<IProjects[]>(
+    resumeInfo.projects || []
+  );
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const params = useParams<{ id: string }>();
@@ -24,12 +32,16 @@ const ProjectForm = () => {
     value: string
   ) => {
     setProjects((prev) =>
-      prev.map((project) => (project.id === projectId ? { ...project, [field]: value } : project))
+      prev.map((project) =>
+        project.prId === projectId ? { ...project, [field]: value } : project
+      )
     );
     setResumeInfo((prev) => ({
       ...prev,
       projects,
     }));
+
+    handleDisableNextBtn();
   };
 
   const handleOnSubmit = async () => {
@@ -45,7 +57,9 @@ const ProjectForm = () => {
     }
 
     try {
-      const { status } = await GlobalApi.UpdateResumeDetails(params.id, { projects });
+      const { status } = await GlobalApi.UpdateResumeDetails(params.id, {
+        projects,
+      });
 
       if (status === 200) {
         toast.success("Projects saved successfully.", {
@@ -53,6 +67,8 @@ const ProjectForm = () => {
           theme: "light",
           transition: Bounce,
         });
+
+        handleEnableNextBtn();
       }
     } catch (error) {
       const err = error as AxiosError<IErrorResponse>;
@@ -78,7 +94,7 @@ const ProjectForm = () => {
 
   const handleAddProject = () => {
     const newProject: IProjects = {
-      id: uuidv4(),
+      prId: uuidv4(),
       title: "",
       description: "",
     };
@@ -90,10 +106,10 @@ const ProjectForm = () => {
   };
 
   const handleRemoveProject = (projectId: string) => {
-    setProjects((prev) => prev.filter((project) => project.id !== projectId));
+    setProjects((prev) => prev.filter((project) => project.prId !== projectId));
     setResumeInfo((prev) => ({
       ...prev,
-      projects: projects.filter((project) => project.id !== projectId),
+      projects: projects.filter((project) => project.prId !== projectId),
     }));
   };
 
@@ -137,7 +153,7 @@ const ProjectForm = () => {
         <AnimatePresence>
           {projects.map((project, index) => (
             <motion.div
-              key={project.id}
+              key={project.prId}
               variants={animationVariants}
               initial="initial"
               animate="animate"
@@ -163,33 +179,32 @@ const ProjectForm = () => {
                   >
                     <ChevronDown className="h-4 w-4" />
                   </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleRemoveProject(project.id)}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
                 </div>
               </div>
 
               <form>
-                <input
-                  type="text"
-                  placeholder="Project Title"
-                  value={project.title}
+                <FormInput
+                  id={uuidv4()}
+                  label={"Title"}
+                  placeholder="Title"
+                  defaultValue={project.title}
                   onChange={(e) =>
-                    handleInputChange(project.id, "title", e.target.value)
+                    handleInputChange(project.prId, "title", e.target.value)
                   }
-                  className="w-full p-2 border rounded"
                 />
-                <textarea
+
+                <FormTextarea
+                  id={uuidv4()}
+                  label={"Description"}
                   placeholder="Description"
-                  value={project.description}
+                  defaultValue={project.description}
                   onChange={(e) =>
-                    handleInputChange(project.id, "description", e.target.value)
+                    handleInputChange(
+                      project.prId,
+                      "description",
+                      e.target.value
+                    )
                   }
-                  className="w-full p-2 border rounded"
                 />
               </form>
 
@@ -198,7 +213,7 @@ const ProjectForm = () => {
                   type="button"
                   variant={"danger"}
                   size="sm"
-                  onClick={() => handleRemoveProject(project.id)}
+                  onClick={() => handleRemoveProject(project.prId)}
                 >
                   Remove
                 </Button>
@@ -222,8 +237,9 @@ const ProjectForm = () => {
         variant="success"
         isLoading={isLoading}
         onClick={handleOnSubmit}
+        disabled={enableNextBtn}
       >
-        Save
+        Save Projects
       </Button>
     </div>
   );
