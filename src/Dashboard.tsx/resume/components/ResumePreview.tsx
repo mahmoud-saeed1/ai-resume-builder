@@ -1,6 +1,6 @@
 import PersonalDataPreview from "./preview/PersonalDataPreview";
 import SummaryPreview from "./preview/SummaryPreview";
-import ProfessionalExperience from "./preview/ProfessionalExperience";
+import ProfessionalExperience from "./preview/ExperiencePreview";
 import Education from "./preview/EducationPreview";
 import Skills from "./preview/Skills";
 import { useContext } from "react";
