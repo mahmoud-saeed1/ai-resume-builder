@@ -1,19 +1,45 @@
-import { IResumeInfo } from "@/interfaces";
+import { IEducation } from "@/interfaces";
 
-const ProfessionalExperience = ({ experience }: { experience: IResumeInfo["experience"] }) => {
+const EducationPreview = ({ education = [] }: { education: IEducation[] }) => {
   return (
-    <div className="resumePreview__experience">
-      <h2 className="resumePreview__experience--heading">Professional Experience</h2>
-      {experience.map((job) => (
-        <div key={job.exId} className="resumePreview__experience--job">
-          <h3>{job.title}</h3>
-          <p>{job.companyName} - {job.city}, {job.state}</p>
-          <p>{job.startDate} - {job.currentlyWorking ? "Present" : job.endDate}</p>
-          <p className="resumePreview__experience--workSummery">{job.workSummary}</p>
-        </div>
-      ))}
-    </div>
+    <section className="resumePreview__education">
+      <h2 className="resumePreview__education--heading">Education</h2>
+      <div className="resumePreview__education--grid">
+        {education.map(
+          ({
+            degree,
+            description,
+            edId,
+            major,
+            startDate,
+            universityName,
+            currentlyStudy,
+            endDate,
+            minor,
+          }) => (
+            <div key={edId} className="resumePreview__education--card">
+              <div className="resumePreview__education--header">
+                <h3>{universityName}</h3>
+                <span>{degree}</span>
+              </div>
+              <div className="resumePreview__education--details">
+                <p>
+                  {major}
+                  {minor && `, ${minor}`}
+                </p>
+                <p>
+                  {startDate} - {currentlyStudy ? "Present" : endDate}
+                </p>
+              </div>
+              <p className="resumePreview__education--description">
+                {description}
+              </p>
+            </div>
+          )
+        )}
+      </div>
+    </section>
   );
 };
 
-export default ProfessionalExperience;
+export default EducationPreview;

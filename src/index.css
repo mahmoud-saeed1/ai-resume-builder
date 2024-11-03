@@ -57,141 +57,135 @@ header{
 }
 
 /*~~~~~~~~$ Resume Preview Styling $~~~~~~~~*/
+/* Sections styling */
+.resume-preview__section {
+  @apply rounded-lg bg-gray-50 p-5 border border-gray-200 shadow-sm;
+  transition: transform 0.2s ease-in-out;
+}
 
-/* ResumePreview */
-.resumePreview {
-    @apply p-8 bg-white shadow-lg rounded-lg max-w-4xl mx-auto;
-  }
-  
-  /* PersonalDetails */
-  .resumePreview__personalDetails {
-    @apply text-center mb-8;
-  }
-  
-  .resumePreview__personalDetails--name {
-    @apply text-3xl font-bold;
-  }
-  
-  .resumePreview__personalDetails--jobTitle {
-    @apply text-xl text-gray-600;
-  }
-  
-  .resumePreview__personalDetails--contact {
-    @apply text-sm text-gray-500 mt-2;
-  }
-  
-  /* Summary */
-  .resumePreview__summary {
-    @apply mb-8;
-  }
-  
-  .resumePreview__summary--heading {
-    @apply text-2xl font-semibold border-b pb-2 mb-4;
-  }
-  
-  .resumePreview__summary--text {
-    @apply text-base text-gray-700;
-  }
-  
-  /* Professional Experience */
-  .experience-form {
-    @apply grid gap-4;
-  }
-  
-  .experience-form__item {
-    @apply border border-gray-300 p-4 rounded-md;
-  }
-  
-  .experience-form__header {
-    @apply flex justify-between items-center mb-2;
-  }
-  
-  .experience-form__order {
-    @apply font-semibold text-lg;
-  }
-  
-  .experience-form__btn {
-    @apply px-2 py-1 bg-gray-200 rounded hover:bg-gray-300;
-  }
-  
-  .experience-form__btn--top {
-    @apply text-blue-500;
-  }
-  
-  .experience-form__btn--bottom {
-    @apply text-green-500;
-  }
-  
-  .experience-form__btn--delete {
-    @apply text-red-500;
-  }
-  
-  .experience-form__input {
-    @apply w-full p-2 border border-gray-300 rounded mb-2;
-  }
-  
-  .experience-form__rich-text {
-    @apply mt-2 mb-4;
-  }
-  
-  .experience-form__label {
-    @apply flex items-center space-x-2 mt-2;
-  }
-  
-  .experience-form__add-btn,
-  .experience-form__save-btn {
-    @apply w-full mt-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600;
-  }
-  
-  
-  /* Education */
-  .resumePreview__education {
-    @apply mb-8;
-  }
-  
-  .resumePreview__education--heading {
-    @apply text-2xl font-semibold border-b pb-2 mb-4;
-  }
-  
-  .resumePreview__education--item {
-    @apply mb-4;
-  }
-  
-  .resumePreview__education--description {
-    @apply text-sm text-gray-600 mt-2;
-  }
-  
-  /* Skills */
-  .resumePreview__skills {
-    @apply mb-8;
-  }
-  
-  .resumePreview__skills--heading {
-    @apply text-2xl font-semibold border-b pb-2 mb-4;
-  }
-  
-  .resumePreview__skills--list {
-    @apply grid grid-cols-2 gap-4;
-  }
-  
-  .resumePreview__skills--item {
-    @apply flex justify-between items-center;
-  }
-  
-  .resumePreview__skills--rating {
-    @apply text-sm text-gray-500;
-  }
-  
-  /* ***************************** */
-  .summary {
-    border-left: 4px solid #1a73e8; /* Accent border */
-  }
-  
-  .summary__heading {
-    color: #1a73e8;
-  }
-  
-  .summary__text {
-    line-height: 1.6;
-  }
-  
+.resume-preview__section:hover {
+  transform: translateY(-5px);
+}
+
+.resume-preview__section-title {
+  @apply text-lg font-semibold mb-4 text-gray-700 border-b-2 pb-2;
+  border-color: #4A90E2;
+}
+
+.resume-preview__job-title,
+.resume-preview__university-name {
+  @apply text-lg font-semibold text-gray-800;
+}
+
+.resume-preview__section-title {
+  position: relative;
+}
+
+.resume-preview {
+  font-family: 'Arial', sans-serif;
+  color: #333;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f7f9fc;
+}
+
+/* Header Section */
+.resume-preview__header {
+  background-color: var(--theme-color, #3b82f6);
+  color: white;
+  padding: 20px;
+  text-align: center;
+  border-radius: 8px 8px 0 0;
+}
+
+.resume-preview__name {
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+
+.resume-preview__job-title {
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-top: 8px;
+}
+
+.resume-preview__contact {
+  font-size: 0.9rem;
+  margin-top: 4px;
+}
+
+/* Section Titles */
+.resume-preview__section {
+  padding: 15px;
+  border-left: 4px solid var(--theme-color, #3b82f6);
+  background-color: #ffffff;
+  margin-top: 10px;
+  border-radius: 8px;
+}
+
+.resume-preview__section-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--theme-color, #3b82f6);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.resume-preview__section-content {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+
+.resume-preview__job-title, .resume-preview__university-name {
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.resume-preview__company, .resume-preview__degree {
+  font-size: 0.9rem;
+  color: #4b5563;
+}
+
+.resume-preview__dates {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.resume-preview__description, .resume-preview__work-summary {
+  font-size: 0.9rem;
+  color: #374151;
+  margin-top: 4px;
+}
+
+/* Skills List */
+.resume-preview__skills-list {
+  list-style: none;
+  padding: 0;
+}
+
+.resume-preview__skill-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+}
+
+.resume-preview__skill-name {
+  font-size: 1rem;
+  color: #1f2937;
+}
+
+.resume-preview__skill-rating {
+  color: #fbbf24;
+}
+
+/* Color Scheme */
+.resume-preview__header--blue { --theme-color: #3b82f6; }
+.resume-preview__header--green { --theme-color: #10b981; }
+.resume-preview__header--red { --theme-color: #ef4444; }
+.resume-preview__header--purple { --theme-color: #8b5cf6; }
+.resume-preview__header--yellow { --theme-color: #f59e0b; }
+

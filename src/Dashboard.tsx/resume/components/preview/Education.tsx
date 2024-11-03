@@ -1,19 +1,20 @@
-import { IResumeInfo } from "@/interfaces";
+import { IEducation } from "@/interfaces";
 
-const Education = ({ education }: { education: IResumeInfo["education"] }) => {
+const EducationPreview = ({ education = [] }: { education: IEducation[] }) => {
+  
   return (
-    <div className="resumePreview__education">
-      <h2 className="resumePreview__education--heading">Education</h2>
-      {education.map((edu) => (
-        <div key={edu.edId} className="resumePreview__education--item">
-          <h3>{edu.universityName}</h3>
-          <p>{edu.degree} in {edu.major}</p>
-          <p>{edu.startDate} - {edu.endDate}</p>
-          <p className="resumePreview__education--description">{edu.description}</p>
-        </div>
-      ))}
-    </div>
+    <section className="resume-preview__section resume-preview__education">
+    <h3 className="resume-preview__section-title">Education</h3>
+    {education.map(({ edId, universityName, degree, major, minor, startDate, endDate, description }) => (
+      <div key={edId} className="resume-preview__education-item">
+        <h4 className="resume-preview__university-name">{universityName}</h4>
+        <p className="resume-preview__degree">{degree} in {major}{minor ? `, ${minor}` : ''}</p>
+        <p className="resume-preview__dates">{startDate} - {endDate}</p>
+        <p className="resume-preview__description">{description}</p>
+      </div>
+    ))}
+  </section>
   );
 };
 
-export default Education;
+export default EducationPreview;
