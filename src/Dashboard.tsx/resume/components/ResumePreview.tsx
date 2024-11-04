@@ -5,9 +5,10 @@ import Education from "./preview/EducationPreview";
 import SkillsPreview from "./preview/SkillsPreview";
 import { useContext } from "react";
 import { ResumeInfoContext } from "@/context/ResumeInfoContext";
-import Languages from "./preview/Languages";
+import LanguagesPreview from "./preview/LanguagesPreview";
 import CertificationsPreview from "./preview/CertificationsPreview";
 import ProjectsPreview from "./preview/ProjectsPreview";
+import ReferencesPreview from "./preview/ReferencesPreview";
 
 const ResumePreview = () => {
   const resumeInfo = useContext(ResumeInfoContext);
@@ -45,7 +46,7 @@ const ResumePreview = () => {
 
       {/*~~~~~~~~$ Language Section $~~~~~~~~*/}
       {resumeInfo?.resumeInfo.languages && (
-        <Languages languages={resumeInfo.resumeInfo.languages} />
+        <LanguagesPreview languages={resumeInfo.resumeInfo.languages} />
       )}
 
       {/*~~~~~~~~$ Certification Section $~~~~~~~~*/}
@@ -60,7 +61,10 @@ const ResumePreview = () => {
         <ProjectsPreview projects={resumeInfo?.resumeInfo.projects} />
       )}
 
-      
+      {/*~~~~~~~~$ References Section $~~~~~~~~*/}
+      {resumeInfo?.resumeInfo.references && (
+        <ReferencesPreview references={resumeInfo?.resumeInfo.references} />
+      )}
     </div>
   );
 };

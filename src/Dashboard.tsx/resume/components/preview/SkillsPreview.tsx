@@ -8,10 +8,10 @@ const SkillsPreview = ({ skills }: { skills: ISkills[] }) => {
       </h3>
       <ul className="resume-preview__skills-list list-disc list-inside">
         {skills.map(({ name, rating, skId }) => (
-          <li key={skId} className="resume-preview__skill text-gray-700">
+          <li key={skId} className="resume-preview__skill text-gray-700 flex items-center space-x-4">
             <h4>{name}</h4>
             {/* rating bar */}
-            <div className="w-full bg-gray-300 rounded-full mt-1">
+            <div className="w-1/3 bg-gray-300 rounded-full mt-1">
               <div
                 className="bg-blue-500 text-xs leading-none py-1 text-center text-white rounded-full"
                 style={{ width: `${rating}%` }}

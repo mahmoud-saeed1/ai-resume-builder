@@ -1,6 +1,6 @@
 import { ILanguages } from "@/interfaces";
 
-const Languages = ({ languages }: { languages: ILanguages[] }) => {
+const LanguagesPreview = ({ languages }: { languages: ILanguages[] }) => {
   return (
     <section className="resume-preview__section mb-6">
       <h3 className="resume-preview__section-title text-2xl font-semibold text-gray-800 border-b-2 border-gray-300 pb-2">
@@ -20,4 +20,4 @@ const Languages = ({ languages }: { languages: ILanguages[] }) => {
   );
 };
 
-export default Languages;
+export default LanguagesPreview;
