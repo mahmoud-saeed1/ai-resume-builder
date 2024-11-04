@@ -1,5 +1,5 @@
 import Button from "@/ui/Button";
-import { ArrowLeft, ArrowRight, LayoutGrid } from "lucide-react";
+import { ArrowLeft, ArrowRight, Home, LayoutGrid } from "lucide-react";
 import { useState } from "react";
 import PersonalDataFrom from "./forms/PersonalDataFrom";
 import SummaryForm from "./forms/SummaryForm";
@@ -10,10 +10,11 @@ import CertificationForm from "./forms/CertificationForm";
 import ProjectForm from "./forms/ProjectForm";
 import LanguagesForm from "./forms/LanguagesForm";
 import ReferenceForm from "./forms/ReferenceForm";
+import { Link } from "react-router-dom";
 
 const FormSection = () => {
   /*~~~~~~~~$ States $~~~~~~~~*/
-  const [activeFromIdx, setActiveFromIdx] = useState(3);
+  const [activeFromIdx, setActiveFromIdx] = useState(1);
   const [enableNextBtn, setEnableNextBtn] = useState(false);
 
   /*~~~~~~~~$ Handlers $~~~~~~~~*/
@@ -44,9 +45,20 @@ const FormSection = () => {
     <div>
       {/*~~~~~~~~$ Form Buttons $~~~~~~~~*/}
       <div className="flex items-center justify-between">
-        <Button variant={"outline"} onClick={handlePrev}>
-          <LayoutGrid />
-        </Button>
+        <div className="flex items-center space-x-2">
+          <Link
+            to="/dashboard"
+            className="text-white capitalize tracking-wider text-lg"
+          >
+            <Button>
+              <Home />
+            </Button>
+          </Link>
+
+          <Button variant={"outline"} onClick={handlePrev}>
+            <LayoutGrid />
+          </Button>
+        </div>
 
         <div className="flex items-center space-x-2">
           {activeFromIdx > 1 && (

@@ -5,16 +5,25 @@ import FormSection from "../components/FormSection";
 import ResumePreview from "../components/ResumePreview";
 import dummy from "@/data/dummy";
 import { IResumeInfo } from "@/interfaces";
+import GlobalApi from "@/service/GlobalApi";
 
 const EditResume = () => {
   /*~~~~~~~~$ States $~~~~~~~~*/
-  const params = useParams();
+  const { resumeId } = useParams<{ resumeId: string }>();
   const [resumeInfo, setResumeInfo] = useState<IResumeInfo>(dummy);
 
   /*~~~~~~~~$ Effects $~~~~~~~~*/
   useEffect(() => {
-    setResumeInfo(dummy);
-  }, [params]);
+    getResumeData();
+  }, []);
+
+  /*~~~~~~~~$ Handlers $~~~~~~~~*/
+  const getResumeData = ()=>{
+    GlobalApi.GetResumeById(resumeId!).then(resp=>{
+      console.log(resp.data.data);
+      setResumeInfo(resp.data.data);
+    })
+}
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-10 p-10">

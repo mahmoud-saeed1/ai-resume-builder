@@ -20,7 +20,7 @@ const ExperienceForm = ({
 }: IFormProbs) => {
   const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext)!;
   const [experienceList, setExperienceList] = useState<IExperience[]>(
-    resumeInfo.experience || []
+    resumeInfo?.experience || []
   );
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -55,7 +55,7 @@ const ExperienceForm = ({
     }
 
     try {
-      const { status } = await GlobalApi.UpdateResumeDetails(params.id, {
+      const { status } = await GlobalApi.UpdateResumeData(params.id, {
         experience: experienceList,
       });
 

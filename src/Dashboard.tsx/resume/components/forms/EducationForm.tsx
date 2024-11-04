@@ -59,7 +59,7 @@ const EducationForm = ({
     }
 
     try {
-      const { status } = await GlobalApi.UpdateResumeDetails(params.id, {
+      const { status } = await GlobalApi.UpdateResumeData(params.id, {
         personalData: resumeInfo.personalData,
         education: educationList,
       });

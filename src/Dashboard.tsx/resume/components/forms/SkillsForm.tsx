@@ -54,7 +54,7 @@ const SkillsForm = ({
       return;
     }
     try {
-      const { status } = await GlobalApi.UpdateResumeDetails(params.id, {
+      const { status } = await GlobalApi.UpdateResumeData(params.id, {
         skills: skillsList,
       });
 

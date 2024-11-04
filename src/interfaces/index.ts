@@ -100,7 +100,7 @@ export interface IReferences {
 }
 
 export interface IResumeInfo {
-  personalData: IPersonalData[];
+  personalData?: IPersonalData[];
   themeColor?: string;
   summary?: string;
   experience?: IExperience[];

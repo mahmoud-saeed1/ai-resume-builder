@@ -73,7 +73,7 @@ const SummaryForm = ({
     console.log("Resume ID:", params.id);
 
     try {
-      const { status } = await GlobalApi.UpdateResumeDetails(params.id, data);
+      const { status } = await GlobalApi.UpdateResumeData(params.id, data);
       if (status === 200) {
         toast.success("Data saved successfully.", {
           autoClose: 1000,

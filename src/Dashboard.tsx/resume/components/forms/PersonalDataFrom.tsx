@@ -42,6 +42,7 @@ const PersonalDataForm = ({
     const { name, value } = e.target;
     setResumeInfo((prev) => ({
       ...prev,
+      personalData: prev?.personalData ?? [],
       [name]: value,
     }));
     handleDisableNextBtn();
@@ -61,7 +62,7 @@ const PersonalDataForm = ({
     }
 
     try {
-      const { status } = await GlobalApi.UpdateResumeDetails(params.id, {
+      const { status } = await GlobalApi.UpdateResumeData(params.id, {
         personalData: [data],
       });
       if (status === 200) {
@@ -96,7 +97,7 @@ const PersonalDataForm = ({
             register={register(field as keyof IPersonalData)}
             onChange={handleInputChange}
             defaultValue={
-              resumeInfo?.personalData[0]?.[field as keyof IPersonalData] ?? ""
+              resumeInfo?.personalData?.[0]?.[field as keyof IPersonalData] ?? ""
             }
             errorMessage={errors[field as keyof IPersonalData]?.message}
           />

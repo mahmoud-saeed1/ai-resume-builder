@@ -57,7 +57,7 @@ const ProjectForm = ({
     }
 
     try {
-      const { status } = await GlobalApi.UpdateResumeDetails(params.id, {
+      const { status } = await GlobalApi.UpdateResumeData(params.id, {
         projects,
       });
 

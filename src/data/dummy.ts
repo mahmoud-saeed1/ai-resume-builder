@@ -81,20 +81,6 @@ export default {
       proficiency: "Intermediate",
     },
   ],
-  hobbies: [
-    {
-      hoId: "1",
-      name: "Photography",
-    },
-    {
-      hoId: "2",
-      name: "Traveling",
-    },
-    {
-      hoId: "3",
-      name: "Reading",
-    },
-  ],
   references: [
     {
       reId: "1",

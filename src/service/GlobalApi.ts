@@ -11,20 +11,20 @@ const axiosClient = axios.create({
   },
 });
 
-const createNewResume = (data: IUserResume) =>
+const CreateNewResume = (data: IUserResume) =>
   axiosClient.post("/user-resumes", data);
 
-// const getUserResumes = (userEmail) => axiosClient.get("/user-resumes");
-
-// get user resumes list by email
-const getUserResumes = (userEmail: string | undefined) =>
+const GetUserResumes = (userEmail: string | undefined) =>
   axiosClient.get(`/user-resumes?filters[userEmail][$eq]=${userEmail}`);
 
-// update user resume by resumeId
-const UpdateResumeDetails = (resumeId: string, data: IResumeInfo) =>
+const UpdateResumeData = (resumeId: string, data: IResumeInfo) =>
   axiosClient.put(`/user-resumes/${resumeId}`, { data });
+
+const GetResumeById = (resumeId: string) =>
+  axiosClient.get(`/user-resumes/${resumeId}?populate=*`);
 export default {
-  createNewResume,
-  getUserResumes,
-  UpdateResumeDetails,
+  createNewResume: CreateNewResume,
+  GetUserResumes: GetUserResumes,
+  UpdateResumeData: UpdateResumeData,
+  GetResumeById: GetResumeById,
 };

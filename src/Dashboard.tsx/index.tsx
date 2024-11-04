@@ -15,7 +15,7 @@ const Dashboard = () => {
   }, [user?.primaryEmailAddress?.emailAddress ?? ""]);
 
   const getResumesList = () => {
-    GlobalApi.getUserResumes(user?.primaryEmailAddress?.emailAddress).then(
+    GlobalApi.GetUserResumes(user?.primaryEmailAddress?.emailAddress).then(
       (res) => {
         setResumeList(res.data.data);
       }
