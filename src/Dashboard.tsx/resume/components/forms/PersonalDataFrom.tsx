@@ -3,7 +3,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { SPersonalData } from "@/validation";
 import { ResumeInfoContext } from "@/context/ResumeInfoContext";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import GlobalApi from "@/service/GlobalApi";
 import { useParams } from "react-router-dom";
 import { toast, Bounce } from "react-toastify";
@@ -27,6 +27,12 @@ const PersonalDataForm = ({
   }
 
   const params = useParams<{ id: string }>();
+
+  useEffect (() => {
+    console.log("Resume ID: ", params.id);
+    console.log("Resume Info: ", resumeInfo);
+  }
+  , [resumeInfo]);
 
   /*~~~~~~~~$ Form $~~~~~~~~*/
   const {

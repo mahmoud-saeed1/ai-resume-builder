@@ -96,7 +96,9 @@ const SummaryForm = ({
 
   const handleGenerateSummary = async () => {
     setIsGenerated(true);
-    const prompt = `Job Title: ${resumeInfo?.jobTitle}. Please provide a JSON array containing summaries for three experience levels: Fresher, Mid-Level, and Senior.`;
+    const prompt = resumeInfo?.personalData
+      ? `Job Title: ${resumeInfo.personalData[0].jobTitle}. Please provide a JSON array containing summaries for three experience levels: Fresher, Mid-Level, and Senior.`
+      : "Please provide a JSON array containing summaries for three experience levels: Fresher, Mid-Level, and Senior.";
 
     try {
       const { response } = await AIChatSession.sendMessage(prompt);

@@ -22,7 +22,6 @@ const Dashboard = () => {
     );
   };
 
-  console.log(resumeList);
 
   return (
     <section>

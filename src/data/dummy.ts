@@ -20,7 +20,6 @@ export default {
       state: "NY",
       startDate: "Jan 2021",
       currentlyWorking: true,
-      // Changed from 'workSummery' to 'workSummary'
       workSummary:
         "Designed, developed, and maintained full-stack applications...",
     },

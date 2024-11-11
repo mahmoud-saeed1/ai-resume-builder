@@ -20,7 +20,7 @@ const SkillsForm = ({
 }: IFormProbs) => {
   const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext)!;
   const [skillsList, setSkillsList] = useState<ISkills[]>(
-    resumeInfo.skills || []
+    resumeInfo?.skills || []
   );
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const params = useParams<{ id: string }>();

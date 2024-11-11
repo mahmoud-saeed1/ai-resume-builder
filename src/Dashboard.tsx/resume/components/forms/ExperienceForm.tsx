@@ -162,7 +162,7 @@ const ExperienceForm = ({
                     size="sm"
                     onClick={() => handleMoveExperience(index, "down")}
                     disabled={
-                      index === (resumeInfo.experience || []).length - 1
+                      index === ((resumeInfo?.experience || []).length - 1)
                     }
                   >
                     <ChevronDown className="h-4 w-4" />

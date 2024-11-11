@@ -23,7 +23,7 @@ const EducationForm = ({
 }: IFormProbs) => {
   const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext)!;
   const [educationList, setEducationList] = useState<IEducation[]>(
-    resumeInfo.education || []
+    resumeInfo?.education || []
   );
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -31,12 +31,12 @@ const EducationForm = ({
 
   /*~~~~~~~~$ Handlers $~~~~~~~~*/
   const handleInputChange = (
-    eduId: string,
+    edId: string,
     field: keyof IEducation,
     value: string | boolean
   ) => {
     setEducationList((prev) =>
-      prev.map((edu) => (edu.edId === eduId ? { ...edu, [field]: value } : edu))
+      prev.map((edu) => (edu.edId === edId ? { ...edu, [field]: value } : edu))
     );
     setResumeInfo((prev) => ({
       ...prev,
@@ -60,8 +60,8 @@ const EducationForm = ({
 
     try {
       const { status } = await GlobalApi.UpdateResumeData(params.id, {
-        personalData: resumeInfo.personalData,
-        education: educationList,
+        personalData: resumeInfo?.personalData || [],
+        education: educationList.map(({id, ...rest})=>rest),
       });
 
       if (status === 200) {
@@ -103,11 +103,11 @@ const EducationForm = ({
     }));
   };
 
-  const handleRemoveEducation = (eduId: string) => {
-    setEducationList((prev) => prev.filter((edu) => edu.edId !== eduId));
+  const handleRemoveEducation = (edId: string) => {
+    setEducationList((prev) => prev.filter((edu) => edu.edId !== edId));
     setResumeInfo((prev) => ({
       ...prev,
-      education: educationList.filter((edu) => edu.edId !== eduId),
+      education: educationList.filter((edu) => edu.edId !== edId),
     }));
   };
 
@@ -169,7 +169,9 @@ const EducationForm = ({
                     variant="outline"
                     size="sm"
                     onClick={() => handleMoveEducation(index, "down")}
-                    disabled={index === (resumeInfo.education || []).length - 1}
+                    disabled={
+                      index === (resumeInfo?.education || []).length - 1
+                    }
                   >
                     <ChevronDown className="h-4 w-4" />
                   </Button>

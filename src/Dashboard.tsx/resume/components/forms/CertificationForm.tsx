@@ -18,7 +18,7 @@ const CertificationForm = ({
 }: IFormProbs) => {
   const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext)!;
   const [certifications, setCertifications] = useState<ICertification[]>(
-    resumeInfo.certifications || []
+    resumeInfo?.certifications || []
   );
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const params = useParams<{ id: string }>();

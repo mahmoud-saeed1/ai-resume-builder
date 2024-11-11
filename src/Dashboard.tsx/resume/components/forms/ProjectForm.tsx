@@ -19,7 +19,7 @@ const ProjectForm = ({
 }: IFormProbs) => {
   const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext)!;
   const [projects, setProjects] = useState<IProjects[]>(
-    resumeInfo.projects || []
+    resumeInfo?.projects || []
   );
   const [isLoading, setIsLoading] = useState<boolean>(false);
 

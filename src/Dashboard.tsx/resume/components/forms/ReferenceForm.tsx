@@ -18,7 +18,7 @@ const ReferenceForm = ({
 }: IFormProbs) => {
   const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext)!;
   const [references, setReferences] = useState<IReferences[]>(
-    resumeInfo.references || []
+    resumeInfo?.references || []
   );
   const [isLoading, setIsLoading] = useState<boolean>(false);
 

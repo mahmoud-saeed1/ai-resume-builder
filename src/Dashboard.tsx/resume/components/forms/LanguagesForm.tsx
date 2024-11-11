@@ -21,7 +21,7 @@ const LanguagesForm = ({
 }: IFormProbs) => {
   const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext)!;
   const [languagesList, setLanguagesList] = useState<ILanguages[]>(
-    resumeInfo.languages || []
+    resumeInfo?.languages || []
   );
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
