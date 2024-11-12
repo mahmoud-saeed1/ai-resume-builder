@@ -1,65 +1,114 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast, Bounce } from "react-toastify";
+import GlobalApi from "@/service/GlobalApi";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogAction
+} from "@/components/ui/alert-dialog";
+import { ChevronDown, Pencil, Eye, Trash, Loader2Icon } from "lucide-react";
+import { AxiosError } from "axios";
+import { IErrorResponse } from "@/interfaces";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
-import { FileText, Calendar, User } from "lucide-react";
-import { IReusme } from "@/interfaces";
 
-// Framer Motion animation variants for a cleaner, smoother layout
-const containerVariants = {
-  hidden: { opacity: 0, scale: 0.95 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    transition: { duration: 0.5, ease: "easeInOut" },
-  },
-  hover: { scale: 1.03, transition: { duration: 0.3, ease: "easeInOut" } },
-};
+interface ResumeItemProps {
+  resumeId: string;
+  resumeTitle: string;
+  resumeSummary: string;
+}
 
-const ResumeItem = ({ title, documentId }: IReusme) => {
+const ResumeItem = ({ resumeId, resumeTitle, resumeSummary }: ResumeItemProps) => {
+  const [isDeleting, setIsDeleting] = useState(false);
+  const navigate = useNavigate();
+  const [openAlert, setOpenAlert] = useState(false);
+
+  const handleDeleteResume = async () => {
+    setIsDeleting(true);
+    try {
+      const { status } = await GlobalApi.DeleteResume(resumeId);
+      if (status === 200) {
+        toast.success("Resume deleted successfully.", {
+          autoClose: 1000,
+          theme: "light",
+          transition: Bounce,
+        });
+        setOpenAlert(false);
+      }
+    } catch (error) {
+      const err = error as AxiosError<IErrorResponse>;
+      toast.error(err.response?.data.error.message, {
+        autoClose: 2000,
+        theme: "light",
+        transition: Bounce,
+      });
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  const handleEdit = () => navigate(`/dashboard/resume/${resumeId}/edit`);
+  const handleView = () => navigate(`/my-resume/${resumeId}/view`);
+  const handleOpenAlertDialog = () => setOpenAlert(true);
+  const handleCloseAlertDialog = () => setOpenAlert(false);
+
+  // Framer Motion variants for cleaner code
+  const cardVariants = {
+    hidden: { opacity: 0, scale: 0.9 },
+    visible: { opacity: 1, scale: 1, transition: { duration: 0.5, ease: "easeOut" } },
+  };
+
   return (
     <motion.div
-      variants={containerVariants}
+      className="resume-item"
+      variants={cardVariants}
       initial="hidden"
       animate="visible"
-      whileHover="hover"
-      className="max-w-2xl mx-auto p-6 bg-white shadow-lg rounded-xl border border-gray-200 transition-all transform hover:shadow-2xl hover:border-blue-300"
     >
-      {/* Header Section with Resume Icon */}
-      <div className="flex justify-between items-center mb-4">
-        <div className="flex items-center space-x-4">
-          <FileText className="text-blue-500" size={36} />
-          <h2 className="text-2xl font-semibold text-gray-800">{title}</h2>
-        </div>
-        <Link to={`/dashboard/resume/${documentId}/edit`}>
-          <motion.button
-            whileHover={{ scale: 1.1 }}
-            className="px-4 py-2 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 transition"
-          >
-            Edit Resume
-          </motion.button>
-        </Link>
-      </div>
+      <div className="resume-item__header">
+        <h2 className="resume-item__title">{resumeTitle}</h2>
+        <DropdownMenu>
+          <DropdownMenuTrigger><ChevronDown className="resume-item__dropdown-icon" /></DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuLabel>Options</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={handleEdit}><Pencil className="resume-item__menu-icon" /> Edit</DropdownMenuItem>
+            <DropdownMenuItem onClick={handleView}><Eye className="resume-item__menu-icon" /> View</DropdownMenuItem>
+            <DropdownMenuItem onClick={handleOpenAlertDialog}><Trash className="resume-item__menu-icon" /> Delete</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
 
-      {/* Resume Body (example of real-life details) */}
-      <div className="grid grid-cols-2 gap-4 text-sm text-gray-600">
-        <div className="flex items-center space-x-2">
-          <User className="text-gray-400" size={18} />
-          <p>John Doe</p>
-        </div>
-        <div className="flex items-center space-x-2">
-          <Calendar className="text-gray-400" size={18} />
-          <p>Last updated: Sept 28, 2024</p>
-        </div>
-
-        {/* Add more details that would resemble a resume summary */}
-        <div className="col-span-2 mt-4 text-gray-700">
-          <p>
-            Experienced software developer skilled in React, TypeScript, and
-            modern web technologies. Adept at creating user-centric web
-            applications with a focus on functionality, design, and
-            accessibility.
-          </p>
-        </div>
+        <AlertDialog open={openAlert}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+              <AlertDialogDescription>
+                This action cannot be undone. This will permanently delete your resume and remove your data.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel onClick={handleCloseAlertDialog}>Cancel</AlertDialogCancel>
+              <AlertDialogAction onClick={handleDeleteResume} disabled={isDeleting}>
+                {isDeleting ? <Loader2Icon className='animate-spin' /> : 'Delete'}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
+      <p className="resume-item__summary">{resumeSummary}</p>
     </motion.div>
   );
 };

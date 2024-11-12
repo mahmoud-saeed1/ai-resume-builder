@@ -211,7 +211,7 @@ header{
 }
 /* ViewResume.css */
 
-.view-resume__container {
+body {
   @apply bg-gradient-to-r from-blue-50 to-gray-200 p-8;
 }
 
@@ -276,4 +276,81 @@ header{
 
 .modal__button--share {
   @apply bg-green-500 text-white;
+}
+
+/*~~~~~~~~$ Resume Item Container $~~~~~~~~*/
+/* ResumeItem.module.css */
+.resume-item {
+  @apply w-full max-w-sm mx-auto bg-gradient-to-br from-white to-gray-50 shadow-xl rounded-2xl p-5 border-l-4 border-indigo-500 transition-transform duration-300 hover:scale-105;
+}
+
+.resume-item__header {
+  @apply flex justify-between items-center border-b border-gray-300 pb-3 mb-4;
+}
+
+.resume-item__title {
+  @apply text-lg font-bold text-gray-700 truncate;
+}
+
+.resume-item__dropdown-icon {
+  @apply text-gray-500 cursor-pointer hover:text-indigo-600 transition-transform duration-200 transform hover:rotate-180;
+}
+
+.resume-item__summary {
+  @apply text-sm text-gray-600 mt-2 leading-relaxed line-clamp-4;
+}
+
+/* Dropdown Menu */
+.dropdown-menu__content {
+  @apply bg-white shadow-md rounded-lg border border-gray-200 p-3 w-40;
+}
+
+.dropdown-menu__item {
+  @apply flex items-center space-x-2 p-2 rounded-md text-gray-700 hover:bg-indigo-100 transition-colors;
+}
+
+.dropdown-menu__label {
+  @apply font-semibold text-gray-600 mb-1;
+}
+
+.dropdown-menu__separator {
+  @apply my-2 border-t border-gray-200;
+}
+
+.resume-item__menu-icon {
+  @apply w-5 h-5 text-indigo-500;
+}
+
+/* Alert dialog styles */
+.alert-dialog__header {
+  @apply text-lg font-bold text-gray-800;
+}
+
+.alert-dialog__description {
+  @apply text-sm text-gray-500;
+}
+
+.alert-dialog__footer {
+  @apply flex justify-end space-x-2 mt-4;
+}
+
+.alert-dialog__cancel {
+  @apply bg-gray-200 text-gray-700 hover:bg-gray-300 transition-colors duration-150 rounded-md px-4 py-1.5;
+}
+
+.alert-dialog__confirm {
+  @apply bg-red-500 text-white hover:bg-red-600 transition-colors duration-150 rounded-md px-4 py-1.5;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 640px) {
+  .resume-item {
+    @apply w-full max-w-full;
+  }
+  .resume-item__header {
+    @apply flex-col items-start;
+  }
+  .resume-item__title {
+    @apply text-base;
+  }
 }

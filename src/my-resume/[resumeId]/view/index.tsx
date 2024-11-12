@@ -42,6 +42,11 @@ const ViewResume = () => {
         setShowShareModal(true);
     };
 
+    useEffect(() => {
+        console.log("params", params);
+    }
+    );
+
     return (
         <ResumeInfoContext.Provider value={{ resumeInfo: resumeInfo || {} as IResumeInfo, setResumeInfo }}>
             {/*~~~~~~~~$ Celebration Confetti $~~~~~~~~*/}

@@ -16,7 +16,7 @@ const FormSection = () => {
   /*~~~~~~~~$ States $~~~~~~~~*/
   const [activeFromIdx, setActiveFromIdx] = useState(10);
   const [enableNextBtn, setEnableNextBtn] = useState(false);
-  const params = useParams<{ id: string }>();
+  const params = useParams<{ resumeId: string }>();
 
 
   /*~~~~~~~~$ Handlers $~~~~~~~~*/
@@ -43,6 +43,8 @@ const FormSection = () => {
       handleDisableNextBtn();
     }
   };
+
+
   return (
     <div>
       {/*~~~~~~~~$ Form Buttons $~~~~~~~~*/}
@@ -165,7 +167,7 @@ const FormSection = () => {
 
       {
         activeFromIdx === 10 && (
-          <Navigate to={`/my-resume/${params.id}/view`} />
+          <Navigate to={`/my-resume/${params.resumeId}/view`} />
         )
       }
     </div>

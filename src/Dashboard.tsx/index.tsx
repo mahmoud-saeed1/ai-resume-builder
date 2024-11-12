@@ -35,7 +35,7 @@ const Dashboard = () => {
           <AddResume />
 
           {resumeList.map((resume) => (
-            <ResumeItem key={resume.id} {...resume} />
+            <ResumeItem key={resume.id} resumeId={`${resume.id}`} resumeSummary="fd" resumeTitle={resume.title ?? "Untitled"}/>
           ))}
         </div>
       </div>

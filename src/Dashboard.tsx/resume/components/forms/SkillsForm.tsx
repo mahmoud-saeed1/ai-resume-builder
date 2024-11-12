@@ -23,7 +23,7 @@ const SkillsForm = ({
     resumeInfo?.skills || []
   );
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const params = useParams<{ id: string }>();
+  const params = useParams<{ resumeId: string }>();
 
   const handleInputChange = (
     skillId: string,
@@ -44,7 +44,7 @@ const SkillsForm = ({
 
   const handleOnSubmit = async () => {
     setIsLoading(true);
-    if (!params?.id) {
+    if (!params?.resumeId) {
       toast.error("ID parameter is missing.", {
         autoClose: 2000,
         theme: "light",
@@ -54,7 +54,7 @@ const SkillsForm = ({
       return;
     }
     try {
-      const { status } = await GlobalApi.UpdateResumeData(params.id, {
+      const { status } = await GlobalApi.UpdateResumeData(params.resumeId, {
         skills: skillsList,
       });
 

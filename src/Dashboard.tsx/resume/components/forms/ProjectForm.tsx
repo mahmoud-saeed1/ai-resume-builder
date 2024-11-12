@@ -23,7 +23,7 @@ const ProjectForm = ({
   );
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const params = useParams<{ id: string }>();
+  const params = useParams<{ resumeId: string }>();
 
   /*~~~~~~~~$ Handlers $~~~~~~~~*/
   const handleInputChange = (
@@ -46,7 +46,7 @@ const ProjectForm = ({
 
   const handleOnSubmit = async () => {
     setIsLoading(true);
-    if (!params?.id) {
+    if (!params?.resumeId) {
       toast.error("ID parameter is missing.", {
         autoClose: 2000,
         theme: "light",
@@ -57,7 +57,7 @@ const ProjectForm = ({
     }
 
     try {
-      const { status } = await GlobalApi.UpdateResumeData(params.id, {
+      const { status } = await GlobalApi.UpdateResumeData(params.resumeId, {
         projects,
       });
 

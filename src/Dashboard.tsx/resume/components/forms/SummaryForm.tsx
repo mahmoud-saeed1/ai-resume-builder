@@ -33,7 +33,7 @@ const SummaryForm = ({
     throw new Error("ResumeInfoContext is undefined");
   }
 
-  const params = useParams<{ id: string }>();
+  const params = useParams<{ resumeId: string }>();
 
   /*~~~~~~~~$ Form $~~~~~~~~*/
   const {
@@ -58,7 +58,7 @@ const SummaryForm = ({
   const handleOnSubmit: SubmitHandler<{ summary: string }> = async (data) => {
     setIsLoading(true);
 
-    if (!params?.id) {
+    if (!params?.resumeId) {
       toast.error("ID parameter is missing.", {
         autoClose: 2000,
         theme: "light",
@@ -70,10 +70,10 @@ const SummaryForm = ({
 
     // Log data and params.id for debugging
     console.log("Data to be sent:", data);
-    console.log("Resume ID:", params.id);
+    console.log("Resume ID:", params.resumeId);
 
     try {
-      const { status } = await GlobalApi.UpdateResumeData(params.id, data);
+      const { status } = await GlobalApi.UpdateResumeData(params.resumeId, data);
       if (status === 200) {
         toast.success("Data saved successfully.", {
           autoClose: 1000,
@@ -145,8 +145,6 @@ const SummaryForm = ({
       summary: summaryText,
     }));
   };
-
-  /*~~~~~~~~$ Animations & Variants $~~~~~~~~*/
 
   return (
     <div className="p-4 space-y-4 rounded-lg shadow-md bg-gray-100">

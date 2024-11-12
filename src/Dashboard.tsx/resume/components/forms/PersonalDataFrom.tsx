@@ -26,13 +26,13 @@ const PersonalDataForm = ({
     throw new Error("ResumeInfoContext is undefined");
   }
 
-  const params = useParams<{ id: string }>();
+  const params = useParams<{ resumeId: string }>();
 
-  useEffect (() => {
-    console.log("Resume ID: ", params.id);
+  useEffect(() => {
+    console.log("Resume ID: ", params.resumeId);
     console.log("Resume Info: ", resumeInfo);
   }
-  , [resumeInfo]);
+    , [resumeInfo]);
 
   /*~~~~~~~~$ Form $~~~~~~~~*/
   const {
@@ -58,7 +58,7 @@ const PersonalDataForm = ({
     setIsLoading(true);
 
 
-    if (!params?.id) {
+    if (!params?.resumeId) {
       toast.error("ID parameter is missing.", {
         autoClose: 2000,
         theme: "light",
@@ -68,7 +68,7 @@ const PersonalDataForm = ({
     }
 
     try {
-      const { status } = await GlobalApi.UpdateResumeData(params.id, {
+      const { status } = await GlobalApi.UpdateResumeData(params.resumeId, {
         personalData: [data],
       });
       if (status === 200) {
