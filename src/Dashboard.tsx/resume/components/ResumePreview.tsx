@@ -13,58 +13,48 @@ import ReferencesPreview from "./preview/ReferencesPreview";
 const ResumePreview = () => {
   const resumeInfo = useContext(ResumeInfoContext);
 
+  // Check if resumeInfo and resumeInfo.resumeInfo are not null
+  const resumeData = resumeInfo?.resumeInfo;
+
   return (
     <div className="resumePreview">
       {/*~~~~~~~~$ Personal Data Section $~~~~~~~~*/}
-      {resumeInfo?.resumeInfo.personalData && (
-        <PersonalDataPreview
-          personalData={resumeInfo?.resumeInfo.personalData}
-        />
+      {resumeData?.personalData && (
+        <PersonalDataPreview personalData={resumeData.personalData} />
       )}
-
-      {/*~~~~~~~~$ Summery Section$~~~~~~~~*/}
-      {resumeInfo?.resumeInfo.summary && (
-        <SummaryPreview summary={resumeInfo?.resumeInfo.summary} />
+      {/*~~~~~~~~$ Summary Section $~~~~~~~~*/}
+      {resumeData?.summary && (
+        <SummaryPreview summary={resumeData.summary} />
       )}
-
       {/*~~~~~~~~$ Professional Experience Section $~~~~~~~~*/}
-      {resumeInfo?.resumeInfo.experience && (
-        <ProfessionalExperience
-          experience={resumeInfo?.resumeInfo.experience}
-        />
+      {resumeData?.experience && (
+        <ProfessionalExperience experience={resumeData.experience} />
       )}
-
       {/*~~~~~~~~$ Education Section $~~~~~~~~*/}
-      {resumeInfo?.resumeInfo.education && (
-        <Education education={resumeInfo?.resumeInfo.education} />
+      {resumeData?.education && (
+        <Education education={resumeData.education} />
       )}
-
       {/*~~~~~~~~$ Skills Section $~~~~~~~~*/}
-      {resumeInfo?.resumeInfo.skills && (
-        <SkillsPreview skills={resumeInfo?.resumeInfo.skills} />
+      {resumeData?.skills && (
+        <SkillsPreview skills={resumeData.skills} />
       )}
-
       {/*~~~~~~~~$ Language Section $~~~~~~~~*/}
-      {resumeInfo?.resumeInfo.languages && (
-        <LanguagesPreview languages={resumeInfo.resumeInfo.languages} />
+      {resumeData?.languages && (
+        <LanguagesPreview languages={resumeData.languages} />
       )}
-
       {/*~~~~~~~~$ Certification Section $~~~~~~~~*/}
-      {resumeInfo?.resumeInfo.certifications && (
-        <CertificationsPreview
-          certifications={resumeInfo.resumeInfo.certifications}
-        />
+      {resumeData?.certifications && (
+        <CertificationsPreview certifications={resumeData.certifications} />
       )}
-
       {/*~~~~~~~~$ Projects Section $~~~~~~~~*/}
-      {resumeInfo?.resumeInfo.projects && (
-        <ProjectsPreview projects={resumeInfo?.resumeInfo.projects} />
+      {resumeData?.projects && (
+        <ProjectsPreview projects={resumeData.projects} />
+      )}
+      {/*~~~~~~~~$ References Section $~~~~~~~~*/}
+      {resumeData?.references && (
+        <ReferencesPreview references={resumeData.references} />
       )}
 
-      {/*~~~~~~~~$ References Section $~~~~~~~~*/}
-      {resumeInfo?.resumeInfo.references && (
-        <ReferencesPreview references={resumeInfo?.resumeInfo.references} />
-      )}
     </div>
   );
 };

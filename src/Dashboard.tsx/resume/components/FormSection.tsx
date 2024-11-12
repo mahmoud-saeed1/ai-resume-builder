@@ -10,12 +10,14 @@ import CertificationForm from "./forms/CertificationForm";
 import ProjectForm from "./forms/ProjectForm";
 import LanguagesForm from "./forms/LanguagesForm";
 import ReferenceForm from "./forms/ReferenceForm";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useParams } from "react-router-dom";
 
 const FormSection = () => {
   /*~~~~~~~~$ States $~~~~~~~~*/
-  const [activeFromIdx, setActiveFromIdx] = useState(1);
+  const [activeFromIdx, setActiveFromIdx] = useState(10);
   const [enableNextBtn, setEnableNextBtn] = useState(false);
+  const params = useParams<{ id: string }>();
+
 
   /*~~~~~~~~$ Handlers $~~~~~~~~*/
   const handleEnableNextBtn = () => setEnableNextBtn(true);
@@ -160,6 +162,12 @@ const FormSection = () => {
           handleDisableNextBtn={handleDisableNextBtn}
         />
       )}
+
+      {
+        activeFromIdx === 10 && (
+          <Navigate to={`/my-resume/${params.id}/view`} />
+        )
+      }
     </div>
   );
 };

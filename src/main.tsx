@@ -10,6 +10,7 @@ import { ClerkProvider } from "@clerk/clerk-react";
 import EditResume from "./Dashboard.tsx/resume/[resumeId]/index.tsx";
 import { Bounce, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import ViewResume from "./my-resume/[resumeId]/view/index.tsx";
 
 
 
@@ -23,6 +24,7 @@ const router = createBrowserRouter([
     ],
   },
   { path: "/auth/sign-in", element: <SignInPage /> },
+  { path: "/my-resume/:resumeId/view", element: <ViewResume /> },
 ]);
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;

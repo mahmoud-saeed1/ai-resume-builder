@@ -8,7 +8,7 @@ import GlobalApi from "@/service/GlobalApi";
 
 const EditResume = () => {
   /*~~~~~~~~$ States $~~~~~~~~*/
-  const params = useParams<{ id: string }>();
+  const params = useParams<{ resumeId: string }>();
   const [resumeInfo, setResumeInfo] = useState<IResumeInfo>();
 
   /*~~~~~~~~$ Effects $~~~~~~~~*/
@@ -18,16 +18,11 @@ const EditResume = () => {
 
   /*~~~~~~~~$ Handlers $~~~~~~~~*/
   const getResumeData = () => {
-    GlobalApi.GetResumeById(params.id!).then((resp) => {
+    GlobalApi.GetResumeById(params.resumeId!).then((resp) => {
       console.log(resp.data.data);
       setResumeInfo(resp.data.data);
     });
   };
-
-  useEffect(() => {
-    console.log("resumeInfo from main", resumeInfo);
-  }
-  , [resumeInfo]);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-10 p-10">

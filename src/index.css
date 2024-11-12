@@ -189,3 +189,91 @@ header{
 .resume-preview__header--purple { --theme-color: #8b5cf6; }
 .resume-preview__header--yellow { --theme-color: #f59e0b; }
 
+@media print{
+  #no-print{
+    display: none;
+  }
+
+  #print-area{
+    display: block;
+  }
+
+  body{
+    margin: 0;
+    padding: 0;
+    box-shadow: none;
+  }
+}
+
+@page{
+  size: auto;
+  margin: 0mm;
+}
+/* ViewResume.css */
+
+.view-resume__container {
+  @apply bg-gradient-to-r from-blue-50 to-gray-200 p-8;
+}
+
+.view-resume__content {
+  @apply text-center mx-auto my-8 max-w-2xl;
+}
+
+.view-resume__title {
+  @apply text-3xl font-bold text-gray-800;
+}
+
+.view-resume__description {
+  @apply text-lg text-gray-600 mt-2;
+}
+
+.view-resume__actions {
+  @apply flex justify-center gap-6 mt-8;
+}
+
+.view-resume__button--download {
+  @apply bg-blue-600 text-white;
+}
+
+.view-resume__button--share {
+  @apply bg-green-500 text-white;
+}
+
+/* Resume Preview Area */
+.view-resume__preview-area {
+  @apply bg-white mx-auto p-6 rounded-xl shadow-md mt-6 max-w-2xl w-full;
+}
+
+/* Modal Styling */
+.modal {
+  @apply fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 z-50;
+}
+
+.modal__content {
+  @apply bg-white p-8 rounded max-w-md w-full text-center;
+}
+
+.modal__title {
+  @apply text-2xl font-semibold;
+}
+
+.modal__message {
+  @apply text-base text-gray-600 mt-2;
+}
+
+.modal__actions {
+  @apply flex justify-between gap-4 mt-6;
+}
+
+.modal__button--confirm {
+  @apply bg-blue-600 text-white;
+}
+
+.modal__button--cancel,
+.modal__button--close {
+  @apply bg-red-400 text-white;
+}
+
+.modal__button--share {
+  @apply bg-green-500 text-white;
+}
