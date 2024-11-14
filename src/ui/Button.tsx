@@ -3,7 +3,7 @@ import { VariantProps, cva } from "class-variance-authority";
 import { ButtonHTMLAttributes, ReactNode } from "react";
 
 const buttonVariants = cva(
-  "flex items-center justify-center rounded-xl font-medium text-white duration-300 dark:text-black disabled:bg-indigo-400 disabled:hover:bg-indigo-400 disabled:cursor-not-allowed",
+  "flex items-center justify-center rounded-xl font-medium text-white duration-300 dark:text-black disabled:bg-blue-600 disabled:hover:bg-blue-600 disabled:cursor-not-allowed fo",
   {
     variants: {
       variant: {
@@ -13,15 +13,15 @@ const buttonVariants = cva(
 
         // ** FILLED
         default:
-          "bg-slate-900 dark:bg-indigo-600 dark:text-white dark:hover:bg-indigo-700",
+          "text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50 dark:text-white dark:bg-blue-600 dark:hover:bg-blue-700",
         danger:
           "bg-red-900 dark:bg-[#c2344d] dark:text-white dark:hover:bg-red-700",
         cancel:
-          "bg-gray-500 dark:bg-gray-500 dark:text-dark hover:bg-gray-600 dark:hover:bg-gray-600",
+          "bg-transparent border border-gray-400 text-gray-500 dark:bg-gray-500 dark:text-dark hover:text-white hover:bg-gray-600 dark:hover:bg-gray-600",
 
         // ** OUTLINE
         outline:
-          "border border-indigo-400 hover:text-white bg-transparent text-black hover:border-transparent hover:bg-indigo-600 dark:text-gray-700 dark:hover:text-white",
+          "border border-blue-600 hover:text-white bg-transparent text-black hover:border-transparent hover:bg-blue-600 dark:text-gray-700 dark:hover:text-white",
       },
       size: {
         default: "px-4 py-2",

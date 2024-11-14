@@ -17,7 +17,7 @@ const ResumePreview = () => {
   const resumeData = resumeInfo?.resumeInfo;
 
   return (
-    <div className="resumePreview">
+    <div className="glass-light p-4 rounded-xl" style={{ background: "white" }}>
       {/*~~~~~~~~$ Personal Data Section $~~~~~~~~*/}
       {resumeData?.personalData && (
         <PersonalDataPreview personalData={resumeData.personalData} />

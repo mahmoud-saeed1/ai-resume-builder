@@ -1,26 +1,31 @@
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 import { useUser } from "@clerk/clerk-react";
-import { CirclePlus, Loader2 } from "lucide-react";
+import { CirclePlus } from "lucide-react";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
 import GlobalApi from "@/service/GlobalApi"; // Corrected import path
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import InputErrorMessage from "@/ui/InputErrorMessage";
+import Button from "@/ui/Button";
+import Label from "@/ui/Label";
+import Input from "@/ui/Input";
 
 const AddResume = () => {
-  /*~~~~~~~~$ States $~~~~~~~~*/
-  const [openDailog, setOpenDialog] = useState(false);
-  const [resumeTitle, setResumeTitle] = useState("");
+  /*~~~~~~~~$ States & Hooks $~~~~~~~~*/
+  const [openDialog, setOpenDialog] = useState(false);
   const { user } = useUser();
-  const [loading, setLoading] = useState(false);
-  const naviagation = useNavigate();
+  const [isloading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+
+  // Set up react-hook-form
+  const { register, reset, handleSubmit, formState: { errors } } = useForm<FormData>();
 
   /*~~~~~~~~$ Handlers $~~~~~~~~*/
   const handleOpenDialog = () => {
@@ -31,72 +36,88 @@ const AddResume = () => {
     setOpenDialog(false);
   };
 
-  const handleResumeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setResumeTitle(e.target.value);
-    const resumeId = uuidv4();
-    console.log(resumeId + resumeTitle);
-  };
+  interface ResumeData {
+    data: {
+      title: string;
+      resumeId: string;
+      userEmail: string | undefined;
+      userName: string | undefined;
+    };
+  }
 
-  const handleCreateResume = async () => {
-    setLoading(true);
-    const uuid = uuidv4();
-    const data = {
+  interface FormData {
+    title: string;
+  }
+
+  const handleCreateResume = async (data: FormData) => {
+    setIsLoading(true);
+    const resumeId = uuidv4();
+    const resumeData: ResumeData = {
       data: {
-        title: resumeTitle,
-        resumeId: uuid,
+        title: data.title,
+        resumeId: resumeId,
         userEmail: user?.primaryEmailAddress?.emailAddress,
-        userName: user?.fullName,
+        userName: user?.fullName ?? undefined,
       },
     };
 
     try {
-      await GlobalApi.createNewResume(data).then((res) => {
-        console.log(res);
+      const res = await GlobalApi.createNewResume(resumeData);
+      console.log(res);
 
-        if (res) {
-          setLoading(false);
-          naviagation(`/dashboard/resume/${res.data.data.documentId}/edit`);
-        }
+      if (res) {
+        toast.success("Resume created successfully!");
+        setIsLoading(false);
+        navigate(`/dashboard/resume/${res.data.data.documentId}/edit`);
+      }
 
-        handleCloseDialog();
-      });
-      console.log("Resume created successfully");
+      handleCloseDialog();
     } catch (error) {
       console.error("Error creating resume:", error);
-      console.log(data)
+      toast.error("Error creating resume.");
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
+
+  const handleCancel = () => {
+    reset();
+    handleCloseDialog();
+  }
 
   return (
     <div className="resume">
       <Button
-        className="bg-transparent border-none shadow-none outline-none hover:bg-transparent"
+        className="resume__add-btn"
         onClick={handleOpenDialog}
       >
-        <CirclePlus size={50} className="opacity-75" />
+        <CirclePlus size={50} className="resume__add-icon" />
       </Button>
-      <Dialog open={openDailog}>
-        <DialogContent className="bg-white rounded-xl">
+      <Dialog open={openDialog}>
+        <DialogContent className="resume__dialog-content">
           <DialogHeader>
-            <DialogTitle>Create a new resume</DialogTitle>
-            <DialogDescription>Add your resume title.</DialogDescription>
-            <Input
-              placeholder="Enter resume title"
-              onChange={handleResumeTitle}
-            />
-            <div className="flex items-center justify-end space-x-2">
-              <Button onClick={handleCloseDialog} variant={"ghost"}>
-                Cancel
-              </Button>
-              <Button
-                onClick={handleCreateResume}
-                disabled={!resumeTitle || loading}
-              >
-                {loading ? <Loader2 className="animate-spin" /> : "Create"}
-              </Button>
-            </div>
+            <DialogTitle className="resume__dialog-title">Create a new resume</DialogTitle>
+            <form onSubmit={handleSubmit(handleCreateResume)} className="resume__form">
+              <Label htmlFor="title" className="resume__label">Resume Title</Label>
+              <Input
+                id="title"
+                placeholder="Enter resume title"
+                {...register("title", {
+                  required: "Resume title is required",
+                  minLength: { value: 3, message: "Title must be at least 3 characters" },
+                })}
+                className={`${errors.title ? "resume__input--error" : ""}`}
+              />
+              {errors.title && <InputErrorMessage msg={errors.title.message} />}
+              <div className="resume__actions">
+                <Button onClick={handleCancel} variant="cancel">
+                  Cancel
+                </Button>
+                <Button type="submit" disabled={isloading} isLoading={isloading}>
+                  Create
+                </Button>
+              </div>
+            </form>
           </DialogHeader>
         </DialogContent>
       </Dialog>

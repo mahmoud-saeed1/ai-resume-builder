@@ -2,7 +2,7 @@ import { IErrorResponse, IFormProbs, IGeneratedSummary } from "@/interfaces";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ResumeInfoContext } from "@/context/ResumeInfoContext";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import GlobalApi from "@/service/GlobalApi";
 import { useParams } from "react-router-dom";
 import { toast, Bounce } from "react-toastify";
@@ -93,6 +93,13 @@ const SummaryForm = ({
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (resumeInfo?.personalData && typeof resumeInfo.personalData[0].jobTitle === 'string') {
+      setValue("summary", resumeInfo.personalData[0].jobTitle);
+    }
+  }
+  , [resumeInfo?.summary]);
 
   const handleGenerateSummary = async () => {
     setIsGenerated(true);

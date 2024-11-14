@@ -59,9 +59,18 @@ const EducationForm = ({
     }
 
     try {
+      const educationWithoutId = educationList.map((edu) => {
+        const { id, ...rest } = edu;
+        return rest;
+      });
+
+      const personalDataWithoutId = resumeInfo?.personalData
+        ? resumeInfo.personalData.map(({ id, ...rest }) => rest)
+        : [];
+
       const { status } = await GlobalApi.UpdateResumeData(params.resumeId, {
-        personalData: resumeInfo?.personalData || [],
-        education: educationList.map(({id, ...rest})=>rest),
+        personalData: personalDataWithoutId,
+        education: educationWithoutId,
       });
 
       if (status === 200) {

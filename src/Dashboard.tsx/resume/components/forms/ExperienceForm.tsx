@@ -120,7 +120,7 @@ const ExperienceForm = ({
   };
 
   return (
-    <div className="grid gap-4 p-4">
+    <div className="grid gap-4 p-4 ">
       <h2 className="text-lg font-semibold">Experience</h2>
 
       {experienceList.length === 0 ? (

@@ -19,7 +19,7 @@ const EditResume = () => {
   /*~~~~~~~~$ Handlers $~~~~~~~~*/
   const getResumeData = () => {
     GlobalApi.GetResumeById(params.resumeId!).then((resp) => {
-      console.log(resp.data.data);
+      
       setResumeInfo(resp.data.data);
     });
   };

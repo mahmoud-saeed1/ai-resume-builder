@@ -31,11 +31,20 @@ const RichTextEditor = ({
   index,
   defaultValue,
 }: IRichTextEditorProps) => {
-  const { resumeInfo } = useContext(ResumeInfoContext)!;
+  const resumeInfoContext = useContext(ResumeInfoContext);
+  const resumeInfo = resumeInfoContext?.resumeInfo;
   const [value, setValue] = useState<string>(defaultValue || "");
   const [loading, setLoading] = useState<boolean>(false);
 
   const generateSummaryFromAI = async () => {
+    if (!resumeInfo) {
+      toast.error("Resume information is missing.", {
+        autoClose: 2000,
+        theme: "light",
+        transition: Bounce,
+      });
+      return;
+    }
     const exp = resumeInfo.experience ? resumeInfo.experience[index] : null;
     if (!exp) {
       toast.error("Experience information is missing.", {
@@ -61,7 +70,7 @@ const RichTextEditor = ({
       Start Date: ${exp.startDate},
       End Date: ${exp.currentlyWorking ? "Present" : exp.endDate}.
       Highlight impactful achievements, skill applications, and methodologies suitable for a recruiter.`;
-      
+
     setLoading(true);
     try {
       const result = await AIChatSession.sendMessage(prompt);

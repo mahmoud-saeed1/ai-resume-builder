@@ -43,7 +43,7 @@ const ViewResume = () => {
     };
 
     useEffect(() => {
-        console.log("params", params);
+        
     }
     );
 
@@ -123,7 +123,6 @@ const ViewResume = () => {
                                     url: `${import.meta.env.VITE_BASE_URL}/my-resume/${params.resumeId}/view`,
                                     title: "My AI-Generated Resume",
                                 }}
-                                onClick={() => console.log("Shared successfully!")}
                             >
                                 <Button className="modal__button--share">Share Now</Button>
                             </RWebShare>

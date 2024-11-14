@@ -38,6 +38,7 @@ function FormInput({
         onChange={onChange}
         defaultValue={defaultValue}
         required={required}
+        className="bg-white"
       />
       {errorMessage && <InputErrorMessage msg={errorMessage} />}
     </div>

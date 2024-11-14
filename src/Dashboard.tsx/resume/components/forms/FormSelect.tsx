@@ -34,7 +34,7 @@ const FormSelect = ({
         onChange={onChange}
         defaultValue={defaultValue}
         required={required}
-        className="border rounded p-2 w-full"
+        className="bg-white border rounded p-2 w-full"
       >
         {children}
       </Select>
