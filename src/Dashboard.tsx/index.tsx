@@ -9,7 +9,7 @@ const Dashboard = () => {
   const { user } = useUser();
   const [resumeList, setResumeList] = useState<IReusme[]>([]);
 
-  // get user resumes list using useEffect dependency on user email
+  // Get user resumes list using useEffect with dependency on user email
   useEffect(() => {
     getResumesList();
   }, [user?.primaryEmailAddress?.emailAddress ?? ""]);
@@ -22,20 +22,28 @@ const Dashboard = () => {
     );
   };
 
-
   return (
-    <section>
-      <div className="container">
-        <h1 className="title-primary">my resume</h1>
-
-        <h2 className="title-secondary">
-          start creating ai resume to your next job role
+    <section className="dashboard">
+      <div className="dashboard__container">
+        <h1 className="dashboard__title">My Resumes</h1>
+        <h2 className="dashboard__subtitle">
+          Start creating your AI-generated resume for your next job role
         </h2>
-        <div className="resume-container">
-          <AddResume />
 
-          {resumeList.map((resume) => (
-            <ResumeItem key={resume.id} resumeId={`${resume.id}`} resumeSummary="fd" resumeTitle={resume.title ?? "Untitled"}/>
+
+        <div className="dashboard__resume-list">
+          <div className="dashboard__resume-actions">
+            <AddResume />
+          </div>
+          {resumeList.map(({ resumeId, createdAt, updatedAt, title }) => (
+            <ResumeItem
+              key={resumeId}
+              createdAt={createdAt}
+              updatedAt={updatedAt}
+              resumeId={resumeId ?? ""}
+              resumeSummary={""}
+              resumeTitle={title ?? "Untitled"}
+            />
           ))}
         </div>
       </div>

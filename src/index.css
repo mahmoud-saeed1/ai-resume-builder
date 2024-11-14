@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 /*~~~~~~~~$ react-simple-wysiwyg $~~~~~~~~*/
 .rsw-ce ul {
   list-style: disc;
@@ -15,46 +14,71 @@
 }
 
 /*~~~~~~~~$ Global Styling $~~~~~~~~*/
-h1{
-    @apply text-4xl font-bold capitalize
+h1 {
+  @apply text-4xl font-bold capitalize;
 }
 
-h2{
-    @apply font-semibold
+h2 {
+  @apply font-semibold;
 }
 
 .container {
-    @apply px-4 py-8 md:px-8 lg:px-60 xl:px-60 ;
+  @apply px-4 py-8 md:px-8 lg:px-60 xl:px-60;
 }
 
 /*~~~~~~~~$ Header Styling $~~~~~~~~*/
-header{
-    @apply flex justify-between items-center p-4;
+header {
+  @apply flex justify-between items-center p-4;
 }
 
-.btn-primary{
-    @apply rounded-[5px] text-white font-bold tracking-wider capitalize;
+.btn-primary {
+  @apply rounded-[5px] text-white font-bold tracking-wider capitalize;
 }
 
-.link-primary{
-    @apply bg-primary px-4 py-2 rounded-[5px] text-white font-bold tracking-wider capitalize
+.link-primary {
+  @apply bg-primary px-4 py-2 rounded-[5px] text-white font-bold tracking-wider capitalize;
 }
 
-.header-btns{
-    @apply flex items-center justify-center space-x-2
+.header-btns {
+  @apply flex items-center justify-center space-x-2;
 }
 
 /*~~~~~~~~$ Dashboard Styling $~~~~~~~~*/
-.resume-container{
-    @apply grid grid-cols-2 place-items-center sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5
+.resume-container {
+  @apply grid grid-cols-2 place-items-center sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5;
 }
 
-.resume{
-    @apply bg-gray-200 w-52 h-72 flex items-center justify-center rounded-[0.4rem] border-gray-500 border-2 border-dashed
+.resume {
+  @apply bg-gray-200 w-52 h-72 flex items-center justify-center rounded-[0.4rem] border-gray-500 border-2 border-dashed;
 }
-.resume:hover{
-    @apply scale-105 transition-all duration-300 ease-linear
+.resume:hover {
+  @apply scale-105 transition-all duration-300 ease-linear;
 }
+
+.dashboard {
+  @apply min-h-screen max-w-xl md:max-w-2xl lg:max-w-4xl mx-auto flex flex-wrap py-10 px-5 lg:px-10 lg:py-20 rounded-xl bg-gray-50;
+}
+
+.dashboard__container {
+  @apply max-w-5xl mx-auto px-4 md:px-8;
+}
+
+.dashboard__title {
+  @apply text-xl lg:text-3xl font-bold text-center text-red-800 mb-2;
+}
+
+.dashboard__subtitle {
+  @apply lg:text-lg text-center text-gray-600 mb-8;
+}
+
+.dashboard__resume-actions {
+  @apply flex justify-center mb-6;
+}
+
+.dashboard__resume-list {
+  @apply grid gap-6 sm:grid-cols-2 lg:grid-cols-3;
+}
+
 
 /*~~~~~~~~$ Resume Preview Styling $~~~~~~~~*/
 /* Sections styling */
@@ -69,7 +93,7 @@ header{
 
 .resume-preview__section-title {
   @apply text-lg font-semibold mb-4 text-gray-700 text-center border-b-2 pb-2;
-  border-color: #4A90E2;
+  border-color: #4a90e2;
 }
 
 .resume-preview__job-title,
@@ -82,7 +106,7 @@ header{
 }
 
 .resume-preview {
-  font-family: 'Arial', sans-serif;
+  font-family: "Arial", sans-serif;
   color: #333;
   max-width: 800px;
   margin: 0 auto;
@@ -139,13 +163,14 @@ header{
   line-height: 1.6;
 }
 
-
-.resume-preview__job-title, .resume-preview__university-name {
+.resume-preview__job-title,
+.resume-preview__university-name {
   font-weight: 600;
   color: #1f2937;
 }
 
-.resume-preview__company, .resume-preview__degree {
+.resume-preview__company,
+.resume-preview__degree {
   font-size: 0.9rem;
   color: #4b5563;
 }
@@ -155,7 +180,8 @@ header{
   color: #6b7280;
 }
 
-.resume-preview__description, .resume-preview__work-summary {
+.resume-preview__description,
+.resume-preview__work-summary {
   font-size: 0.9rem;
   color: #374151;
   margin-top: 4px;
@@ -183,29 +209,39 @@ header{
 }
 
 /* Color Scheme */
-.resume-preview__header--blue { --theme-color: #3b82f6; }
-.resume-preview__header--green { --theme-color: #10b981; }
-.resume-preview__header--red { --theme-color: #ef4444; }
-.resume-preview__header--purple { --theme-color: #8b5cf6; }
-.resume-preview__header--yellow { --theme-color: #f59e0b; }
+.resume-preview__header--blue {
+  --theme-color: #3b82f6;
+}
+.resume-preview__header--green {
+  --theme-color: #10b981;
+}
+.resume-preview__header--red {
+  --theme-color: #ef4444;
+}
+.resume-preview__header--purple {
+  --theme-color: #8b5cf6;
+}
+.resume-preview__header--yellow {
+  --theme-color: #f59e0b;
+}
 
-@media print{
-  #no-print{
+@media print {
+  #no-print {
     display: none;
   }
 
-  #print-area{
+  #print-area {
     display: block;
   }
 
-  body{
+  body {
     margin: 0;
     padding: 0;
     box-shadow: none;
   }
 }
 
-@page{
+@page {
   size: auto;
   margin: 0mm;
 }
@@ -281,7 +317,7 @@ body {
 /*~~~~~~~~$ Resume Item Container $~~~~~~~~*/
 /* ResumeItem.module.css */
 .resume-item {
-  @apply w-full max-w-sm mx-auto bg-gradient-to-br from-white to-gray-50 shadow-xl rounded-2xl p-5 border-l-4 border-indigo-500 transition-transform duration-300 hover:scale-105;
+  @apply w-full max-w-sm mx-auto bg-gradient-to-br from-white to-gray-50 shadow-xl rounded-2xl p-5 border-l-4 border-blue-500 transition-transform duration-300 hover:scale-105;
 }
 
 .resume-item__header {
@@ -293,7 +329,7 @@ body {
 }
 
 .resume-item__dropdown-icon {
-  @apply text-gray-500 cursor-pointer hover:text-blue-700 transition-transform duration-200 transform hover:rotate-180;
+  @apply translate-x-2;
 }
 
 .resume-item__summary {
@@ -377,8 +413,8 @@ body {
   @apply bg-transparent border-none shadow-none outline-none hover:bg-transparent;
 }
 
-.resume__add-btn:hover{
-  background-color: transparent !important
+.resume__add-btn:hover {
+  background-color: transparent !important;
 }
 
 .resume__add-icon {
@@ -415,4 +451,82 @@ body {
 
 .resume__actions {
   @apply flex items-center justify-end space-x-2 mt-4;
-} 
+}
+
+.dashboard__container {
+  @apply max-w-5xl mx-auto px-6 py-8 bg-white rounded-2xl shadow-lg border-2 border-dashed;
+}
+
+.dashboard__title {
+  @apply text-3xl lg:text-5xl font-bold text-blue-700 mb-2 text-center;
+}
+
+.dashboard__intro {
+  @apply text-lg text-gray-600 mb-10 text-center;
+}
+
+.dashboard__resume-list {
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8;
+}
+
+.skeleton-loader__container {
+  @apply flex gap-4 flex-wrap;
+}
+
+.skeleton-loader {
+  @apply w-full h-32 bg-gray-200 rounded-lg shadow-md p-4 animate-pulse;
+}
+
+.skeleton-loader__header {
+  @apply h-6 w-3/4 bg-gray-300 rounded mb-4;
+}
+
+.skeleton-loader__body {
+  @apply h-4 w-full bg-gray-300 rounded mb-2;
+}
+
+.skeleton-loader__footer {
+  @apply h-4 w-1/2 bg-gray-300 rounded;
+}
+
+
+
+.resume-item {
+  @apply bg-white w-52 h-72 flex flex-col items-center justify-center;
+}
+
+.resume-item__icon {
+  @apply w-20 h-20 flex items-center justify-center bg-blue-100 p-4 rounded-full;
+}
+
+.resume-item__icon-file {
+  @apply text-blue-500 w-20 h-20;
+}
+
+.resume-item__content {
+  @apply flex flex-col items-center justify-center flex-1;
+}
+
+.resume-item__header {
+  @apply flex items-center justify-between mb-2;
+}
+
+.resume-item__title {
+  @apply text-lg font-semibold text-gray-900 capitalize;
+}
+
+.resume-item__dropdown-icon {
+  @apply cursor-pointer text-gray-700 hover:text-gray-900 transition duration-200 ease-in-out;
+}
+
+.resume-item__menu-icon {
+  @apply mr-2 text-gray-600;
+}
+
+.resume-item__summary {
+  @apply text-gray-700 text-sm mt-2 leading-relaxed line-clamp-3;
+}
+
+.resume-item__dates {
+  @apply mt-4 text-xs text-gray-500 flex flex-col space-y-2;
+}

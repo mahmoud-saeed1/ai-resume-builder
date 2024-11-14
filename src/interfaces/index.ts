@@ -18,7 +18,7 @@ export interface IUserResume {
 export interface IReusme {
   createdAt?: string;
   documentId?: string;
-  id: number;
+  id: string;
   locale?: null;
   publishedAt?: string;
   resumeId?: string;

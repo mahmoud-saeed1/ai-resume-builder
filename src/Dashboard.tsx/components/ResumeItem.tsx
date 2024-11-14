@@ -9,10 +9,9 @@ import {
   AlertDialogTitle,
   AlertDialogDescription,
   AlertDialogFooter,
-  AlertDialogCancel,
-  AlertDialogAction
+
 } from "@/components/ui/alert-dialog";
-import { ChevronDown, Pencil, Eye, Trash, Loader2Icon } from "lucide-react";
+import { ChevronDown, Pencil, Eye, Trash, User } from "lucide-react";
 import { AxiosError } from "axios";
 import { IErrorResponse } from "@/interfaces";
 import {
@@ -24,17 +23,26 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { motion } from "framer-motion";
+import Button from "@/ui/Button";
 
 interface ResumeItemProps {
   resumeId: string;
   resumeTitle: string;
   resumeSummary: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
-const ResumeItem = ({ resumeId, resumeTitle, resumeSummary }: ResumeItemProps) => {
+const ResumeItem = ({ resumeId, resumeTitle, resumeSummary, createdAt, updatedAt }: ResumeItemProps) => {
   const [isDeleting, setIsDeleting] = useState(false);
   const navigate = useNavigate();
   const [openAlert, setOpenAlert] = useState(false);
+
+  // Format dates to a readable format
+  const formatDate = (dateStr?: string) => {
+    if (!dateStr) return '';
+    return new Date(dateStr).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
+  };
 
   const handleDeleteResume = async () => {
     setIsDeleting(true);
@@ -67,48 +75,54 @@ const ResumeItem = ({ resumeId, resumeTitle, resumeSummary }: ResumeItemProps) =
 
   // Framer Motion variants for cleaner code
   const cardVariants = {
-    hidden: { opacity: 0, scale: 0.9 },
-    visible: { opacity: 1, scale: 1, transition: { duration: 0.5, ease: "easeOut" } },
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } },
   };
 
   return (
-    <motion.div
-      className="resume-item"
-      variants={cardVariants}
-      initial="hidden"
-      animate="visible"
-    >
-      <div className="resume-item__header">
-        <h2 className="resume-item__title">{resumeTitle}</h2>
-        <DropdownMenu>
-          <DropdownMenuTrigger><ChevronDown className="resume-item__dropdown-icon" /></DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuLabel>Options</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={handleEdit}><Pencil className="resume-item__menu-icon" /> Edit</DropdownMenuItem>
-            <DropdownMenuItem onClick={handleView}><Eye className="resume-item__menu-icon" /> View</DropdownMenuItem>
-            <DropdownMenuItem onClick={handleOpenAlertDialog}><Trash className="resume-item__menu-icon" /> Delete</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-
-        <AlertDialog open={openAlert}>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-              <AlertDialogDescription>
-                This action cannot be undone. This will permanently delete your resume and remove your data.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel onClick={handleCloseAlertDialog}>Cancel</AlertDialogCancel>
-              <AlertDialogAction onClick={handleDeleteResume} disabled={isDeleting}>
-                {isDeleting ? <Loader2Icon className='animate-spin' /> : 'Delete'}
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
+    <motion.div className="resume-item" variants={cardVariants} initial="hidden" animate="visible">
+      <div className="resume-item__icon">
+        <User className="resume-item__icon-file"/>
       </div>
-      <p className="resume-item__summary">{resumeSummary}</p>
+
+      <div className="resume-item__content">
+        <div className="resume-item__header">
+          <h2 className="resume-item__title">{resumeTitle}</h2>
+          <DropdownMenu>
+            <DropdownMenuTrigger><ChevronDown className="resume-item__dropdown-icon" /></DropdownMenuTrigger>
+            <DropdownMenuContent className="bg-white">
+              <DropdownMenuLabel>Options</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={handleEdit}><Pencil className="resume-item__menu-icon" /> Edit</DropdownMenuItem>
+              <DropdownMenuItem onClick={handleView}><Eye className="resume-item__menu-icon" /> View</DropdownMenuItem>
+              <DropdownMenuItem onClick={handleOpenAlertDialog}><Trash className="resume-item__menu-icon" /> Delete</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+
+        <p className="resume-item__summary">{resumeSummary}</p>
+        <div className="resume-item__dates">
+          <span>Created: {formatDate(createdAt)}</span>
+          <span>Updated: {formatDate(updatedAt)}</span>
+        </div>
+      </div>
+
+      <AlertDialog open={openAlert}>
+        <AlertDialogContent className="bg-white">
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete your resume and remove your data.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <Button onClick={handleCloseAlertDialog} variant={"cancel"}>Cancel</Button>
+            <Button isLoading={isDeleting} variant={"danger"} onClick={handleDeleteResume} disabled={isDeleting}>
+              Delete
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </motion.div>
   );
 };
