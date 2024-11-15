@@ -98,7 +98,7 @@ const AddResume = () => {
           <DialogHeader>
             <DialogTitle className="resume__dialog-title">Create a new resume</DialogTitle>
             <form onSubmit={handleSubmit(handleCreateResume)} className="resume__form">
-              <Label htmlFor="title" className="resume__label">Resume Title</Label>
+              <Label htmlFor="title">Resume Title</Label>
               <Input
                 id="title"
                 placeholder="Enter resume title"

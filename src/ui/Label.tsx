@@ -7,7 +7,7 @@ interface IProps extends LabelHTMLAttributes<HTMLLabelElement> {
 const Label = ({ className, ...rest }: IProps) => {
   return (
     <label
-      className={`text-gray-700 font-medium ${className}`}
+      className={`text-gray-700 font-medium capitalize ${className}`}
       {...rest}
     />
   );

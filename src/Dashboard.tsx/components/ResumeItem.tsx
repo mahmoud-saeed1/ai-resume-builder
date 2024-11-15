@@ -82,7 +82,7 @@ const ResumeItem = ({ resumeId, resumeTitle, resumeSummary, createdAt, updatedAt
   return (
     <motion.div className="resume-item" variants={cardVariants} initial="hidden" animate="visible">
       <div className="resume-item__icon">
-        <User className="resume-item__icon-file"/>
+        <User className="resume-item__icon-file" />
       </div>
 
       <div className="resume-item__content">
@@ -99,6 +99,8 @@ const ResumeItem = ({ resumeId, resumeTitle, resumeSummary, createdAt, updatedAt
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
+        
+        <div className="resume-item__separator" />
 
         <p className="resume-item__summary">{resumeSummary}</p>
         <div className="resume-item__dates">

@@ -92,7 +92,7 @@ const PersonalDataForm = ({
   };
 
   return (
-    <form onSubmit={handleSubmit(handleOnSubmit)}>
+    <form className="space-y-3" onSubmit={handleSubmit(handleOnSubmit)}>
       {["firstName", "lastName", "jobTitle", "phone", "email", "address"].map(
         (field) => (
           <FormInput
