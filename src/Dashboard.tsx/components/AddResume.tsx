@@ -94,21 +94,24 @@ const AddResume = () => {
         <CirclePlus size={50} className="resume__add-icon" />
       </Button>
       <Dialog open={openDialog}>
-        <DialogContent className="resume__dialog-content">
+        <DialogContent className="bg-white">
           <DialogHeader>
-            <DialogTitle className="resume__dialog-title">Create a new resume</DialogTitle>
+            <DialogTitle>Create a new resume</DialogTitle>
             <form onSubmit={handleSubmit(handleCreateResume)} className="resume__form">
-              <Label htmlFor="title">Resume Title</Label>
-              <Input
-                id="title"
-                placeholder="Enter resume title"
-                {...register("title", {
-                  required: "Resume title is required",
-                  minLength: { value: 3, message: "Title must be at least 3 characters" },
-                })}
-                className={`${errors.title ? "resume__input--error" : ""}`}
-              />
-              {errors.title && <InputErrorMessage msg={errors.title.message} />}
+              <div className="add__resume-form">
+
+                <Label htmlFor="title">Resume Title</Label>
+                <Input
+                  id="title"
+                  placeholder="Enter resume title"
+                  {...register("title", {
+                    required: "Resume title is required",
+                    minLength: { value: 3, message: "Title must be at least 3 characters" },
+                  })}
+                  className={`${errors.title ? "resume__input--error" : ""}`}
+                />
+                {errors.title && <InputErrorMessage msg={errors.title.message} />}
+              </div>
               <div className="resume__actions">
                 <Button onClick={handleCancel} variant="cancel">
                   Cancel

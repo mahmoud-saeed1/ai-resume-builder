@@ -55,10 +55,14 @@ const ResumeItem = ({ resumeId, resumeTitle, resumeSummary, createdAt, updatedAt
           transition: Bounce,
         });
         setOpenAlert(false);
+      } else {
+        console.warn("Unexpected status code:", status);
+        toast.error("Unexpected error while deleting the resume.");
       }
     } catch (error) {
+      console.error("Error deleting resume:", error);
       const err = error as AxiosError<IErrorResponse>;
-      toast.error(err.response?.data.error.message, {
+      toast.error(err.response?.data.error.message || "Failed to delete resume.", {
         autoClose: 2000,
         theme: "light",
         transition: Bounce,
@@ -67,6 +71,7 @@ const ResumeItem = ({ resumeId, resumeTitle, resumeSummary, createdAt, updatedAt
       setIsDeleting(false);
     }
   };
+
 
   const handleEdit = () => navigate(`/dashboard/resume/${resumeId}/edit`);
   const handleView = () => navigate(`/my-resume/${resumeId}/view`);
@@ -99,7 +104,7 @@ const ResumeItem = ({ resumeId, resumeTitle, resumeSummary, createdAt, updatedAt
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-        
+
         <div className="resume-item__separator" />
 
         <p className="resume-item__summary">{resumeSummary}</p>

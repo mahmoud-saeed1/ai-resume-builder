@@ -26,13 +26,13 @@ const ResumePreview = () => {
       {resumeData?.summary && (
         <SummaryPreview summary={resumeData.summary} />
       )}
-      {/*~~~~~~~~$ Professional Experience Section $~~~~~~~~*/}
-      {resumeData?.experience && (
-        <ProfessionalExperience experience={resumeData.experience} />
-      )}
       {/*~~~~~~~~$ Education Section $~~~~~~~~*/}
       {resumeData?.education && (
         <Education education={resumeData.education} />
+      )}
+      {/*~~~~~~~~$ Professional Experience Section $~~~~~~~~*/}
+      {resumeData?.experience && (
+        <ProfessionalExperience experience={resumeData.experience} />
       )}
       {/*~~~~~~~~$ Skills Section $~~~~~~~~*/}
       {resumeData?.skills && (

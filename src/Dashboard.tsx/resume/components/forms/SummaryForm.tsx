@@ -2,7 +2,7 @@ import { IErrorResponse, IFormProbs, IGeneratedSummary } from "@/interfaces";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ResumeInfoContext } from "@/context/ResumeInfoContext";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import GlobalApi from "@/service/GlobalApi";
 import { useParams } from "react-router-dom";
 import { toast, Bounce } from "react-toastify";
@@ -94,12 +94,7 @@ const SummaryForm = ({
     }
   };
 
-  useEffect(() => {
-    if (resumeInfo?.personalData && typeof resumeInfo.personalData[0].jobTitle === 'string') {
-      setValue("summary", resumeInfo.personalData[0].jobTitle);
-    }
-  }
-  , [resumeInfo?.summary]);
+
 
   const handleGenerateSummary = async () => {
     setIsGenerated(true);
@@ -154,8 +149,9 @@ const SummaryForm = ({
   };
 
   return (
-    <div className="p-4 space-y-4 rounded-lg shadow-md bg-gray-100">
-      <Button onClick={handleGenerateSummary} isLoading={isGenerated}>
+    <div className="resume-form">
+      <h2 className="form-title">summary</h2>
+      <Button onClick={handleGenerateSummary} isLoading={isGenerated} variant={"success"}>
         Generate Summary <Sparkles width={"1rem"} className="ml-2" />
       </Button>
 

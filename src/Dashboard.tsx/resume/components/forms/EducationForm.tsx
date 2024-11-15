@@ -7,7 +7,6 @@ import { useParams } from "react-router-dom";
 import { Bounce, toast } from "react-toastify";
 import { AxiosError } from "axios";
 import GlobalApi from "@/service/GlobalApi";
-import Button from "@/ui/Button";
 import { v4 as uuidv4 } from "uuid";
 import { VForm } from "@/animation";
 import FormInput from "./FormInputs";
@@ -15,6 +14,7 @@ import FormInput from "./FormInputs";
 import Label from "@/ui/Label";
 import FormTextarea from "./FormTextArea";
 import FormSelect from "./FormSelect";
+import Button from "@/ui/Button";
 
 const EducationForm = ({
   enableNextBtn,
@@ -132,13 +132,10 @@ const EducationForm = ({
     }));
   };
 
-  useEffect(() => {
-    console.log("Education Component: ", educationList);
-  }, [educationList]);
 
   return (
-    <div className="grid gap-4 p-4">
-      <h2 className="text-lg font-semibold">Education</h2>
+    <div className="resume-form">
+      <h2 className="form-title">education</h2>
 
       {educationList.length === 0 ? (
         <motion.div
@@ -159,20 +156,20 @@ const EducationForm = ({
               initial="initial"
               animate="animate"
               exit="exit"
-              className="border p-4 rounded-lg shadow-md space-y-4"
+              className="border-b-2 border-gray-300 py-4 flex flex-col"
             >
               <div className="flex justify-between items-center mb-2">
                 <h4 className="font-semibold text-sm">
                   Education #{index + 1}
                 </h4>
-                <div className="flex gap-2">
+                <div className="flex items-center space-x-2">
                   <Button
                     variant="outline"
                     size="sm"
                     disabled={index === 0}
                     onClick={() => handleMoveEducation(index, "up")}
                   >
-                    <ChevronUp className="h-4 w-4" />
+                    <ChevronUp className="h-4 w-4 text-blue-600" />
                   </Button>
                   <Button
                     variant="outline"
@@ -182,12 +179,12 @@ const EducationForm = ({
                       index === (resumeInfo?.education || []).length - 1
                     }
                   >
-                    <ChevronDown className="h-4 w-4" />
+                    <ChevronDown className="h-4 w-4 text-blue-600 hover:text-white" />
                   </Button>
                 </div>
               </div>
 
-              <form>
+              <form className="form-content">
                 <FormInput
                   id={uuidv4()}
                   label="University Name"
@@ -317,18 +314,19 @@ const EducationForm = ({
       <Button
         type="button"
         onClick={handleAddEducation}
-        variant="outline"
+        variant="success"
         className="mb-4"
+        fullWidth
       >
         Add Education
       </Button>
 
       <Button
         type="submit"
-        variant="success"
         isLoading={isLoading}
         onClick={handleOnSubmit}
         disabled={enableNextBtn}
+        fullWidth
       >
         Save Education
       </Button>

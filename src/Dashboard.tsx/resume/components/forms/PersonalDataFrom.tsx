@@ -92,27 +92,31 @@ const PersonalDataForm = ({
   };
 
   return (
-    <form className="space-y-3" onSubmit={handleSubmit(handleOnSubmit)}>
-      {["firstName", "lastName", "jobTitle", "phone", "email", "address"].map(
-        (field) => (
-          <FormInput
-            id={field}
-            label={field}
-            key={field}
-            placeholder={field.replace(/^\w/, (c) => c.toUpperCase())}
-            register={register(field as keyof IPersonalData)}
-            onChange={handleInputChange}
-            defaultValue={
-              resumeInfo?.personalData?.[0]?.[field as keyof IPersonalData] ?? ""
-            }
-            errorMessage={errors[field as keyof IPersonalData]?.message}
-          />
-        )
-      )}
-      <Button isLoading={isLoading} disabled={enableNextBtn}>
-        Save Personal Data
-      </Button>
-    </form>
+    <div>
+
+      <form className="resume-form" onSubmit={handleSubmit(handleOnSubmit)}>
+      <h2 className="form-title">Personal Data</h2>
+        {["firstName", "lastName", "jobTitle", "phone", "email", "address"].map(
+          (field) => (
+            <FormInput
+              id={field}
+              label={field}
+              key={field}
+              placeholder={field.replace(/^\w/, (c) => c.toUpperCase())}
+              register={register(field as keyof IPersonalData)}
+              onChange={handleInputChange}
+              defaultValue={
+                resumeInfo?.personalData?.[0]?.[field as keyof IPersonalData] ?? ""
+              }
+              errorMessage={errors[field as keyof IPersonalData]?.message}
+            />
+          )
+        )}
+        <Button isLoading={isLoading} disabled={enableNextBtn} fullWidth>
+          Save Personal Data
+        </Button>
+      </form>
+    </div>
   );
 };
 
