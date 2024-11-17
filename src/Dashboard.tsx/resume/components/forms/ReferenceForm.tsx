@@ -10,6 +10,8 @@ import GlobalApi from "@/service/GlobalApi";
 import Button from "@/ui/Button";
 import { v4 as uuidv4 } from "uuid";
 import FormInput from "./FormInputs";
+import { VForm } from "@/animation";
+import NoData from "./NoData";
 
 const ReferenceForm = ({
   enableNextBtn,
@@ -124,144 +126,141 @@ const ReferenceForm = ({
     }));
   };
 
-  const animationVariants = {
-    initial: { opacity: 0, y: -10 },
-    animate: { opacity: 1, y: 0 },
-    exit: { opacity: 0, y: 10 },
-  };
-
   useEffect(() => {
     console.log("References Component: ", references);
   }, [references]);
 
   return (
-    <div className="grid gap-4 p-4">
-      <h2 className="text-lg font-semibold">References</h2>
+    <div className="resume-form">
+      <h2 className="form-title">References</h2>
 
-      {references.length === 0 ? (
-        <motion.div
-          variants={animationVariants}
-          initial="initial"
-          animate="animate"
-          exit="exit"
-          className="border p-4 rounded-lg shadow-md"
-        >
-          <p className="text-center">No references added yet</p>
-        </motion.div>
-      ) : (
-        <AnimatePresence>
-          {references.map((ref, index) => (
-            <motion.div
-              key={ref.reId}
-              variants={animationVariants}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              className="border p-4 rounded-lg shadow-md space-y-4"
-            >
-              <div className="flex justify-between items-center mb-2">
-                <h4 className="font-semibold text-sm">
-                  Reference #{index + 1}
-                </h4>
-                <div className="flex gap-2">
+      <div>
+        {references.length === 0 ? (
+          <NoData message="No References added yet." />
+        ) : (
+          <AnimatePresence>
+            {references.map((ref, index) => (
+              <motion.div
+                key={ref.reId}
+                variants={VForm}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                className="from__container"
+              >
+                {/*~~~~~~~~$ Form Header $~~~~~~~~*/}
+                <div className="form__container-header">
+                  <h4>
+                    Reference #{index + 1}
+                  </h4>
+
+                  {/*~~~~~~~~$ Move Buttons $~~~~~~~~*/}
+                  <div className="move__btn-container">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      disabled={index === 0}
+                      onClick={() => handleMoveReference(index, "up")}
+                    >
+                      <ChevronUp className="move-icon" />
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleMoveReference(index, "down")}
+                      disabled={index === references.length - 1}
+                    >
+                      <ChevronDown className="move-icon" />
+                    </Button>
+                  </div>
+                </div>
+
+                <form>
+
+                  {/*~~~~~~~~$ Form Inputs $~~~~~~~~*/}
+                  <FormInput
+                    id={uuidv4()}
+                    label="Name"
+                    type="text"
+                    placeholder="Name"
+                    defaultValue={ref.name}
+                    onChange={(e) =>
+                      handleInputChange(ref.reId, "name", e.target.value)
+                    }
+                  />
+
+                  <FormInput
+                    id={uuidv4()}
+                    label="Position"
+                    type="text"
+                    placeholder="Position"
+                    defaultValue={ref.position}
+                    onChange={(e) =>
+                      handleInputChange(ref.reId, "position", e.target.value)
+                    }
+                  />
+
+                  <FormInput
+                    id={uuidv4()}
+                    label="Company"
+                    type="text"
+                    placeholder="Company"
+                    defaultValue={ref.company}
+                    onChange={(e) =>
+                      handleInputChange(ref.reId, "company", e.target.value)
+                    }
+                  />
+
+                  <FormInput
+                    id={uuidv4()}
+                    label="Contact"
+                    type="text"
+                    placeholder="Contact"
+                    defaultValue={ref.contact}
+                    onChange={(e) =>
+                      handleInputChange(ref.reId, "contact", e.target.value)
+                    }
+                  />
+                </form>
+
+                {/*~~~~~~~~$ Remove Button $~~~~~~~~*/}
+                <div className="flex justify-end">
                   <Button
-                    variant="outline"
+                    type="button"
+                    variant="danger"
                     size="sm"
-                    disabled={index === 0}
-                    onClick={() => handleMoveReference(index, "up")}
+                    onClick={() => handleRemoveReference(ref.reId)}
                   >
-                    <ChevronUp className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleMoveReference(index, "down")}
-                    disabled={index === references.length - 1}
-                  >
-                    <ChevronDown className="h-4 w-4" />
+                    Remove
                   </Button>
                 </div>
-              </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        )}
+      </div>
 
-              <form>
-                <FormInput
-                  id={uuidv4()}
-                  label="Name"
-                  type="text"
-                  placeholder="Name"
-                  defaultValue={ref.name}
-                  onChange={(e) =>
-                    handleInputChange(ref.reId, "name", e.target.value)
-                  }
-                />
+      {/*~~~~~~~~$ Add & Save Button $~~~~~~~~*/}
+      <div>
+        <Button
+          type="button"
+          onClick={handleAddReference}
+          variant="outline"
+          className="mb-4"
+        >
+          Add Reference
+        </Button>
 
-                <FormInput
-                  id={uuidv4()}
-                  label="Position"
-                  type="text"
-                  placeholder="Position"
-                  defaultValue={ref.position}
-                  onChange={(e) =>
-                    handleInputChange(ref.reId, "position", e.target.value)
-                  }
-                />
-
-                <FormInput
-                  id={uuidv4()}
-                  label="Company"
-                  type="text"
-                  placeholder="Company"
-                  defaultValue={ref.company}
-                  onChange={(e) =>
-                    handleInputChange(ref.reId, "company", e.target.value)
-                  }
-                />
-
-                <FormInput
-                  id={uuidv4()}
-                  label="Contact"
-                  type="text"
-                  placeholder="Contact"
-                  defaultValue={ref.contact}
-                  onChange={(e) =>
-                    handleInputChange(ref.reId, "contact", e.target.value)
-                  }
-                />
-              </form>
-
-              <div className="flex justify-end">
-                <Button
-                  type="button"
-                  variant="danger"
-                  size="sm"
-                  onClick={() => handleRemoveReference(ref.reId)}
-                >
-                  Remove
-                </Button>
-              </div>
-            </motion.div>
-          ))}
-        </AnimatePresence>
-      )}
-
-      <Button
-        type="button"
-        onClick={handleAddReference}
-        variant="outline"
-        className="mb-4"
-      >
-        Add Reference
-      </Button>
-
-      <Button
-        type="submit"
-        variant="success"
-        isLoading={isLoading}
-        onClick={handleOnSubmit}
-        disabled={enableNextBtn}
-      >
-        Save References
-      </Button>
+        <Button
+          type="submit"
+          variant="success"
+          isLoading={isLoading}
+          onClick={handleOnSubmit}
+          disabled={enableNextBtn}
+        >
+          Save References
+        </Button>
+      </div>
     </div>
   );
 };
