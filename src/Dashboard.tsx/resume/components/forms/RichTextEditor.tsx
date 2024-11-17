@@ -90,7 +90,7 @@ const RichTextEditor = ({
 
   return (
     <div>
-      <div className="flex justify-between items-center my-2">
+      <div className="flex justify-between items-center mb-4">
         <label>Summary</label>
         <Button
           size="sm"

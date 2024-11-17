@@ -597,6 +597,10 @@ body {
   @apply text-gray-500
 }
 
+.btn:disabled:hover{
+  @apply bg-white
+}
+
 .move__btn-container{
   @apply flex items-center space-x-2
 }
@@ -631,7 +635,7 @@ body {
 }
 
 .no-data__message {
-  @apply transition-colors duration-300 ease-in-out;
+  @apply text-[1rem] sm:text-lg transition-colors duration-300 ease-in-out;
 }
 
 .no-data__message:hover {
