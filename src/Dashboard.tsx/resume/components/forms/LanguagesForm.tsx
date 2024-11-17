@@ -11,6 +11,7 @@ import Button from "@/ui/Button";
 import { v4 as uuidv4 } from "uuid";
 import FormInput from "./FormInputs";
 import FormSelect from "./FormSelect";
+import NoData from "./NoData";
 
 const proficiencyLevels = ["Beginner", "Intermediate", "Advanced", "Fluent"];
 
@@ -138,113 +139,119 @@ const LanguagesForm = ({
   }, [languagesList]);
 
   return (
-    <div className="grid gap-4 p-4">
-      <h2 className="text-lg font-semibold">Languages</h2>
+    <div className="resume-form">
+      <h2 className="form-title">Languages</h2>
 
-      {languagesList.length === 0 ? (
-        <motion.div
-          variants={animationVariants}
-          initial="initial"
-          animate="animate"
-          exit="exit"
-          className="border p-4 rounded-lg shadow-md"
-        >
-          <p className="text-center">No languages added yet</p>
-        </motion.div>
-      ) : (
-        <AnimatePresence>
-          {languagesList.map((lang, index) => (
-            <motion.div
-              key={lang.laId}
-              variants={animationVariants}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              className="border p-4 rounded-lg shadow-md space-y-4"
-            >
-              <div className="flex justify-between items-center mb-2">
-                <h4 className="font-semibold text-sm">Language #{index + 1}</h4>
-                <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    disabled={index === 0}
-                    onClick={() => handleMoveLanguage(index, "up")}
+      <div className="form__scroll-bar">
+        {languagesList.length === 0 ? (
+          <NoData message="No Languages added yet." />
+        ) : (
+          <AnimatePresence>
+            {languagesList.map((lang, index) => (
+              <motion.div
+                key={lang.laId}
+                variants={animationVariants}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                className="from__container"
+              >
+
+                {/*~~~~~~~~$ Form Header $~~~~~~~~*/}
+                <div className="form__container-header">
+                  <h4 className="font-semibold text-sm">Language #{index + 1}</h4>
+
+                  {/*~~~~~~~~$ Move Buttons $~~~~~~~~*/}
+                  <div className="move__btn-container">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      disabled={index === 0}
+                      onClick={() => handleMoveLanguage(index, "up")}
+                    >
+                      <ChevronUp className="move-icon" />
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleMoveLanguage(index, "down")}
+                      disabled={index === languagesList.length - 1}
+                    >
+                      <ChevronDown className="move-icon" />
+                    </Button>
+                  </div>
+                </div>
+
+                <form className="form-content">
+
+                  {/*~~~~~~~~$ Form Inputs $~~~~~~~~*/}
+                  <FormInput
+                    id={uuidv4()}
+                    placeholder="Language"
+                    label="Language"
+                    type="text"
+                    defaultValue={lang.name}
+                    onChange={(e) =>
+                      handleInputChange(lang.laId, "name", e.target.value)
+                    }
+                  />
+
+                  <FormSelect
+                    id={uuidv4()}
+                    label="Proficiency"
+                    defaultValue={lang.proficiency}
+                    onChange={(e) =>
+                      handleInputChange(lang.laId, "proficiency", e.target.value)
+                    }
                   >
-                    <ChevronUp className="h-4 w-4" />
-                  </Button>
+                    {proficiencyLevels.map((level) => (
+                      <option key={level} value={level}>
+                        {level}
+                      </option>
+                    ))}
+                  </FormSelect>
+                </form>
+
+                <div className="flex justify-end">
                   <Button
-                    variant="outline"
+                    type="button"
+                    variant="danger"
                     size="sm"
-                    onClick={() => handleMoveLanguage(index, "down")}
-                    disabled={index === languagesList.length - 1}
+                    onClick={() => handleRemoveLanguage(lang.laId)}
                   >
-                    <ChevronDown className="h-4 w-4" />
+                    Remove
                   </Button>
                 </div>
-              </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        )}
 
-              <form>
-                <FormInput
-                  id={uuidv4()}
-                  placeholder="Language"
-                  label="Language"
-                  type="text"
-                  defaultValue={lang.name}
-                  onChange={(e) =>
-                    handleInputChange(lang.laId, "name", e.target.value)
-                  }
-                />
+      </div>
 
-                <FormSelect
-                  id={uuidv4()}
-                  label="Proficiency"
-                  defaultValue={lang.proficiency}
-                  onChange={(e) =>
-                    handleInputChange(lang.laId, "proficiency", e.target.value)
-                  }
-                >
-                  {proficiencyLevels.map((level) => (
-                    <option key={level} value={level}>
-                      {level}
-                    </option>
-                  ))}
-                </FormSelect>
-              </form>
 
-              <div className="flex justify-end">
-                <Button
-                  type="button"
-                  variant="danger"
-                  size="sm"
-                  onClick={() => handleRemoveLanguage(lang.laId)}
-                >
-                  Remove
-                </Button>
-              </div>
-            </motion.div>
-          ))}
-        </AnimatePresence>
-      )}
+      <div>
+        <Button
+          type="button"
+          onClick={handleAddLanguage}
+          variant="success"
+          className="mb-4"
+          fullWidth
+        >
+          Add Language
+        </Button>
 
-      <Button
-        type="button"
-        onClick={handleAddLanguage}
-        variant="outline"
-        className="mb-4"
-      >
-        Add Language
-      </Button>
+        <Button
+          type="submit"
+          isLoading={isLoading}
+          onClick={handleOnSubmit}
+          disabled={enableNextBtn}
+          fullWidth
+        >
+          Save Languages
+        </Button>
+      </div>
 
-      <Button
-        type="submit"
-        variant="success"
-        isLoading={isLoading}
-        onClick={handleOnSubmit}
-        disabled={enableNextBtn}
-      >
-        Save Languages
-      </Button>
     </div>
   );
 };
