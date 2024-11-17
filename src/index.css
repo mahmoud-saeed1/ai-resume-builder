@@ -606,7 +606,7 @@ body {
 }
 
 .from__container{
-  @apply py-4 flex flex-col space-y-4 border-2  p-4 rounded-xl
+  @apply py-4 flex flex-col space-y-4 border-2 border-blue-400 p-4 rounded-xl
 }
 
 .form__container-header{
@@ -614,7 +614,7 @@ body {
 }
 
 .form__container-header h4{
-  @apply font-semibold text-sm text-gray-600
+  @apply font-semibold text-sm text-blue-500
 }
 
 /* no data component */

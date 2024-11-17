@@ -1,5 +1,5 @@
 import Button from "@/ui/Button";
-import { ArrowLeft, ArrowRight, Home, LayoutGrid } from "lucide-react";
+import { ArrowLeft, ArrowRight, Home } from "lucide-react";
 import { useState } from "react";
 import PersonalDataFrom from "./forms/PersonalDataFrom";
 import SummaryForm from "./forms/SummaryForm";
@@ -7,14 +7,14 @@ import ExperienceForm from "./forms/ExperienceForm";
 import EducationForm from "./forms/EducationForm";
 import SkillsForm from "./forms/SkillsForm";
 import CertificationForm from "./forms/CertificationForm";
-import ProjectForm from "./forms/ProjectForm";
+import ProjectsForm from "./forms/ProjectsForm";
 import LanguagesForm from "./forms/LanguagesForm";
 import ReferenceForm from "./forms/ReferenceForm";
 import { Link, Navigate, useParams } from "react-router-dom";
 
 const FormSection = () => {
   /*~~~~~~~~$ States $~~~~~~~~*/
-  const [activeFromIdx, setActiveFromIdx] = useState(4);
+  const [activeFromIdx, setActiveFromIdx] = useState(6);
   const [enableNextBtn, setEnableNextBtn] = useState(false);
   const params = useParams<{ resumeId: string }>();
 
@@ -49,20 +49,14 @@ const FormSection = () => {
     <div>
       {/*~~~~~~~~$ Form Buttons $~~~~~~~~*/}
       <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-2">
-          <Link
-            to="/dashboard"
-            className="text-white capitalize tracking-wider text-lg"
-          >
-            <Button>
-              <Home />
-            </Button>
-          </Link>
-
-          <Button variant={"outline"} onClick={handlePrev}>
-            <LayoutGrid />
+        <Link
+          to="/dashboard"
+          className="text-white capitalize tracking-wider text-lg"
+        >
+          <Button>
+            <Home />
           </Button>
-        </div>
+        </Link>
 
         <div className="flex items-center space-x-2">
           {activeFromIdx > 1 && (
@@ -122,7 +116,7 @@ const FormSection = () => {
 
       {/*~~~~~~~~$ Project Form $~~~~~~~~*/}
       {activeFromIdx === 5 && (
-        <ProjectForm
+        <ProjectsForm
           enableNextBtn={enableNextBtn}
           handleEnableNextBtn={handleEnableNextBtn}
           handleDisableNextBtn={handleDisableNextBtn}

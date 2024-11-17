@@ -11,7 +11,7 @@ const NoData = ({ message }: { message: string }) => {
             exit="exit"
             className="no-data__container"
         >
-            <CircleAlert />
+            <CircleAlert className='text-gray-600'/>
             <p className="no-data__message text-center text-lg text-gray-700">
                 {message}
             </p>
