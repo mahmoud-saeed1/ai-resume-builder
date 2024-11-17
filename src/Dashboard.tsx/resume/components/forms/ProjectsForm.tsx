@@ -147,7 +147,7 @@ const ProjectsForm = ({
               >
                 {/*~~~~~~~~$ Form Header $~~~~~~~~*/}
                 <div className="form__container-header">
-                  <h4 className="form__container-header">Project #{index + 1}</h4>
+                  <h4>Project #{index + 1}</h4>
 
                   {/*~~~~~~~~$ Move Buttons $~~~~~~~~*/}
                   <div className="move__btn-container">
@@ -198,7 +198,7 @@ const ProjectsForm = ({
                 </form>
 
                 {/*~~~~~~~~$ Remove Button $~~~~~~~~*/}
-                <div className="flex justify-end">
+                <div className="remove-btn">
                   <Button
                     type="button"
                     variant={"danger"}
@@ -214,6 +214,7 @@ const ProjectsForm = ({
         )}
       </div>
 
+      {/*~~~~~~~~$ Add & Save Button $~~~~~~~~*/}
       <div>
         <Button
           type="button"

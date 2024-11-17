@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { ResumeInfoContext } from "@/context/ResumeInfoContext";
 import { ICertification, IErrorResponse, IFormProbs } from "@/interfaces";
 import { motion, AnimatePresence } from "framer-motion";
@@ -10,8 +10,9 @@ import GlobalApi from "@/service/GlobalApi";
 import Button from "@/ui/Button";
 import { v4 as uuidv4 } from "uuid";
 import FormInput from "./FormInputs";
+import NoData from "./NoData";
 
-const CertificationForm = ({
+const CertificationsForm = ({
   enableNextBtn,
   handleEnableNextBtn,
   handleDisableNextBtn,
@@ -130,130 +131,130 @@ const CertificationForm = ({
     exit: { opacity: 0, y: 10 },
   };
 
-  useEffect(() => {
-    console.log("Certification Component: ", certifications);
-  }, [certifications]);
-
   return (
-    <div className="grid gap-4 p-4">
-      <h2 className="text-lg font-semibold">Certifications</h2>
+    <div className="resume-form">
+      <h2 className="form-title">Certifications</h2>
 
-      {certifications.length === 0 ? (
-        <motion.div
-          variants={animationVariants}
-          initial="initial"
-          animate="animate"
-          exit="exit"
-          className="border p-4 rounded-lg shadow-md"
-        >
-          <p className="text-center">No certifications added yet</p>
-        </motion.div>
-      ) : (
-        <AnimatePresence>
-          {certifications.map((cert, index) => (
-            <motion.div
-              key={cert.ceId}
-              variants={animationVariants}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              className="border p-4 rounded-lg shadow-md space-y-4"
-            >
-              <div className="flex justify-between items-center mb-2">
-                <h4 className="font-semibold text-sm">
-                  Certification #{index + 1}
-                </h4>
-                <div className="flex gap-2">
+      <div className="form__scroll-bar">
+        {certifications.length === 0 ? (
+          <NoData message="No Certifications added yet." />
+        ) : (
+          <AnimatePresence>
+            {certifications.map((cert, index) => (
+              <motion.div
+                key={cert.ceId}
+                variants={animationVariants}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                className="from__container"
+              >
+                {/*~~~~~~~~$ Form Header $~~~~~~~~*/}
+                <div className="form__container-header">
+                  <h4>
+                    Certification #{index + 1}
+                  </h4>
+
+                  {/*~~~~~~~~$ Move Buttons $~~~~~~~~*/}
+                  <div className="move__btn-container">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      disabled={index === 0}
+                      onClick={() => handleMoveCertification(index, "up")}
+                    >
+                      <ChevronUp className="move-icon" />
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleMoveCertification(index, "down")}
+                      disabled={index === certifications.length - 1}
+                    >
+                      <ChevronDown className="move-icon" />
+                    </Button>
+                  </div>
+                </div>
+
+                <form className="form-content">
+                  {/*~~~~~~~~$ Form Inputs $~~~~~~~~*/}
+                  <FormInput
+                    id={uuidv4()}
+                    label={"Title"}
+                    type="text"
+                    placeholder="Title"
+                    defaultValue={cert.title}
+                    onChange={(e) =>
+                      handleInputChange(cert.ceId, "title", e.target.value)
+                    }
+                  />
+
+                  <FormInput
+                    id={uuidv4()}
+                    label={"Issuer"}
+                    type="text"
+                    placeholder="Issuer"
+                    defaultValue={cert.issuer}
+                    onChange={(e) =>
+                      handleInputChange(cert.ceId, "issuer", e.target.value)
+                    }
+                  />
+
+                  <FormInput
+                    id={uuidv4()}
+                    label={"Date"}
+                    type="date"
+                    placeholder="Date"
+                    defaultValue={cert.date}
+                    onChange={(e) =>
+                      handleInputChange(cert.ceId, "date", e.target.value)
+                    }
+                  />
+
+                </form>
+
+                {/*~~~~~~~~$ Remove Button $~~~~~~~~*/}
+                <div className="remove-btn">
                   <Button
-                    variant="outline"
+                    type="button"
+                    variant={"danger"}
                     size="sm"
-                    disabled={index === 0}
-                    onClick={() => handleMoveCertification(index, "up")}
+                    onClick={() => handleRemoveCertification(cert.ceId)}
                   >
-                    <ChevronUp className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleMoveCertification(index, "down")}
-                    disabled={index === certifications.length - 1}
-                  >
-                    <ChevronDown className="h-4 w-4" />
+                    Remove
                   </Button>
                 </div>
-              </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        )}
+      </div>
 
-              <form>
-                <FormInput
-                  id={uuidv4()}
-                  label={"Title"}
-                  type="text"
-                  placeholder="Title"
-                  defaultValue={cert.title}
-                  onChange={(e) =>
-                    handleInputChange(cert.ceId, "title", e.target.value)
-                  }
-                />
-                
-                <FormInput
-                  id={uuidv4()}
-                  label={"Issuer"}
-                  type="text"
-                  placeholder="Issuer"
-                  defaultValue={cert.issuer}
-                  onChange={(e) =>
-                    handleInputChange(cert.ceId, "issuer", e.target.value)
-                  }
-                />
-                
-                <FormInput
-                  id={uuidv4()}
-                  label={"Date"}
-                  type="date"
-                  placeholder="Date"
-                  defaultValue={cert.date}
-                  onChange={(e) =>
-                    handleInputChange(cert.ceId, "date", e.target.value)
-                  }
-                />
-                
-              </form>
+      {/*~~~~~~~~$ Add & Save Button $~~~~~~~~*/}
+      <div>
+        <Button
+          type="button"
+          onClick={handleAddCertification}
+          variant="success"
+          className="mb-4"
+          fullWidth
+        >
+          Add Certification
+        </Button>
 
-              <div className="flex justify-end">
-                <Button
-                  type="button"
-                  variant={"danger"}
-                  size="sm"
-                  onClick={() => handleRemoveCertification(cert.ceId)}
-                >
-                  Remove
-                </Button>
-              </div>
-            </motion.div>
-          ))}
-        </AnimatePresence>
-      )}
+        <Button
+          type="submit"
+          isLoading={isLoading}
+          onClick={handleOnSubmit}
+          disabled={enableNextBtn}
+          fullWidth
+        >
+          Save Certifications
+        </Button>
+      </div>
 
-      <Button
-        type="button"
-        onClick={handleAddCertification}
-        variant="outline"
-        className="mb-4"
-      >
-        Add Certification
-      </Button>
-
-      <Button
-        type="submit"
-        variant="success"
-        isLoading={isLoading}
-        onClick={handleOnSubmit}
-        disabled={enableNextBtn}
-      >
-        Save Certifications
-      </Button>
     </div>
   );
 };
 
-export default CertificationForm;
+export default CertificationsForm;

@@ -303,7 +303,7 @@ const EducationForm = ({
                 </form>
 
                 {/*~~~~~~~~$ Remove Button $~~~~~~~~*/}
-                <div className="flex justify-end">
+                <div className="remove-btn">
                   <Button
                     type="button"
                     variant={"danger"}
@@ -320,6 +320,7 @@ const EducationForm = ({
       </div>
 
 
+      {/*~~~~~~~~$ Add & Save Buttons $~~~~~~~~*/}
       <div>
         <Button
           type="button"

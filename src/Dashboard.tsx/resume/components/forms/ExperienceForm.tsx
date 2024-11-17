@@ -257,7 +257,7 @@ const ExperienceForm = ({
                 />
 
                 {/*~~~~~~~~$ Remove Button $~~~~~~~~*/}
-                <div className="flex justify-end">
+                <div className="remove-btn">
                   <Button
                     type="button"
                     variant={"danger"}
@@ -273,6 +273,7 @@ const ExperienceForm = ({
         )}
       </div>
 
+      {/*~~~~~~~~$ Add & Save Button $~~~~~~~~*/}
       <div>
         <Button
           type="button"

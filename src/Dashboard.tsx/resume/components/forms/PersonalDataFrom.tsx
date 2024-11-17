@@ -95,7 +95,7 @@ const PersonalDataForm = ({
     <div>
 
       <form className="resume-form" onSubmit={handleSubmit(handleOnSubmit)}>
-      <h2 className="form-title">Personal Data</h2>
+        <h2 className="form-title">Personal Data</h2>
         {["firstName", "lastName", "jobTitle", "phone", "email", "address"].map(
           (field) => (
             <FormInput
@@ -112,6 +112,7 @@ const PersonalDataForm = ({
             />
           )
         )}
+
         <Button isLoading={isLoading} disabled={enableNextBtn} fullWidth>
           Save Personal Data
         </Button>

@@ -6,7 +6,7 @@ import SummaryForm from "./forms/SummaryForm";
 import ExperienceForm from "./forms/ExperienceForm";
 import EducationForm from "./forms/EducationForm";
 import SkillsForm from "./forms/SkillsForm";
-import CertificationForm from "./forms/CertificationForm";
+import CertificationsForm from "./forms/CertificationsForm";
 import ProjectsForm from "./forms/ProjectsForm";
 import LanguagesForm from "./forms/LanguagesForm";
 import ReferenceForm from "./forms/ReferenceForm";
@@ -125,7 +125,7 @@ const FormSection = () => {
 
       {/*~~~~~~~~$ Certification Form $~~~~~~~~*/}
       {activeFromIdx === 6 && (
-        <CertificationForm
+        <CertificationsForm
           enableNextBtn={enableNextBtn}
           handleEnableNextBtn={handleEnableNextBtn}
           handleDisableNextBtn={handleDisableNextBtn}

@@ -577,7 +577,7 @@ body {
 }
 
 .form__scroll-bar{
-  @apply max-h-[50rem] space-y-6 lg:px-3 overflow-y-scroll overflow-x-hidden scrollbar-none scroll-smooth lg:scrollbar-thin lg:scrollbar-thumb-blue-300 lg:scrollbar-track-blue-100
+  @apply max-h-[50rem] space-y-6 sm:px-3 overflow-y-scroll overflow-x-hidden scrollbar-none scroll-smooth sm:scrollbar-thin sm:scrollbar-thumb-blue-300 sm:scrollbar-track-blue-100
 }
 
 .form__date-btn{
@@ -640,4 +640,8 @@ body {
 
 .no-data__message:hover {
   @apply text-gray-800; 
+}
+
+.remove-btn{
+  @apply flex justify-end;
 }
