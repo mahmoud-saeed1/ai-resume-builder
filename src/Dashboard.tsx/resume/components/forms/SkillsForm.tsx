@@ -12,6 +12,7 @@ import { Bounce, toast } from "react-toastify";
 import GlobalApi from "@/service/GlobalApi";
 import { AxiosError } from "axios";
 import FormInput from "./FormInputs";
+import NoData from "./NoData";
 
 const SkillsForm = ({
   enableNextBtn,
@@ -118,110 +119,115 @@ const SkillsForm = ({
   }, [skillsList]);
 
   return (
-    <div className="grid gap-4 p-4">
-      <h2 className="text-lg font-semibold">Skills</h2>
+    <div className="resume-form">
+      <h2 className="form-title">Skills</h2>
 
-      {skillsList.length === 0 ? (
-        <motion.div
-          variants={VForm}
-          initial="initial"
-          animate="animate"
-          exit="exit"
-          className="border p-4 rounded-lg shadow-md"
-        >
-          <p className="text-center">No skills added yet</p>
-        </motion.div>
-      ) : (
-        <AnimatePresence>
-          {skillsList.map((skill, index) => (
-            <motion.div
-              key={index}
-              variants={VForm}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              className="border p-4 rounded-lg shadow-md space-y-4"
-            >
-              <div className="flex justify-between items-center mb-2">
-                <h4 className="font-semibold text-sm">Skill #{index + 1}</h4>
-                <div className="flex gap-2">
+      <div className="form__scroll-bar">
+        {skillsList.length === 0 ? (
+          <NoData message="No skills added yet." />
+        ) : (
+          <AnimatePresence>
+            {skillsList.map((skill, index) => (
+              <motion.div
+                key={index}
+                variants={VForm}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                className="from__container"
+              >
+                {/*~~~~~~~~$ Form Header $~~~~~~~~*/}
+                <div className="flex justify-between items-center mb-2">
+                  <h4 className="font-semibold text-sm">Skill #{index + 1}</h4>
+
+                  {/*~~~~~~~~$ Move Buttons $~~~~~~~~*/}
+                  <div className="move__btn-container">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      disabled={index === 0}
+                      onClick={() => handleMoveSkill(index, "up")}
+                    >
+                      <ChevronUp className="move-icon" />
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleMoveSkill(index, "down")}
+                      disabled={index === skillsList.length - 1}
+                    >
+                      <ChevronDown className="move-icon" />
+                    </Button>
+                  </div>
+                </div>
+
+                <form className="form-content">
+
+                  {/*~~~~~~~~$ Form Inputs $~~~~~~~~*/}
+                  <FormInput
+                    id={uuidv4()}
+                    placeholder="Skill Name"
+                    label="Skill Name"
+                    type="text"
+                    defaultValue={skill.name}
+                    onChange={(e) =>
+                      handleInputChange(skill.skId, "name", e.target.value)
+                    }
+                  />
+
+                  <StarRatings
+                    rating={skill.rating}
+                    starRatedColor="gold"
+                    starHoverColor="gold"
+                    changeRating={(newRating) =>
+                      handleInputChange(skill.skId, "rating", newRating)
+                    }
+                    numberOfStars={5}
+                    name="rating"
+                    starDimension="20px"
+                    starSpacing="5px"
+                  />
+                </form>
+
+                {/*~~~~~~~~$ Remove Button $~~~~~~~~*/}
+                <div className="remove-btn">
                   <Button
-                    variant="outline"
+                    type="button"
+                    variant="danger"
                     size="sm"
-                    disabled={index === 0}
-                    onClick={() => handleMoveSkill(index, "up")}
+                    onClick={() => handleRemoveSkill(skill.skId)}
                   >
-                    <ChevronUp className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleMoveSkill(index, "down")}
-                    disabled={index === skillsList.length - 1}
-                  >
-                    <ChevronDown className="h-4 w-4" />
+                    Remove
                   </Button>
                 </div>
-              </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        )}
+      </div>
 
-              <form>
-                <FormInput
-                  id={uuidv4()}
-                  placeholder="Skill Name"
-                  label="Skill Name"
-                  type="text"
-                  defaultValue={skill.name}
-                  onChange={(e) =>
-                    handleInputChange(skill.skId, "name", e.target.value)
-                  }
-                />
+      {/*~~~~~~~~$ Add & Save Button $~~~~~~~~*/}
+      <div>
+        <Button
+          type="button"
+          onClick={handleAddSkill}
+          variant="success"
+          className="mb-4"
+          fullWidth
+        >
+          Add Skill
+        </Button>
+        <Button
+          type="submit"
+          isLoading={isLoading}
+          onClick={handleOnSubmit}
+          disabled={enableNextBtn}
+          fullWidth
+        >
+          Save Skills
+        </Button>
+      </div>
 
-                <StarRatings
-                  rating={skill.rating}
-                  starRatedColor="gold"
-                  starHoverColor="gold"
-                  changeRating={(newRating) =>
-                    handleInputChange(skill.skId, "rating", newRating)
-                  }
-                  numberOfStars={5}
-                  name="rating"
-                  starDimension="20px"
-                  starSpacing="5px"
-                />
-              </form>
-
-              <div className="flex justify-end">
-                <Button
-                  type="button"
-                  variant="danger"
-                  size="sm"
-                  onClick={() => handleRemoveSkill(skill.skId)}
-                >
-                  Remove
-                </Button>
-              </div>
-            </motion.div>
-          ))}
-        </AnimatePresence>
-      )}
-
-      <Button
-        type="button"
-        onClick={handleAddSkill}
-        variant="outline"
-        className="mb-4"
-      >
-        Add Skill
-      </Button>
-      <Button
-        type="submit"
-        variant="success"
-        isLoading={isLoading}
-        onClick={handleOnSubmit}
-        disabled={enableNextBtn}
-      >
-        Save Skills
-      </Button>
     </div>
   );
 };

@@ -13,6 +13,7 @@ interface FormInputProps {
   errorMessage?: string;
   type?: string;
   defaultValue?: string;
+  className?: string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -24,11 +25,12 @@ function FormInput({
   required = false,
   onChange,
   defaultValue,
+  className,
   errorMessage,
   type = "text",
 }: FormInputProps) {
   return (
-    <div>
+    <div className={className}>
       <Label htmlFor={id}>{label}</Label>
       <Input
         id={id}

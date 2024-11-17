@@ -11,6 +11,7 @@ import Button from "@/ui/Button";
 import { v4 as uuidv4 } from "uuid";
 import FormInput from "./FormInputs";
 import NoData from "./NoData";
+import { VForm } from "@/animation";
 
 const CertificationsForm = ({
   enableNextBtn,
@@ -125,12 +126,6 @@ const CertificationsForm = ({
     }));
   };
 
-  const animationVariants = {
-    initial: { opacity: 0, y: -10 },
-    animate: { opacity: 1, y: 0 },
-    exit: { opacity: 0, y: 10 },
-  };
-
   return (
     <div className="resume-form">
       <h2 className="form-title">Certifications</h2>
@@ -143,7 +138,7 @@ const CertificationsForm = ({
             {certifications.map((cert, index) => (
               <motion.div
                 key={cert.ceId}
-                variants={animationVariants}
+                variants={VForm}
                 initial="initial"
                 animate="animate"
                 exit="exit"
@@ -177,6 +172,7 @@ const CertificationsForm = ({
                 </div>
 
                 <form className="form-content">
+
                   {/*~~~~~~~~$ Form Inputs $~~~~~~~~*/}
                   <FormInput
                     id={uuidv4()}
