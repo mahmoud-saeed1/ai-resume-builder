@@ -14,6 +14,7 @@ import Label from "@/ui/Label";
 import FormTextarea from "./FormTextArea";
 import FormSelect from "./FormSelect";
 import Button from "@/ui/Button";
+import NoData from "./NoData";
 
 const EducationForm = ({
   enableNextBtn,
@@ -143,15 +144,7 @@ const EducationForm = ({
 
       <div className="form__scroll-bar">
         {educationList.length === 0 ? (
-          <motion.div
-            variants={VForm}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-            className="border p-4 rounded-lg shadow-md"
-          >
-            <p className="text-center">No education added yet</p>
-          </motion.div>
+          <NoData message="No Education added yet." />
         ) : (
           <AnimatePresence>
             {educationList.map((edu, index) => (

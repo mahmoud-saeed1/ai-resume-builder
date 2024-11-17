@@ -612,3 +612,28 @@ body {
 .form__container-header h4{
   @apply font-semibold text-sm text-gray-600
 }
+
+/* no data component */
+.no-data__container {
+  @apply rounded-xl text-gray-500 flex items-center justify-center space-x-2 border p-6 shadow-md bg-gray-100 hover:scale-105 transition-colors duration-300 ease-in-out;
+}
+
+.no-data__container:hover {
+  @apply bg-gray-100; 
+}
+
+.no-data__icon {
+  @apply transition-colors duration-300 ease-in-out;
+}
+
+.no-data__icon:hover {
+  @apply text-indigo-600;
+}
+
+.no-data__message {
+  @apply transition-colors duration-300 ease-in-out;
+}
+
+.no-data__message:hover {
+  @apply text-gray-800; 
+}

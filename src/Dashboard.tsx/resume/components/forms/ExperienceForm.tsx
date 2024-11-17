@@ -12,6 +12,7 @@ import Button from "@/ui/Button";
 import { v4 as uuidv4 } from "uuid";
 import { VForm } from "@/animation";
 import FormInput from "./FormInputs";
+import NoData from "./NoData";
 
 const ExperienceForm = ({
   enableNextBtn,
@@ -125,15 +126,7 @@ const ExperienceForm = ({
 
       <div className="form__scroll-bar">
         {experienceList.length === 0 ? (
-          <motion.div
-            variants={VForm}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-            className="border p-4 rounded-lg shadow-md"
-          >
-            <p className="text-center">No experience added yet</p>
-          </motion.div>
+          <NoData message="No Experience added yet." />
         ) : (
           <AnimatePresence>
             {experienceList.map((exp, index) => (
