@@ -3,7 +3,7 @@ import AddResume from "./components/AddResume";
 import GlobalApi from "@/service/GlobalApi";
 import { useEffect, useState } from "react";
 import { IReusme } from "@/interfaces";
-import ResumeItem from "./components/ResumeItem";
+import ResumeCard from "./components/ResumeCard";
 
 const Dashboard = () => {
   const { user } = useUser();
@@ -36,7 +36,7 @@ const Dashboard = () => {
             <AddResume />
           </div>
           {resumeList.map(({ resumeId, createdAt, updatedAt, title }) => (
-            <ResumeItem
+            <ResumeCard
               key={resumeId}
               createdAt={createdAt}
               updatedAt={updatedAt}

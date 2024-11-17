@@ -7,9 +7,9 @@ const ReferencesPreview = ({ references }: { references: IReferences[] }) => {
       <h3 className="resume-preview__section-title text-2xl font-semibold text-gray-800 border-b-2 border-gray-300 pb-2">
         References
       </h3>
-      <ul className="resume-preview__references-list list-disc list-inside">
+      <ul className="preview__list-container">
         {references.map(({ company, contact, name, position, reId }) => (
-          <li key={reId} className="resume-preview__reference text-gray-700">
+          <li key={reId}>
             <span className="resume-preview__reference-name">{name}</span>
             <span className="resume-preview__reference-position">
               {`, ${position}`}

@@ -14,7 +14,7 @@ import { Link, Navigate, useParams } from "react-router-dom";
 
 const FormSection = () => {
   /*~~~~~~~~$ States $~~~~~~~~*/
-  const [activeFromIdx, setActiveFromIdx] = useState(9);
+  const [activeFromIdx, setActiveFromIdx] = useState(1);
   const [enableNextBtn, setEnableNextBtn] = useState(false);
   const params = useParams<{ resumeId: string }>();
 
@@ -26,7 +26,7 @@ const FormSection = () => {
 
   //! handle next button with plus 1 until the last form
   const handleNext = () => {
-    if (activeFromIdx < 6) {
+    if (activeFromIdx < 11) {
       setActiveFromIdx((prev) => prev + 1);
       handleEnableNextBtn();
     } else {

@@ -24,3 +24,8 @@ export const VForm = {
   animate: { opacity: 1, y: 0 },
   exit: { opacity: 0, y: 10 },
 };
+
+export const VResumeCard = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } },
+};

@@ -245,18 +245,19 @@ const ReferenceForm = ({
         <Button
           type="button"
           onClick={handleAddReference}
-          variant="outline"
+          variant="success"
           className="mb-4"
+          fullWidth
         >
           Add Reference
         </Button>
 
         <Button
           type="submit"
-          variant="success"
           isLoading={isLoading}
           onClick={handleOnSubmit}
           disabled={enableNextBtn}
+          fullWidth
         >
           Save References
         </Button>

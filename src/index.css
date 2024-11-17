@@ -79,7 +79,6 @@ header {
   @apply grid gap-6 sm:grid-cols-2 lg:grid-cols-3;
 }
 
-
 /*~~~~~~~~$ Resume Preview Styling $~~~~~~~~*/
 /* Sections styling */
 .resume-preview__section {
@@ -189,8 +188,8 @@ header {
 
 /* Skills List */
 .resume-preview__skills-list {
-  list-style: none;
-  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
 }
 
 .resume-preview__skill-item {
@@ -277,7 +276,7 @@ body {
 
 /* Resume Preview Area */
 .view-resume__preview-area {
-  @apply bg-white mx-auto p-6 rounded-xl shadow-md mt-6 max-w-2xl w-full;
+  @apply w-full mx-auto p-6 rounded-xl mt-6 max-w-2xl;
 }
 
 /* Modal Styling */
@@ -320,10 +319,8 @@ body {
 }
 
 .resume-item:hover {
-  @apply shadow-xl shadow-blue-500 duration-300 transition-all ease-linear ;
-  ;
+  @apply shadow-xl shadow-blue-500 duration-300 transition-all ease-linear;
 }
-
 
 .resume-item__separator {
   @apply w-full h-[1px] bg-gray-300 rounded-full;
@@ -442,8 +439,8 @@ body {
 .resume__label {
   @apply text-gray-700 font-medium;
 }
-.add__resume-form{
-  @apply flex flex-col items-start space-y-2; 
+.add__resume-form {
+  @apply flex flex-col items-start space-y-2;
 }
 .resume__input {
   @apply w-full border border-gray-300 rounded-md p-2;
@@ -493,10 +490,8 @@ body {
   @apply h-4 w-1/2 bg-gray-300 rounded;
 }
 
-
-
 .resume-item {
-  @apply bg-white w-52 h-72 flex flex-col items-center justify-center hover:scale-110 ;
+  @apply bg-white w-52 h-72 flex flex-col items-center justify-center hover:scale-110;
 }
 
 .resume-item__icon {
@@ -546,13 +541,13 @@ body {
   @apply absolute inset-0 bg-blue-400 rounded-xl opacity-50;
   transform: rotate(3deg);
   z-index: -1;
-  filter: drop-shadow(0 0 10px #2563eb); 
+  filter: drop-shadow(0 0 10px #2563eb);
 }
 .form-title {
   @apply text-2xl mb-6 font-semibold capitalize text-blue-500;
 }
 
-.form-content{
+.form-content {
   @apply space-y-4;
 }
 
@@ -561,9 +556,9 @@ body {
   display: block;
   width: 100%;
   height: 2px;
-  background: #3b82f6 ;
+  background: #3b82f6;
   margin-top: 5px;
-  box-shadow: 0 0 10px #3b82f6 ;
+  box-shadow: 0 0 10px #3b82f6;
   animation: grow 1s ease-in-out forwards; /* Animation with easing and forwards */
 }
 
@@ -576,45 +571,44 @@ body {
   }
 }
 
-.form__scroll-bar{
-  @apply max-h-[50rem] space-y-6 sm:px-3 overflow-y-scroll overflow-x-hidden scrollbar-none scroll-smooth sm:scrollbar-thin sm:scrollbar-thumb-blue-300 sm:scrollbar-track-blue-100
+.form__scroll-bar {
+  @apply max-h-[50rem] space-y-6 sm:px-3 overflow-y-scroll overflow-x-hidden scrollbar-none scroll-smooth sm:scrollbar-thin sm:scrollbar-thumb-blue-300 sm:scrollbar-track-blue-100;
 }
 
-.form__date-btn{
-  
-  @apply flex flex-col sm:flex-row gap-4
+.form__date-btn {
+  @apply flex flex-col sm:flex-row gap-4;
 }
 
-.move-icon{
+.move-icon {
   @apply h-4 w-4 text-blue-600;
 }
 
-.btn:hover .move-icon{
-  @apply text-white
+.btn:hover .move-icon {
+  @apply text-white;
 }
 
-.btn:disabled .move-icon{
-  @apply text-gray-500
+.btn:disabled .move-icon {
+  @apply text-gray-500;
 }
 
-.btn:disabled:hover{
-  @apply bg-white
+.btn:disabled:hover {
+  @apply bg-white;
 }
 
-.move__btn-container{
-  @apply flex items-center space-x-2
+.move__btn-container {
+  @apply flex items-center space-x-2;
 }
 
-.from__container{
-  @apply py-4 flex flex-col space-y-4 border-2 border-blue-400 p-4 rounded-xl
+.from__container {
+  @apply py-4 flex flex-col space-y-4 border-2 border-blue-400 p-4 rounded-xl;
 }
 
-.form__container-header{
-  @apply flex justify-between items-center mb-2
+.form__container-header {
+  @apply flex justify-between items-center mb-2;
 }
 
-.form__container-header h4{
-  @apply font-semibold text-sm text-blue-500
+.form__container-header h4 {
+  @apply font-semibold text-sm text-blue-500;
 }
 
 /* no data component */
@@ -623,7 +617,7 @@ body {
 }
 
 .no-data__container:hover {
-  @apply bg-gray-100; 
+  @apply bg-gray-100;
 }
 
 .no-data__icon {
@@ -639,9 +633,18 @@ body {
 }
 
 .no-data__message:hover {
-  @apply text-gray-800; 
+  @apply text-gray-800;
 }
 
-.remove-btn{
+.remove-btn {
   @apply flex justify-end;
+}
+
+/* preview */
+.preview__list-container {
+  @apply list-disc list-inside;
+}
+
+.preview__list-container li {
+  @apply text-gray-700;
 }

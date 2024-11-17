@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { motion } from "framer-motion";
 import Button from "@/ui/Button";
+import { VResumeCard } from "@/animation";
 
 interface ResumeItemProps {
   resumeId: string;
@@ -33,17 +34,21 @@ interface ResumeItemProps {
   updatedAt?: string;
 }
 
-const ResumeItem = ({ resumeId, resumeTitle, resumeSummary, createdAt, updatedAt }: ResumeItemProps) => {
+const ResumeCard = ({ resumeId, resumeTitle, resumeSummary, createdAt, updatedAt }: ResumeItemProps) => {
+
+  /*~~~~~~~~$ States $~~~~~~~~*/
   const [isDeleting, setIsDeleting] = useState(false);
   const navigate = useNavigate();
   const [openAlert, setOpenAlert] = useState(false);
 
-  // Format dates to a readable format
+  /*~~~~~~~~$ Functions $~~~~~~~~*/  
   const formatDate = (dateStr?: string) => {
     if (!dateStr) return '';
     return new Date(dateStr).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
   };
 
+
+  /*~~~~~~~~$ Handlers $~~~~~~~~*/
   const handleDeleteResume = async () => {
     setIsDeleting(true);
     try {
@@ -72,20 +77,17 @@ const ResumeItem = ({ resumeId, resumeTitle, resumeSummary, createdAt, updatedAt
     }
   };
 
-
   const handleEdit = () => navigate(`/dashboard/resume/${resumeId}/edit`);
+
   const handleView = () => navigate(`/my-resume/${resumeId}/view`);
+
   const handleOpenAlertDialog = () => setOpenAlert(true);
+
   const handleCloseAlertDialog = () => setOpenAlert(false);
 
-  // Framer Motion variants for cleaner code
-  const cardVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } },
-  };
 
   return (
-    <motion.div className="resume-item" variants={cardVariants} initial="hidden" animate="visible">
+    <motion.div className="resume-item" variants={VResumeCard} initial="hidden" animate="visible">
       <div className="resume-item__icon">
         <User className="resume-item__icon-file" />
       </div>
@@ -134,4 +136,4 @@ const ResumeItem = ({ resumeId, resumeTitle, resumeSummary, createdAt, updatedAt
   );
 };
 
-export default ResumeItem;
+export default ResumeCard;

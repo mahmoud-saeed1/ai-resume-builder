@@ -6,19 +6,20 @@ const ProjectsPreview = ({ projects }: { projects: IProjects[] }) => {
       <h3 className="resume-preview__section-title text-2xl font-semibold text-gray-800 border-b-2 border-gray-300 pb-2">
         Projects
       </h3>
-      {projects.map(({ prId, title, description }) => (
-        <div
-          key={prId}
-          className="resume-preview__project-item mb-4 border border-gray-200 p-4 rounded-md"
-        >
-          <h4 className="resume-preview__project-title text-xl font-bold text-gray-800">
-            {title}
-          </h4>
-          <p className="resume-preview__project-description text-gray-700">
-            {description}
-          </p>
-        </div>
-      ))}
+      <ul className="preview__list-container">
+        {projects.map(({ prId, title, description }) => (
+          <li
+            key={prId}
+          >
+            <h4 className="inline-block">
+              {title}
+            </h4>
+            <p className="resume-preview__project-description text-gray-700">
+              {description}
+            </p>
+          </li>
+        ))}
+      </ul>
     </section>
   );
 };
