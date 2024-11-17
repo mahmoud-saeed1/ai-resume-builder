@@ -120,176 +120,187 @@ const ExperienceForm = ({
   };
 
   return (
-    <div className="grid gap-4 p-4 ">
-      <h2 className="text-lg font-semibold">Experience</h2>
+    <div className="resume-form">
+      <h2 className="form-title">Experience</h2>
 
-      {experienceList.length === 0 ? (
-        <motion.div
-          variants={VForm}
-          initial="initial"
-          animate="animate"
-          exit="exit"
-          className="border p-4 rounded-lg shadow-md"
-        >
-          <p className="text-center">No experience added yet</p>
-        </motion.div>
-      ) : (
-        <AnimatePresence>
-          {experienceList.map((exp, index) => (
-            <motion.div
-              key={exp.exId}
-              variants={VForm}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              className="border p-4 rounded-lg shadow-md space-y-4"
-            >
-              <div className="flex justify-between items-center mb-2">
-                <h4 className="font-semibold text-sm">
-                  Experience #{index + 1}
-                </h4>
-                <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    disabled={index === 0}
-                    onClick={() => handleMoveExperience(index, "up")}
-                  >
-                    <ChevronUp className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleMoveExperience(index, "down")}
-                    disabled={
-                      index === ((resumeInfo?.experience || []).length - 1)
-                    }
-                  >
-                    <ChevronDown className="h-4 w-4" />
-                  </Button>
+      <div className="form__scroll-bar">
+        {experienceList.length === 0 ? (
+          <motion.div
+            variants={VForm}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            className="border p-4 rounded-lg shadow-md"
+          >
+            <p className="text-center">No experience added yet</p>
+          </motion.div>
+        ) : (
+          <AnimatePresence>
+            {experienceList.map((exp, index) => (
+              <motion.div
+                key={exp.exId}
+                variants={VForm}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                className="from__container"
+              >
+                {/*~~~~~~~~$ Form Header $~~~~~~~~*/}
+                <div className="form__container-header">
+                  <h4>
+                    Experience #{index + 1}
+                  </h4>
+
+                  {/*~~~~~~~~$ Move Buttons $~~~~~~~~*/}
+                  <div className="move__btn-container">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      disabled={index === 0}
+                      onClick={() => handleMoveExperience(index, "up")}
+                    >
+                      <ChevronUp className="move-icon" />
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleMoveExperience(index, "down")}
+                      disabled={
+                        index === ((resumeInfo?.experience || []).length - 1)
+                      }
+                    >
+                      <ChevronDown className="move-icon" />
+                    </Button>
+                  </div>
                 </div>
-              </div>
 
-              <form>
-                <FormInput
-                  id={uuidv4()}
-                  label="Title"
-                  placeholder="Enter Title"
-                  defaultValue={exp.title}
-                  onChange={(e) =>
-                    handleInputChange(exp.exId, "title", e.target.value)
-                  }
-                  required
-                />
-
-                <FormInput
-                  id={uuidv4()}
-                  label="Company Name"
-                  placeholder="Enter Company Name"
-                  defaultValue={exp.companyName}
-                  onChange={(e) =>
-                    handleInputChange(exp.exId, "companyName", e.target.value)
-                  }
-                  required
-                />
-
-                <FormInput
-                  id={uuidv4()}
-                  label="City"
-                  placeholder="Enter City"
-                  defaultValue={exp.city}
-                  onChange={(e) =>
-                    handleInputChange(exp.exId, "city", e.target.value)
-                  }
-                  required
-                />
-
-                <div className="flex gap-4">
+                <form className="form-content">
+                  {/*~~~~~~~~$ Form Inputs $~~~~~~~~*/}
                   <FormInput
                     id={uuidv4()}
-                    type="date"
-                    label="Start Date"
-                    placeholder="Enter Start Date"
-                    defaultValue={exp.startDate}
+                    label="Title"
+                    placeholder="Enter Title"
+                    defaultValue={exp.title}
                     onChange={(e) =>
-                      handleInputChange(exp.exId, "startDate", e.target.value)
+                      handleInputChange(exp.exId, "title", e.target.value)
                     }
                     required
                   />
-                  {!exp.currentlyWorking && (
+
+                  <FormInput
+                    id={uuidv4()}
+                    label="Company Name"
+                    placeholder="Enter Company Name"
+                    defaultValue={exp.companyName}
+                    onChange={(e) =>
+                      handleInputChange(exp.exId, "companyName", e.target.value)
+                    }
+                    required
+                  />
+
+                  <FormInput
+                    id={uuidv4()}
+                    label="City"
+                    placeholder="Enter City"
+                    defaultValue={exp.city}
+                    onChange={(e) =>
+                      handleInputChange(exp.exId, "city", e.target.value)
+                    }
+                    required
+                  />
+
+                  {/*~~~~~~~~$ Date Inputs $~~~~~~~~*/}
+                  <div className="form__date-btn">
                     <FormInput
                       id={uuidv4()}
                       type="date"
-                      label="End Date"
-                      placeholder="Enter End Date"
-                      defaultValue={exp.endDate ?? ""}
+                      label="Start Date"
+                      placeholder="Enter Start Date"
+                      defaultValue={exp.startDate}
                       onChange={(e) =>
-                        handleInputChange(exp.exId, "endDate", e.target.value)
+                        handleInputChange(exp.exId, "startDate", e.target.value)
                       }
                       required
                     />
-                  )}
+                    {!exp.currentlyWorking && (
+                      <FormInput
+                        id={uuidv4()}
+                        type="date"
+                        label="End Date"
+                        placeholder="Enter End Date"
+                        defaultValue={exp.endDate ?? ""}
+                        onChange={(e) =>
+                          handleInputChange(exp.exId, "endDate", e.target.value)
+                        }
+                        required
+                      />
+                    )}
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <input
+                      id={uuidv4()}
+                      type="checkbox"
+                      title="Currently Working"
+                      checked={exp.currentlyWorking}
+                      onChange={(e) =>
+                        handleInputChange(
+                          exp.exId,
+                          "currentlyWorking",
+                          e.target.checked
+                        )
+                      }
+                      required
+                    />
+                    <label>Currently Working</label>
+                  </div>
+                </form>
+
+                <RichTextEditor
+                  index={index}
+                  onRichTextEditorChange={(content) =>
+                    handleInputChange(exp.exId, "workSummary", content)
+                  }
+                  defaultValue={exp.workSummary}
+                />
+
+                {/*~~~~~~~~$ Remove Button $~~~~~~~~*/}
+                <div className="flex justify-end">
+                  <Button
+                    type="button"
+                    variant={"danger"}
+                    size="sm"
+                    onClick={() => handleRemoveExperience(exp.exId)}
+                  >
+                    Remove
+                  </Button>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <input
-                    id={uuidv4()}
-                    type="checkbox"
-                    title="Currently Working"
-                    checked={exp.currentlyWorking}
-                    onChange={(e) =>
-                      handleInputChange(
-                        exp.exId,
-                        "currentlyWorking",
-                        e.target.checked
-                      )
-                    }
-                    required
-                  />
-                  <label>Currently Working</label>
-                </div>
-              </form>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        )}
+      </div>
 
-              <RichTextEditor
-                index={index}
-                onRichTextEditorChange={(content) =>
-                  handleInputChange(exp.exId, "workSummary", content)
-                }
-                defaultValue={exp.workSummary}
-              />
+      <div>
+        <Button
+          type="button"
+          onClick={handleAddExperience}
+          variant="success"
+          className="mb-4"
+          fullWidth
+        >
+          Add Experience
+        </Button>
 
-              <div className="flex justify-end">
-                <Button
-                  type="button"
-                  variant={"danger"}
-                  size="sm"
-                  onClick={() => handleRemoveExperience(exp.exId)}
-                >
-                  Remove
-                </Button>
-              </div>
-            </motion.div>
-          ))}
-        </AnimatePresence>
-      )}
-
-      <Button
-        type="button"
-        onClick={handleAddExperience}
-        variant="outline"
-        className="mb-4"
-      >
-        Add Experience
-      </Button>
-
-      <Button
-        type="submit"
-        variant="success"
-        isLoading={isLoading}
-        onClick={handleOnSubmit}
-        disabled={enableNextBtn}
-      >
-        Save Experience
-      </Button>
+        <Button
+          type="submit"
+          isLoading={isLoading}
+          onClick={handleOnSubmit}
+          disabled={enableNextBtn}
+          fullWidth
+        >
+          Save Experience
+        </Button>
+      </div>
     </div>
   );
 };

@@ -575,3 +575,40 @@ body {
     width: 100%;
   }
 }
+
+.form__scroll-bar{
+  @apply max-h-[50rem] space-y-6 lg:px-3 overflow-y-scroll overflow-x-hidden scrollbar-none scroll-smooth lg:scrollbar-thin lg:scrollbar-thumb-blue-300 lg:scrollbar-track-blue-100
+}
+
+.form__date-btn{
+  
+  @apply flex flex-col sm:flex-row gap-4
+}
+
+.move-icon{
+  @apply h-4 w-4 text-blue-600;
+}
+
+.btn:hover .move-icon{
+  @apply text-white
+}
+
+.btn:disabled .move-icon{
+  @apply text-gray-500
+}
+
+.move__btn-container{
+  @apply flex items-center space-x-2
+}
+
+.from__container{
+  @apply py-4 flex flex-col space-y-4 border-2  p-4 rounded-xl
+}
+
+.form__container-header{
+  @apply flex justify-between items-center mb-2
+}
+
+.form__container-header h4{
+  @apply font-semibold text-sm text-gray-600
+}

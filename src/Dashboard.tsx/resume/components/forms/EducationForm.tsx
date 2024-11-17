@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { ResumeInfoContext } from "@/context/ResumeInfoContext";
 import { IErrorResponse, IEducation, IFormProbs } from "@/interfaces";
 import { motion, AnimatePresence } from "framer-motion";
@@ -10,7 +10,6 @@ import GlobalApi from "@/service/GlobalApi";
 import { v4 as uuidv4 } from "uuid";
 import { VForm } from "@/animation";
 import FormInput from "./FormInputs";
-
 import Label from "@/ui/Label";
 import FormTextarea from "./FormTextArea";
 import FormSelect from "./FormSelect";
@@ -21,7 +20,11 @@ const EducationForm = ({
   handleEnableNextBtn,
   handleDisableNextBtn,
 }: IFormProbs) => {
+
+  /*~~~~~~~~$ Context $~~~~~~~~*/
   const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext)!;
+
+  /*~~~~~~~~$ States $~~~~~~~~*/
   const [educationList, setEducationList] = useState<IEducation[]>(
     resumeInfo?.education || []
   );
@@ -137,199 +140,215 @@ const EducationForm = ({
     <div className="resume-form">
       <h2 className="form-title">education</h2>
 
-      {educationList.length === 0 ? (
-        <motion.div
-          variants={VForm}
-          initial="initial"
-          animate="animate"
-          exit="exit"
-          className="border p-4 rounded-lg shadow-md"
-        >
-          <p className="text-center">No education added yet</p>
-        </motion.div>
-      ) : (
-        <AnimatePresence>
-          {educationList.map((edu, index) => (
-            <motion.div
-              key={edu.edId}
-              variants={VForm}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              className="border-b-2 border-gray-300 py-4 flex flex-col"
-            >
-              <div className="flex justify-between items-center mb-2">
-                <h4 className="font-semibold text-sm">
-                  Education #{index + 1}
-                </h4>
-                <div className="flex items-center space-x-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    disabled={index === 0}
-                    onClick={() => handleMoveEducation(index, "up")}
-                  >
-                    <ChevronUp className="h-4 w-4 text-blue-600" />
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleMoveEducation(index, "down")}
-                    disabled={
-                      index === (resumeInfo?.education || []).length - 1
-                    }
-                  >
-                    <ChevronDown className="h-4 w-4 text-blue-600 hover:text-white" />
-                  </Button>
+
+      <div className="form__scroll-bar">
+        {educationList.length === 0 ? (
+          <motion.div
+            variants={VForm}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            className="border p-4 rounded-lg shadow-md"
+          >
+            <p className="text-center">No education added yet</p>
+          </motion.div>
+        ) : (
+          <AnimatePresence>
+            {educationList.map((edu, index) => (
+              <motion.div
+                key={edu.edId}
+                variants={VForm}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                className="from__container"
+              >
+                {/*~~~~~~~~$ Form Header $~~~~~~~~*/}
+                <div className="form__container-header">
+                  <h4>
+                    Education #{index + 1}
+                  </h4>
+
+                  {/*~~~~~~~~$ Move Buttons $~~~~~~~~*/}
+                  <div className="move__btn-container">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      disabled={index === 0}
+                      onClick={() => handleMoveEducation(index, "up")}
+                    >
+                      <ChevronUp className="move-icon" />
+                    </Button>
+
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleMoveEducation(index, "down")}
+                      disabled={
+                        index === (resumeInfo?.education || []).length - 1
+                      }
+                    >
+                      <ChevronDown className="move-icon" />
+                    </Button>
+                  </div>
                 </div>
-              </div>
 
-              <form className="form-content">
-                <FormInput
-                  id={uuidv4()}
-                  label="University Name"
-                  placeholder="University Name"
-                  defaultValue={edu.universityName}
-                  onChange={(e) =>
-                    handleInputChange(
-                      edu.edId,
-                      "universityName",
-                      e.target.value
-                    )
-                  }
-                  required
-                />
-
-                <FormSelect
-                  id={uuidv4()}
-                  label="Degree"
-                  defaultValue={edu.degree}
-                  onChange={(e) =>
-                    handleInputChange(edu.edId, "degree", e.target.value)
-                  }
-                  required
-                >
-                  <option value="" disabled>
-                    Select Degree
-                  </option>
-                  <option value="Bachelor">Bachelor</option>
-                  <option value="Master">Master</option>
-                  <option value="Doctorate">Doctorate</option>
-                  <option value="Associate">Associate</option>
-                  <option value="Diploma">Diploma</option>
-                  <option value="Certificate">Certificate</option>
-                  <option value="High School">High School</option>
-                  <option value="Vocational">Vocational</option>
-                </FormSelect>
-
-                <FormInput
-                  id={uuidv4()}
-                  label="Major"
-                  placeholder="Major"
-                  defaultValue={edu.major}
-                  onChange={(e) =>
-                    handleInputChange(edu.edId, "major", e.target.value)
-                  }
-                  required
-                />
-
-                <FormInput
-                  id={uuidv4()}
-                  label="Minor"
-                  placeholder="Minor"
-                  defaultValue={edu.minor}
-                  onChange={(e) =>
-                    handleInputChange(edu.edId, "minor", e.target.value)
-                  }
-                />
-
-                <div className="flex gap-4">
+                <form className="form-content">
+                  {/*~~~~~~~~$ Form Inputs $~~~~~~~~*/}
                   <FormInput
                     id={uuidv4()}
-                    type="date"
-                    label="Start Date"
-                    placeholder="Start Date"
-                    defaultValue={edu.startDate}
-                    onChange={(e) =>
-                      handleInputChange(edu.edId, "startDate", e.target.value)
-                    }
-                    required
-                  />
-                  {!edu.currentlyStudy && (
-                    <FormInput
-                      id={uuidv4()}
-                      type="date"
-                      label="End Date"
-                      placeholder="End Date"
-                      defaultValue={edu.endDate}
-                      onChange={(e) =>
-                        handleInputChange(edu.edId, "endDate", e.target.value)
-                      }
-                      required
-                    />
-                  )}
-                </div>
-                <div className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    title="Currently Studying"
-                    checked={edu.currentlyStudy}
+                    label="University Name"
+                    placeholder="University Name"
+                    defaultValue={edu.universityName}
                     onChange={(e) =>
                       handleInputChange(
                         edu.edId,
-                        "currentlyStudy",
-                        e.target.checked
+                        "universityName",
+                        e.target.value
                       )
                     }
+                    required
                   />
-                  <Label>Currently Studying</Label>
+
+                  <FormSelect
+                    id={uuidv4()}
+                    label="Degree"
+                    defaultValue={edu.degree}
+                    onChange={(e) =>
+                      handleInputChange(edu.edId, "degree", e.target.value)
+                    }
+                    required
+                  >
+                    <option value="" disabled>
+                      Select Degree
+                    </option>
+                    <option value="Bachelor">Bachelor</option>
+                    <option value="Master">Master</option>
+                    <option value="Doctorate">Doctorate</option>
+                    <option value="Associate">Associate</option>
+                    <option value="Diploma">Diploma</option>
+                    <option value="Certificate">Certificate</option>
+                    <option value="High School">High School</option>
+                    <option value="Vocational">Vocational</option>
+                  </FormSelect>
+
+                  <FormInput
+                    id={uuidv4()}
+                    label="Major"
+                    placeholder="Major"
+                    defaultValue={edu.major}
+                    onChange={(e) =>
+                      handleInputChange(edu.edId, "major", e.target.value)
+                    }
+                    required
+                  />
+
+                  <FormInput
+                    id={uuidv4()}
+                    label="Minor"
+                    placeholder="Minor"
+                    defaultValue={edu.minor}
+                    onChange={(e) =>
+                      handleInputChange(edu.edId, "minor", e.target.value)
+                    }
+                  />
+
+                  {/*~~~~~~~~$ Date Inputs $~~~~~~~~*/}
+                  <div className="form__date-btn">
+                    <FormInput
+                      id={uuidv4()}
+                      type="date"
+                      label="Start Date"
+                      placeholder="Start Date"
+                      defaultValue={edu.startDate}
+                      onChange={(e) =>
+                        handleInputChange(edu.edId, "startDate", e.target.value)
+                      }
+                      required
+                    />
+                    {!edu.currentlyStudy && (
+                      <FormInput
+                        id={uuidv4()}
+                        type="date"
+                        label="End Date"
+                        placeholder="End Date"
+                        defaultValue={edu.endDate}
+                        onChange={(e) =>
+                          handleInputChange(edu.edId, "endDate", e.target.value)
+                        }
+                        required
+                      />
+                    )}
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      title="Currently Studying"
+                      checked={edu.currentlyStudy}
+                      onChange={(e) =>
+                        handleInputChange(
+                          edu.edId,
+                          "currentlyStudy",
+                          e.target.checked
+                        )
+                      }
+                    />
+                    <Label>Currently Studying</Label>
+                  </div>
+
+                  {/*~~~~~~~~$ Description $~~~~~~~~*/}
+                  <FormTextarea
+                    id={uuidv4()}
+                    label="Description"
+                    placeholder="Description"
+                    defaultValue={edu.description}
+                    onChange={(e) =>
+                      handleInputChange(edu.edId, "description", e.target.value)
+                    }
+                  />
+                </form>
+
+                {/*~~~~~~~~$ Remove Button $~~~~~~~~*/}
+                <div className="flex justify-end">
+                  <Button
+                    type="button"
+                    variant={"danger"}
+                    size="sm"
+                    onClick={() => handleRemoveEducation(edu.edId)}
+                  >
+                    Remove
+                  </Button>
                 </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        )}
+      </div>
 
-                <FormTextarea
-                  id={uuidv4()}
-                  label="Description"
-                  placeholder="Description"
-                  defaultValue={edu.description}
-                  onChange={(e) =>
-                    handleInputChange(edu.edId, "description", e.target.value)
-                  }
-                />
-              </form>
 
-              <div className="flex justify-end">
-                <Button
-                  type="button"
-                  variant={"danger"}
-                  size="sm"
-                  onClick={() => handleRemoveEducation(edu.edId)}
-                >
-                  Remove
-                </Button>
-              </div>
-            </motion.div>
-          ))}
-        </AnimatePresence>
-      )}
+      <div>
+        <Button
+          type="button"
+          onClick={handleAddEducation}
+          variant="success"
+          className="mb-4"
+          fullWidth
+        >
+          Add Education
+        </Button>
 
-      <Button
-        type="button"
-        onClick={handleAddEducation}
-        variant="success"
-        className="mb-4"
-        fullWidth
-      >
-        Add Education
-      </Button>
+        <Button
+          type="submit"
+          isLoading={isLoading}
+          onClick={handleOnSubmit}
+          disabled={enableNextBtn}
+          fullWidth
+        >
+          Save Education
+        </Button>
+      </div>
 
-      <Button
-        type="submit"
-        isLoading={isLoading}
-        onClick={handleOnSubmit}
-        disabled={enableNextBtn}
-        fullWidth
-      >
-        Save Education
-      </Button>
     </div>
   );
 };

@@ -7,31 +7,40 @@ export const SPersonalData = yup
     firstName: yup
       .string()
       .required()
-      .matches(/^[a-zA-Z\s]+$/)
+      .matches(/^[a-zA-Z\s]+$/, "First name must be a string")
       .min(3),
     lastName: yup
       .string()
       .required()
-      .matches(/^[a-zA-Z\s]+$/)
+      .matches(/^[a-zA-Z\s]+$/, "Last name must be a string")
       .min(3),
     jobTitle: yup
       .string()
       .required()
-      .matches(/^[a-zA-Z\s]+$/)
+      .matches(/^[a-zA-Z\s]+$/, "Job title must be a string")
       .min(3),
     phone: yup
       .string()
       .required()
-      .matches(/^(012|015|010)\d{8}$/),
+      .matches(
+        /^(012|015|010)\d{8}$/,
+        "Phone number must be matched 010, 012, 015 and 8 digits"
+      ),
     email: yup
       .string()
       .email()
       .required()
-      .matches(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/),
+      .matches(
+        /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+        "Email must be a valid email"
+      ),
     address: yup
       .string()
       .required()
-      .matches(/^[#.0-9a-zA-Z\u0600-\u06FF\s,-]+$/),
+      .matches(
+        /^[#.0-9a-zA-Z\u0600-\u06FF\s,-]+$/,
+        "Address must be matched a valid address"
+      ),
   })
   .required();
 
@@ -42,86 +51,43 @@ export const SSummary = yup
   })
   .required();
 
-// Experience Schema
-
-export const SExperience = yup.object().shape({
-  id: yup.string().required("ID is required"),
-
-  title: yup.string().required("Job title is required"),
-
-  companyName: yup.string().required("Company name is required"),
-
-  city: yup.string().required("City is required"),
-
-  state: yup.string().required("State is required"),
-
-  startDate: yup.string().required("Start date is required"),
-
-  endDate: yup.string().nullable(),
-
-  currentlyWorking: yup.boolean(),
-
-  workSummary: yup.string().required("Work summary is required"),
+export const EducationSchema = yup.object().shape({
+  educationList: yup
+    .array()
+    .of(
+      yup.object().shape({
+        universityName: yup
+          .string()
+          .required("University Name is required")
+          .max(100, "University Name must be at most 100 characters"),
+        degree: yup.string().required("Degree is required"),
+        major: yup.string().required("Major is required"),
+        minor: yup.string(),
+        startDate: yup
+          .date()
+          .required("Start Date is required")
+          .typeError("Start Date must be a valid date"),
+        endDate: yup
+          .date()
+          .nullable()
+          .when("currentlyStudy", {
+            is: false,
+            then: (schema) =>
+              schema
+                .required("End Date is required")
+                .typeError("End Date must be a valid date")
+                .min(
+                  yup.ref("startDate"),
+                  "End Date cannot be before Start Date"
+                ),
+            otherwise: (schema) => schema.nullable(),
+          }),
+        currentlyStudy: yup.boolean(),
+        description: yup
+          .string()
+          .max(500, "Description must be at most 500 characters"),
+      })
+    )
+    .required("At least one education entry is required")
+    .min(1, "At least one education entry is required"),
 });
-
-// Education Schema
-export const SEducation = yup
-  .object({
-    universityName: yup.string().required().min(3),
-    startDate: yup.string().required(),
-    endDate: yup.string().optional(),
-    degree: yup.string().required(),
-    major: yup.string().required(),
-    description: yup.string().optional(),
-  })
-  .required();
-
-// Skills Schema
-export const SSkills = yup
-  .object({
-    name: yup.string().required().min(2),
-    rating: yup.number().required().min(0).max(100),
-  })
-  .required();
-
-// Certifications Schema
-export const SCertifications = yup
-  .object({
-    title: yup.string().required(),
-    issuer: yup.string().required(),
-    date: yup.string().required(),
-  })
-  .required();
-
-// Projects Schema
-export const SProjects = yup
-  .object({
-    title: yup.string().required(),
-    description: yup.string().required(),
-  })
-  .required();
-
-// Languages Schema
-export const SLanguages = yup
-  .object({
-    name: yup.string().required(),
-    proficiency: yup.string().required(),
-  })
-  .required();
-
-// Hobbies Schema
-export const SHobbies = yup
-  .object({
-    name: yup.string().required(),
-  })
-  .required();
-
-// References Schema
-export const SReferences = yup
-  .object({
-    name: yup.string().required(),
-    position: yup.string().required(),
-    company: yup.string().required(),
-    contact: yup.string().required(),
-  })
-  .required();

@@ -14,11 +14,11 @@ import {
 } from "react-simple-wysiwyg";
 import { ResumeInfoContext } from "@/context/ResumeInfoContext";
 import { AIChatSession } from "@/service/AIModal";
-import { Button } from "@/components/ui/button";
 import { Brain, LoaderCircle } from "lucide-react";
 import { toast, Bounce } from "react-toastify";
 import { AxiosError } from "axios";
 import { IErrorResponse } from "@/interfaces";
+import Button from "@/ui/Button";
 
 interface IRichTextEditorProps {
   onRichTextEditorChange: (content: string) => void;
@@ -93,17 +93,18 @@ const RichTextEditor = ({
       <div className="flex justify-between items-center my-2">
         <label>Summary</label>
         <Button
-          variant="outline"
           size="sm"
           onClick={generateSummaryFromAI}
           disabled={loading}
-          className="flex gap-2 border-primary text-primary"
+          variant="success"
         >
           {loading ? (
             <LoaderCircle className="animate-spin" />
           ) : (
             <>
-              <Brain className="h-4 w-4" /> Generate from AI
+              <Brain className="h-4 w-4" />
+              <p className="ml-1">
+                Generate from AI</p>
             </>
           )}
         </Button>
@@ -115,8 +116,9 @@ const RichTextEditor = ({
             setValue(e.target.value);
             onRichTextEditorChange(e.target.value);
           }}
+          className="bg-white border border-gray-300 rounded-b-xl p-2 focus:border-none focus:outline-none"
         >
-          <Toolbar>
+          <Toolbar className="focus:border-none focus:outline-none rounded-b-xl">
             <BtnBold />
             <BtnItalic />
             <BtnUnderline />

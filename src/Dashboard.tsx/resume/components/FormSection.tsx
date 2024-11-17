@@ -14,7 +14,7 @@ import { Link, Navigate, useParams } from "react-router-dom";
 
 const FormSection = () => {
   /*~~~~~~~~$ States $~~~~~~~~*/
-  const [activeFromIdx, setActiveFromIdx] = useState(1);
+  const [activeFromIdx, setActiveFromIdx] = useState(4);
   const [enableNextBtn, setEnableNextBtn] = useState(false);
   const params = useParams<{ resumeId: string }>();
 
