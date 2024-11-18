@@ -23,7 +23,7 @@ h2 {
 }
 
 .container {
-  @apply px-4 py-8 md:px-8 lg:px-60 xl:px-60;
+  @apply px-4 py-8 md:px-8 lg:px-52 xl:px-52;
 }
 
 /*~~~~~~~~$ Header Styling $~~~~~~~~*/
@@ -655,7 +655,7 @@ body {
 }
 
 .header {
-  @apply fixed top-0 left-0 w-full bg-gradient-to-r from-gray-300 to-gray-200 text-white z-50 shadow-lg;
+  @apply fixed top-0 left-0 w-full bg-gradient-to-r from-gray-100 to-gray-300 text-white z-50 shadow-lg;
 }
 
 .landing__header-container {
@@ -667,7 +667,7 @@ body {
 }
 
 .landing__logo {
-  @apply bg-gradient-to-r from-blue-700 to-teal-400 text-transparent bg-clip-text;
+  @apply bg-gradient-to-r from-blue-600 to-teal-400 text-transparent bg-clip-text;
 }
 
 .landing__nav {
@@ -683,12 +683,12 @@ body {
 }
 
 .landing__hero {
-  @apply relative pt-20 md:pt-32 pb-16;
+  @apply relative pt-10 md:pt-20 pb-16;
 }
 
 .landing__hero-shape {
-  @apply absolute top-0 left-0 w-3/4 h-full bg-gradient-to-br from-blue-500 to-gray-600 rounded-bl-full z-0;
-  clip-path: circle(80% at top left);
+  @apply absolute  -top-44 -left-10 w-3/4 h-full bg-gradient-to-br from-blue-500 to-gray-600 rounded-bl-full z-0;
+  clip-path: circle(90% at top left);
 }
 
 .landing__hero-container {
@@ -696,19 +696,19 @@ body {
 }
 
 .landing__hero-content {
-  @apply text-white md:text-left text-center;
+  @apply text-blue-500 md:text-white md:text-left text-center;
 }
 
 .landing__hero-title {
-  @apply text-4xl md:text-5xl font-bold leading-tight;
+  @apply text-4xl md:text-5xl font-bold leading-tight tracking-wider;
 }
 
 .landing__hero-highlight {
-  @apply text-blue-300;
+  @apply bg-gradient-to-r from-blue-500 to-blue-800 text-transparent bg-clip-text;
 }
 
 .landing__hero-description {
-  @apply mt-4 text-lg leading-relaxed;
+  @apply rounded-xl text-gray-500 mt-6 text-xl font-semibold leading-relaxed tracking-wider;
 }
 
 .landing__hero-buttons {
@@ -716,7 +716,7 @@ body {
 }
 
 .landing__button-primary {
-  @apply px-6 py-2 rounded-lg bg-blue-500 text-white font-semibold hover:bg-blue-700 transition-all flex items-center;
+  @apply border-gray-300 bg-gray-200 py-4;
 }
 
 .landing__button-secondary {
@@ -724,23 +724,23 @@ body {
 }
 
 .landing__hero-image {
-  @apply relative mt-10 md:mt-0;
+  @apply relative mt-10 md:mt-0 bg-transparent;
 }
 
 .landing__hero-img {
-  @apply w-full md:w-[400px] rounded-lg shadow-2xl;
+  @apply w-full md:w-[700px] rounded-lg;
 }
 
 .landing__hero-animation {
-  @apply absolute top-[-20px] left-[-20px] w-16 h-16 bg-blue-400 rounded-full;
+  @apply absolute top-[-25px] flex items-center justify-center left-0 w-16 h-16 bg-blue-500 rounded-full;
 }
 
 .landing__features {
-  @apply bg-gray-100 py-16 relative overflow-hidden;
+  @apply bg-gray-100 rounded-xl py-10 relative overflow-hidden;
 }
 
 .landing__features-bg-top {
-  @apply absolute top-[-100px] left-[-100px] w-96 h-96 bg-gradient-to-br from-blue-400 to-blue-200 rounded-full opacity-20;
+  @apply absolute top-[-100px] left-[-100px] w-96 h-96 bg-gradient-to-br from-blue-300 to-blue-500 rounded-full opacity-20;
 }
 
 .landing__features-bg-bottom {
@@ -760,19 +760,19 @@ body {
 }
 
 .landing__features-subtitle {
-  @apply mt-2 text-gray-600 text-center;
+  @apply mt-2 text-gray-500 text-center font-semibold tracking-wider;
 }
 
 .landing__features-grid {
-  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-12;
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-16;
 }
 
 .landing__feature-card {
-  @apply bg-white shadow-md p-6 rounded-lg relative;
+  @apply bg-white flex flex-col items-center justify-center shadow-md p-6 rounded-xl relative;
 }
 
 .landing__feature-icon {
-  @apply text-4xl;
+  @apply text-5xl;
 }
 
 .landing__feature-title {
@@ -780,7 +780,7 @@ body {
 }
 
 .landing__feature-description {
-  @apply text-gray-600 mt-2;
+  @apply text-gray-600 mt-2 text-center;
 }
 
 .landing__footer {

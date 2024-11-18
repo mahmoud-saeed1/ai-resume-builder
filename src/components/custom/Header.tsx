@@ -5,7 +5,8 @@ const Header = () => {
   const { isSignedIn } = useUser();
   return (
     <header className="header">
-      <NavLink to={"/"}>
+      <NavLink to={"/"} className="flex items-center">
+        <img src="ai-logo.svg" alt="ResumeBuilder" width={40} height={40} />
         <h1 className="landing__logo">
           ResumeBuilder
         </h1>
