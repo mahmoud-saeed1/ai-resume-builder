@@ -4,29 +4,25 @@ import { Link, NavLink } from "react-router-dom";
 const Header = () => {
   const { isSignedIn } = useUser();
   return (
-    <header>
+    <header className="header">
       <NavLink to={"/"}>
-        <img
-          src="/public/Logo.svg"
-          className="repeat-0"
-          width={50}
-          height={50}
-          alt="logo"
-        />
+        <h1 className="landing__logo">
+          ResumeBuilder
+        </h1>
       </NavLink>
 
       {isSignedIn ? (
         <div className="header-btns">
           <Link
             to={"/dashboard"}
-            className="bg-primary px-4 py-2 rounded-[5px] text-white font-bold tracking-wider capitalize"
+            className="header-btn"
           >
             dashboard
           </Link>
           <UserButton />
         </div>
       ) : (
-        <Link to={"/auth/sign-in"} className="link-primary">
+        <Link to={"/auth/sign-in"} className="header-btn">
           get started
         </Link>
       )}

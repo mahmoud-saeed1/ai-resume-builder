@@ -9,7 +9,6 @@ const Dashboard = () => {
   const { user } = useUser();
   const [resumeList, setResumeList] = useState<IReusme[]>([]);
 
-  // Get user resumes list using useEffect with dependency on user email
   useEffect(() => {
     getResumesList();
   }, [user?.primaryEmailAddress?.emailAddress ?? ""]);
@@ -21,6 +20,12 @@ const Dashboard = () => {
       }
     );
   };
+
+  useEffect(() => {
+    console.log("Resume List", resumeList);
+  }
+    , [resumeList]);
+
 
   return (
     <section className="dashboard">
