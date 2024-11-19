@@ -35,7 +35,7 @@ const LandingPage = React.memo(() => {
 
             <div className="landing__hero-buttons">
 
-              <Button className="py-3 text-lg"><Link to={"/auth/sign-in"}>Get Started</Link> <ArrowRight className="ml-2" /></Button>
+              <Button className="py-3 text-lg"><Link to={"/dashboard"}>Get Started</Link> <ArrowRight className="ml-2" /></Button>
 
               <Button className="text-lg border-gray-300 bg-gray-200 py-3" variant={"outline"} >Watch Demo <Video className="ml-2" /></Button>
             </div>
@@ -59,7 +59,7 @@ const LandingPage = React.memo(() => {
                 scale: [1, 1.2, 1],
               }}
               transition={{ repeat: Infinity, duration: 3 }}
-            ><Link to={"/auth/sign-in"} className=""><Plus className="text-white scale-150" /></Link></motion.div>
+            ><Link to={"/dashboard"} className=""><Plus className="text-white scale-150" /></Link></motion.div>
           </motion.div>
         </div>
       </div>

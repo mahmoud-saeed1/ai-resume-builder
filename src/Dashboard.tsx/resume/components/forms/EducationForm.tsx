@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ResumeInfoContext } from "@/context/ResumeInfoContext";
 import { IErrorResponse, IEducation, IFormProbs } from "@/interfaces";
 import { motion, AnimatePresence } from "framer-motion";
@@ -32,6 +32,14 @@ const EducationForm = ({
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const params = useParams<{ resumeId: string }>();
+
+  /*~~~~~~~~$ Get Form List Data $~~~~~~~~*/
+  useEffect(() => {
+    if (resumeInfo?.education && resumeInfo.education.length > 0) {
+      setEducationList(resumeInfo.education);
+    }
+
+  }, [])
 
   /*~~~~~~~~$ Handlers $~~~~~~~~*/
   const handleInputChange = (

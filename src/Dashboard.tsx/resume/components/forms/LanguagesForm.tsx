@@ -28,6 +28,14 @@ const LanguagesForm = ({
 
   const params = useParams<{ resumeId: string }>();
 
+  /*~~~~~~~~$ Get Form List Data $~~~~~~~~*/
+  useEffect(() => {
+    if (resumeInfo?.languages && resumeInfo.languages.length > 0) {
+      setLanguagesList(resumeInfo.languages);
+    }
+
+  }, [])
+
   /*~~~~~~~~$ Handlers $~~~~~~~~*/
   const handleInputChange = (
     langId: string,

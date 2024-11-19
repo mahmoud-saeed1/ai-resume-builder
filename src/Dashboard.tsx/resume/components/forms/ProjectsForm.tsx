@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ResumeInfoContext } from "@/context/ResumeInfoContext";
 import { IErrorResponse, IFormProbs, IProjects } from "@/interfaces";
 import { motion, AnimatePresence } from "framer-motion";
@@ -26,6 +26,14 @@ const ProjectsForm = ({
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const params = useParams<{ resumeId: string }>();
+
+  /*~~~~~~~~$ Get Form List Data $~~~~~~~~*/
+  useEffect(() => {
+    if (resumeInfo?.projects && resumeInfo.projects.length > 0) {
+      setProjects(resumeInfo.projects);
+    }
+
+  }, [])
 
   /*~~~~~~~~$ Handlers $~~~~~~~~*/
   const handleInputChange = (

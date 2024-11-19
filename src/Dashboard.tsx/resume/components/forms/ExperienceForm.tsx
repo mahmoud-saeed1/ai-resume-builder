@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ResumeInfoContext } from "@/context/ResumeInfoContext";
 import { IErrorResponse, IExperience, IFormProbs } from "@/interfaces";
 import RichTextEditor from "./RichTextEditor";
@@ -26,6 +26,15 @@ const ExperienceForm = ({
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const params = useParams<{ resumeId: string }>();
+
+  /*~~~~~~~~$ Get Form List Data $~~~~~~~~*/
+  useEffect(()=>{
+    if (resumeInfo?.experience && resumeInfo.experience.length > 0) {
+      setExperienceList(resumeInfo.experience);
+    }
+    
+},[])
+
   /*~~~~~~~~$ Handlers $~~~~~~~~*/
   const handleInputChange = (
     exId: string,

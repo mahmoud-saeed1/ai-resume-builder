@@ -1,7 +1,8 @@
 import { IResumeInfo, IUserResume } from "@/interfaces";
-import axios from "axios"; // Use ES6 module import
+import axios from "axios"; 
 
-const API_Key = import.meta.env.VITE_STARPI_API_KEY; // Now TypeScript knows about import.meta.env
+
+const API_Key = import.meta.env.VITE_STARPI_API_KEY;
 
 const axiosClient = axios.create({
   baseURL: "http://localhost:1337/api/",

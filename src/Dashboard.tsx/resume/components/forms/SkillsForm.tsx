@@ -26,6 +26,14 @@ const SkillsForm = ({
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const params = useParams<{ resumeId: string }>();
 
+  /*~~~~~~~~$ Get Form List Data $~~~~~~~~*/
+  useEffect(() => {
+    if (resumeInfo?.skills && resumeInfo.skills.length > 0) {
+      setSkillsList(resumeInfo.skills);
+    }
+
+  }, [])
+
   const handleInputChange = (
     skillId: string,
     field: keyof ISkills,
@@ -60,7 +68,7 @@ const SkillsForm = ({
       });
 
       if (status === 200) {
-        toast.success("Education saved successfully.", {
+        toast.success("skills saved successfully.", {
           autoClose: 1000,
           theme: "light",
           transition: Bounce,

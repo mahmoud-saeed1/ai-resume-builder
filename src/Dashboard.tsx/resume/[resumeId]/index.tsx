@@ -8,7 +8,7 @@ import GlobalApi from "@/service/GlobalApi";
 
 const EditResume = () => {
   /*~~~~~~~~$ States $~~~~~~~~*/
-  const {resumeId} = useParams<{ resumeId: string }>();
+  const { resumeId } = useParams<{ resumeId: string }>();
   const [resumeInfo, setResumeInfo] = useState<IResumeInfo>();
 
   /*~~~~~~~~$ Effects $~~~~~~~~*/
@@ -19,7 +19,7 @@ const EditResume = () => {
   /*~~~~~~~~$ Handlers $~~~~~~~~*/
   const getResumeData = () => {
     GlobalApi.GetResumeById(resumeId!).then((resp) => {
-      
+
       setResumeInfo(resp.data.data);
     });
   };
@@ -30,12 +30,12 @@ const EditResume = () => {
     , [resumeId]);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-      <ResumeInfoContext.Provider value={{ resumeInfo: resumeInfo || {} as IResumeInfo, setResumeInfo }}>
+    <ResumeInfoContext.Provider value={{ resumeInfo: resumeInfo || {} as IResumeInfo, setResumeInfo }}>
+      <div className="mt-20 grid grid-cols-1 md:grid-cols-2 gap-10">
         <FormSection />
         <ResumePreview />
-      </ResumeInfoContext.Provider>
-    </div>
+      </div>
+    </ResumeInfoContext.Provider>
   );
 };
 

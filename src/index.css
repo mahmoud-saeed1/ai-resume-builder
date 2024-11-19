@@ -576,7 +576,7 @@ body {
 }
 
 .form__date-btn {
-  @apply flex flex-col sm:flex-row gap-4;
+  @apply flex flex-col lg:flex-row gap-4;
 }
 
 .move-icon {

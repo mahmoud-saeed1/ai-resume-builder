@@ -72,6 +72,7 @@ const FormSection = () => {
             className="text-white capitalize tracking-wider text-lg"
             onClick={handleNext}
             disabled={!enableNextBtn}
+            variant={"success"}
           >
             next <ArrowRight />
           </Button>

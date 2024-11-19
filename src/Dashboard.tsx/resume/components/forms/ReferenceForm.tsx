@@ -19,12 +19,20 @@ const ReferenceForm = ({
   handleDisableNextBtn,
 }: IFormProbs) => {
   const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext)!;
-  const [references, setReferences] = useState<IReferences[]>(
+  const [referencesList, setReferencesList] = useState<IReferences[]>(
     resumeInfo?.references || []
   );
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const params = useParams<{ resumeId: string }>();
+
+  /*~~~~~~~~$ Get Form List Data $~~~~~~~~*/
+  useEffect(() => {
+    if (resumeInfo?.references && resumeInfo.references.length > 0) {
+      setReferencesList(resumeInfo.references);
+    }
+
+  }, [])
 
   /*~~~~~~~~$ Handlers $~~~~~~~~*/
   const handleInputChange = (
@@ -32,12 +40,12 @@ const ReferenceForm = ({
     field: keyof IReferences,
     value: string
   ) => {
-    setReferences((prev) =>
+    setReferencesList((prev) =>
       prev.map((ref) => (ref.reId === refId ? { ...ref, [field]: value } : ref))
     );
     setResumeInfo((prev) => ({
       ...prev,
-      references,
+      references: referencesList,
     }));
 
     handleDisableNextBtn();
@@ -57,7 +65,7 @@ const ReferenceForm = ({
 
     try {
       const { status } = await GlobalApi.UpdateResumeData(params.resumeId, {
-        references,
+        references: referencesList,
       });
 
       if (status === 200) {
@@ -99,27 +107,27 @@ const ReferenceForm = ({
       company: "",
       contact: "",
     };
-    setReferences((prev) => [...prev, newReference]);
+    setReferencesList((prev) => [...prev, newReference]);
     setResumeInfo((prev) => ({
       ...prev,
-      references: [...references, newReference],
+      references: [...referencesList, newReference],
     }));
   };
 
   const handleRemoveReference = (refId: string) => {
-    setReferences((prev) => prev.filter((ref) => ref.reId !== refId));
+    setReferencesList((prev) => prev.filter((ref) => ref.reId !== refId));
     setResumeInfo((prev) => ({
       ...prev,
-      references: references.filter((ref) => ref.reId !== refId),
+      references: referencesList.filter((ref) => ref.reId !== refId),
     }));
   };
 
   const handleMoveReference = (index: number, direction: "up" | "down") => {
     const newIndex = direction === "up" ? index - 1 : index + 1;
-    const updatedReferences = [...references];
+    const updatedReferences = [...referencesList];
     const movedReference = updatedReferences.splice(index, 1);
     updatedReferences.splice(newIndex, 0, movedReference[0]);
-    setReferences(updatedReferences);
+    setReferencesList(updatedReferences);
     setResumeInfo((prev) => ({
       ...prev,
       references: updatedReferences,
@@ -127,19 +135,19 @@ const ReferenceForm = ({
   };
 
   useEffect(() => {
-    console.log("References Component: ", references);
-  }, [references]);
+    console.log("References Component: ", referencesList);
+  }, [referencesList]);
 
   return (
     <div className="resume-form">
       <h2 className="form-title">References</h2>
 
       <div>
-        {references.length === 0 ? (
+        {referencesList.length === 0 ? (
           <NoData message="No References added yet." />
         ) : (
           <AnimatePresence>
-            {references.map((ref, index) => (
+            {referencesList.map((ref, index) => (
               <motion.div
                 key={ref.reId}
                 variants={VForm}
@@ -168,7 +176,7 @@ const ReferenceForm = ({
                       variant="outline"
                       size="sm"
                       onClick={() => handleMoveReference(index, "down")}
-                      disabled={index === references.length - 1}
+                      disabled={index === referencesList.length - 1}
                     >
                       <ChevronDown className="move-icon" />
                     </Button>
