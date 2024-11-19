@@ -8,6 +8,15 @@ import ResumeCard from "./components/ResumeCard";
 const Dashboard = () => {
   const { user } = useUser();
   const [resumeList, setResumeList] = useState<IReusme[]>([]);
+  const [reftch, setReftch] = useState(false);
+
+  // reftch resume after delete operation
+  useEffect(() => {
+    if (reftch) {
+      getResumesList();
+      setReftch(false);
+    }
+  }, [reftch]);
 
   useEffect(() => {
     getResumesList();
@@ -27,6 +36,8 @@ const Dashboard = () => {
     , [resumeList]);
 
 
+  const handleReftch = () => setReftch(true);
+
   return (
     <section className="dashboard">
       <div className="dashboard__container">
@@ -45,9 +56,10 @@ const Dashboard = () => {
               key={documentId}
               createdAt={createdAt}
               updatedAt={updatedAt}
-              resumeId={documentId ?? ""}
+              documentId={documentId ?? ""}
               resumeSummary={""}
               resumeTitle={title ?? "Untitled"}
+              handleReftch={handleReftch}
             />
           ))}
         </div>

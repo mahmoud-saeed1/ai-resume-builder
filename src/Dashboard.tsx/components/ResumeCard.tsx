@@ -27,21 +27,22 @@ import Button from "@/ui/Button";
 import { VResumeCard } from "@/animation";
 
 interface ResumeItemProps {
-  resumeId: string;
+  documentId: string;
   resumeTitle: string;
   resumeSummary: string;
   createdAt?: string;
   updatedAt?: string;
+  handleReftch?: () => void;
 }
 
-const ResumeCard = ({ resumeId, resumeTitle, resumeSummary, createdAt, updatedAt }: ResumeItemProps) => {
+const ResumeCard = ({ documentId, resumeTitle, resumeSummary, createdAt, updatedAt, handleReftch }: ResumeItemProps) => {
 
   /*~~~~~~~~$ States $~~~~~~~~*/
   const [isDeleting, setIsDeleting] = useState(false);
   const navigate = useNavigate();
   const [openAlert, setOpenAlert] = useState(false);
 
-  /*~~~~~~~~$ Functions $~~~~~~~~*/  
+  /*~~~~~~~~$ Functions $~~~~~~~~*/
   const formatDate = (dateStr?: string) => {
     if (!dateStr) return '';
     return new Date(dateStr).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
@@ -52,14 +53,18 @@ const ResumeCard = ({ resumeId, resumeTitle, resumeSummary, createdAt, updatedAt
   const handleDeleteResume = async () => {
     setIsDeleting(true);
     try {
-      const { status } = await GlobalApi.DeleteResume(resumeId);
-      if (status === 200) {
+      const { status } = await GlobalApi.DeleteResume(documentId);
+      if (status === 204) {
         toast.success("Resume deleted successfully.", {
           autoClose: 1000,
           theme: "light",
           transition: Bounce,
         });
         setOpenAlert(false);
+
+        handleReftch?.();
+
+        // window.location.reload();
       } else {
         console.warn("Unexpected status code:", status);
         toast.error("Unexpected error while deleting the resume.");
@@ -77,9 +82,9 @@ const ResumeCard = ({ resumeId, resumeTitle, resumeSummary, createdAt, updatedAt
     }
   };
 
-  const handleEdit = () => navigate(`/dashboard/resume/${resumeId}/edit`);
+  const handleEdit = () => navigate(`/dashboard/resume/${documentId}/edit`);
 
-  const handleView = () => navigate(`/my-resume/${resumeId}/view`);
+  const handleView = () => navigate(`/my-resume/${documentId}/view`);
 
   const handleOpenAlertDialog = () => setOpenAlert(true);
 
@@ -125,10 +130,10 @@ const ResumeCard = ({ resumeId, resumeTitle, resumeSummary, createdAt, updatedAt
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <Button onClick={handleCloseAlertDialog} variant={"cancel"}>Cancel</Button>
             <Button isLoading={isDeleting} variant={"danger"} onClick={handleDeleteResume} disabled={isDeleting}>
               Delete
             </Button>
+            <Button onClick={handleCloseAlertDialog} variant={"cancel"}>Cancel</Button>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
