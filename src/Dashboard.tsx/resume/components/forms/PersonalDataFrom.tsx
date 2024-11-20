@@ -7,9 +7,9 @@ import { useContext, useState } from "react";
 import GlobalApi from "@/service/GlobalApi";
 import { useParams } from "react-router-dom";
 import { toast, Bounce } from "react-toastify";
-import Button from "@/ui/Button";
 import { AxiosError } from "axios";
 import FormInput from "./FormInputs";
+import FormContainer from "./FormContainer";
 
 const PersonalDataForm = ({
   enableNextBtn,
@@ -86,10 +86,13 @@ const PersonalDataForm = ({
   };
 
   return (
-    <div>
-
-      <form className="resume-form" onSubmit={handleSubmit(handleOnSubmit)}>
-        <h2 className="form-title">Personal Data</h2>
+    <FormContainer
+      formTitle="Personal Data"
+      handleOnSubmit={handleSubmit(handleOnSubmit)}
+      isLoading={isLoading}
+      enableNextBtn={enableNextBtn}
+    >
+      <form className="form-content" onSubmit={handleSubmit(handleOnSubmit)}>
         {["firstName", "lastName", "jobTitle", "phone", "email", "address"].map(
           (field) => (
             <FormInput
@@ -106,12 +109,8 @@ const PersonalDataForm = ({
             />
           )
         )}
-
-        <Button isLoading={isLoading} disabled={enableNextBtn} fullWidth>
-          Save Personal Data
-        </Button>
       </form>
-    </div>
+    </FormContainer>
   );
 };
 

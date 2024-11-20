@@ -2,6 +2,47 @@
 @tailwind components;
 @tailwind utilities;
 
+/*~~~~~~~~$ Start Global Styling $~~~~~~~~*/
+/*~~~~~~~~$ End Global Styling $~~~~~~~~*/
+
+/*~~~~~~~~$ Start Header Styling $~~~~~~~~*/
+/*~~~~~~~~$ End Header Styling $~~~~~~~~*/
+
+/*~~~~~~~~$ Start Landing Page Styling $~~~~~~~~*/
+/*~~~~~~~~$ End Landing Page Styling $~~~~~~~~*/
+
+/*~~~~~~~~$ Start Dashboard Styling $~~~~~~~~*/
+/*~~~~~~~~$ End Dashboard Styling $~~~~~~~~*/
+
+/*~~~~~~~~$ Start Form Container Styling $~~~~~~~~*/
+/*~~~~~~~~$ End Form Container Styling $~~~~~~~~*/
+
+/*~~~~~~~~$ Start Resume Preview Styling $~~~~~~~~*/
+/*~~~~~~~~$ End Resume Preview Styling $~~~~~~~~*/
+
+/*~~~~~~~~$ Start Resume Item Container $~~~~~~~~*/
+/*~~~~~~~~$ End Resume Item Container $~~~~~~~~*/
+
+/*~~~~~~~~$ Start AddResume Styling $~~~~~~~~*/
+/*~~~~~~~~$ End AddResume Styling $~~~~~~~~*/
+
+/*~~~~~~~~$ Start Resume Form Styling $~~~~~~~~*/
+.form-content {
+  @apply space-y-4;
+}
+/* *** personal data form *** */
+
+/*~~~~~~~~$ End Resume Form Styling $~~~~~~~~*/
+
+/*~~~~~~~~$ Start No Data Component Styling $~~~~~~~~*/
+/*~~~~~~~~$ End No Data Component Styling $~~~~~~~~*/
+
+/*~~~~~~~~$ Start Preview Styling $~~~~~~~~*/
+/*~~~~~~~~$ End Preview Styling $~~~~~~~~*/
+
+/*~~~~~~~~$ Start Generated Summary Styling $~~~~~~~~*/
+/*~~~~~~~~$ End Generated Summary Styling $~~~~~~~~*/
+
 /*~~~~~~~~$ react-simple-wysiwyg $~~~~~~~~*/
 .rsw-ce ul {
   list-style: disc;
@@ -545,10 +586,6 @@ body {
 }
 .form-title {
   @apply text-2xl mb-6 font-semibold capitalize text-blue-500;
-}
-
-.form-content {
-  @apply space-y-4;
 }
 
 .form-title::after {

@@ -38,85 +38,83 @@ const FormContainer = ({
         <div className="resume-form">
             <h2 className="form-title">{formTitle}</h2>
 
-            <div className="form__scroll-bar">
-                {(FormInputsList?.length ?? 0) === 0 && multipleForms ? (
-                    <NoData message={noDataMessage || "No data available"} />
-                ) : (
-                    <AnimatePresence>
-                        {multipleForms && FormInputsList.map((exp, index) => (
-                            <motion.div
-                                key={exp.exId}
-                                variants={VForm}
-                                initial="initial"
-                                animate="animate"
-                                exit="exit"
-                                className="from__container"
-                            >
-                                {/*~~~~~~~~$ Form Header $~~~~~~~~*/}
-                                <div className="form__container-header">
-                                    <h4>
-                                        {formTitle} #{index + 1}
-                                    </h4>
 
-                                    {/*~~~~~~~~$ Move Buttons $~~~~~~~~*/}
-                                    <div className="move__btn-container">
-                                        <Button
-                                            variant="outline"
-                                            size="sm"
-                                            disabled={index === 0}
-                                            onClick={() => handleMoveForm && handleMoveForm(index, "up")}
-                                        >
-                                            <ChevronUp className="move-icon" />
-                                        </Button>
-                                        <Button
-                                            variant="outline"
-                                            size="sm"
-                                            onClick={() => handleMoveForm && handleMoveForm(index, "down")}
-                                            disabled={
-                                                index === ((resumeInfo?.experience || []).length - 1)
-                                            }
-                                        >
-                                            <ChevronDown className="move-icon" />
-                                        </Button>
-                                    </div>
-                                </div>
-
-
-                                {/*~~~~~~~~$ Form Inputs $~~~~~~~~*/}
-                                <div className="form__inputs">
-                                    {children}
-                                </div>
-
-                                {/*~~~~~~~~$ Remove Button $~~~~~~~~*/}
-                                <div className="remove-btn">
-                                    <Button
-                                        type="button"
-                                        variant={"danger"}
-                                        size="sm"
-                                        onClick={() => handleRemoveForm && handleRemoveForm(exp.exId)}
+            <AnimatePresence>
+                <motion.div
+                    variants={VForm}
+                    initial="initial"
+                    animate="animate"
+                    exit="exit"
+                >
+                    {multipleForms ?
+                        <div className="form__scroll-bar">
+                            {(FormInputsList?.length ?? 0) === 0 ? (
+                                <NoData message={noDataMessage || "No data available"} />
+                            ) : (
+                                FormInputsList.map((exp, index) => (
+                                    <motion.div
+                                        key={exp.exId}
+                                        variants={VForm}
+                                        initial="initial"
+                                        animate="animate"
+                                        exit="exit"
+                                        className="from__container"
                                     >
-                                        Remove
-                                    </Button>
-                                </div>
-                            </motion.div>
-                        ))}
+                                        {/*~~~~~~~~$ Form Header $~~~~~~~~*/}
+                                        <div className="form__container-header">
+                                            <h4>
+                                                {formTitle} #{index + 1}
+                                            </h4>
 
-                        {!multipleForms && (
-                            <motion.div
-                                variants={VForm}
-                                initial="initial"
-                                animate="animate"
-                                exit="exit"
-                                className="from__container"
+                                            {/*~~~~~~~~$ Move Buttons $~~~~~~~~*/}
+                                            <div className="move__btn-container">
+                                                <Button
+                                                    variant="outline"
+                                                    size="sm"
+                                                    disabled={index === 0}
+                                                    onClick={() => handleMoveForm && handleMoveForm(index, "up")}
+                                                >
+                                                    <ChevronUp className="move-icon" />
+                                                </Button>
+                                                <Button
+                                                    variant="outline"
+                                                    size="sm"
+                                                    onClick={() => handleMoveForm && handleMoveForm(index, "down")}
+                                                    disabled={
+                                                        index === ((resumeInfo?.experience || []).length - 1)
+                                                    }
+                                                >
+                                                    <ChevronDown className="move-icon" />
+                                                </Button>
+                                            </div>
+                                        </div>
+
+
+                                        {/*~~~~~~~~$ Form Inputs $~~~~~~~~*/}
+                                        {<div className="form__inputs">
+                                            {children}
+                                        </div>}
+
+                                        {/*~~~~~~~~$ Remove Button $~~~~~~~~*/}
+                                        <div className="remove-btn">
+                                            <Button
+                                                type="button"
+                                                variant={"danger"}
+                                                size="sm"
+                                                onClick={() => handleRemoveForm && handleRemoveForm(exp.exId)}
+                                            >
+                                                Remove
+                                            </Button>
+                                        </div>
+                                    </motion.div>
+                                ))
+                            )}
+                        </div> : <
                             >
-                                <div className="form__inputs">
-                                    {children}
-                                </div>
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
-                )}
-            </div>
+                            {children}
+                        </>}
+                </motion.div>
+            </AnimatePresence>
 
             {/*~~~~~~~~$ Add & Save Button $~~~~~~~~*/}
             <div>
