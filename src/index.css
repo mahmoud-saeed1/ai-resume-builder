@@ -30,7 +30,23 @@
 .form-content {
   @apply space-y-4;
 }
-/* *** personal data form *** */
+
+.srollbar{
+  @apply sm:px-3 overflow-y-scroll overflow-x-hidden scrollbar-none scroll-smooth sm:scrollbar-thin sm:scrollbar-thumb-blue-300 sm:scrollbar-track-blue-100
+}
+
+.form__scroll-bar {
+  @apply max-h-[50rem] space-y-6 srollbar;
+}
+
+/* ----! summary form !---- */
+.generated__summary-scroll {
+  @apply max-h-72 p-3 sm:p-4 md:p-6 space-y-4 rounded-xl border-2 border-blue-300 srollbar;
+}
+
+.generated-summary {
+  @apply p-3 bg-white rounded-xl shadow cursor-pointer text-gray-800;
+}
 
 /*~~~~~~~~$ End Resume Form Styling $~~~~~~~~*/
 
@@ -608,9 +624,7 @@ body {
   }
 }
 
-.form__scroll-bar {
-  @apply max-h-[50rem] space-y-6 sm:px-3 overflow-y-scroll overflow-x-hidden scrollbar-none scroll-smooth sm:scrollbar-thin sm:scrollbar-thumb-blue-300 sm:scrollbar-track-blue-100;
-}
+
 
 .form__date-btn {
   @apply flex flex-col lg:flex-row gap-4;
@@ -863,6 +877,3 @@ body {
   @apply flex flex-col justify-center;
 }
 
-.generated-summary {
-  @apply p-3 bg-white rounded-xl shadow cursor-pointer text-gray-800;
-}

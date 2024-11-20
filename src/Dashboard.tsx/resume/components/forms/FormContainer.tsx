@@ -10,6 +10,7 @@ interface IFormContainer {
     formTitle: string;
     noDataMessage?: string;
     multipleForms?: boolean;
+    className?: string;
     handleAddNewForm?: () => void;
     handleRemoveForm?: (exId: string) => void;
     handleMoveForm?: (index: number, direction: "up" | "down") => void;
@@ -25,6 +26,7 @@ const FormContainer = ({
     formTitle,
     noDataMessage,
     multipleForms = false,
+    className,
     handleAddNewForm,
     handleRemoveForm,
     handleMoveForm,
@@ -109,10 +111,10 @@ const FormContainer = ({
                                     </motion.div>
                                 ))
                             )}
-                        </div> : <
-                            >
+                        </div> : <div className={className}
+                        >
                             {children}
-                        </>}
+                        </div>}
                 </motion.div>
             </AnimatePresence>
 
