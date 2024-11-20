@@ -2,7 +2,7 @@ import { IErrorResponse, IFormProbs, IGeneratedSummary } from "@/interfaces";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ResumeInfoContext } from "@/context/ResumeInfoContext";
-import { useContext, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import GlobalApi from "@/service/GlobalApi";
 import { useParams } from "react-router-dom";
 import { toast, Bounce } from "react-toastify";
@@ -23,9 +23,11 @@ const SummaryForm = ({
   /*~~~~~~~~$ States $~~~~~~~~*/
   const [isLoading, setIsLoading] = useState(false);
   const [isGenerated, setIsGenerated] = useState(false);
-  const [generatedSummary, setGeneratedSummary] = useState<IGeneratedSummary[]>(
-    []
-  );
+  const [generatedSummary, setGeneratedSummary] = useState<IGeneratedSummary[]>([]);
+  const [activeTextArea, setActiveTextArea] = useState(false);
+
+  const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
+
   /*~~~~~~~~$ Context $~~~~~~~~*/
   const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext) ?? {};
 
@@ -46,6 +48,10 @@ const SummaryForm = ({
   });
 
   /*~~~~~~~~$ Handlers $~~~~~~~~*/
+  const handleActiveTextArea = () => setActiveTextArea(true);
+
+  const handleInActiveTextArea = () => setActiveTextArea(false); 
+
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { value } = e.target;
     setResumeInfo((prev) => ({
@@ -53,11 +59,11 @@ const SummaryForm = ({
       summary: value,
     }));
     handleDisableNextBtn();
+    handleInActiveTextArea();
   };
 
   const handleOnSubmit: SubmitHandler<{ summary: string }> = async (data) => {
     setIsLoading(true);
-
     if (!params?.resumeId) {
       toast.error("ID parameter is missing.", {
         autoClose: 2000,
@@ -67,10 +73,6 @@ const SummaryForm = ({
       setIsLoading(false);
       return;
     }
-
-    // Log data and params.id for debugging
-    console.log("Data to be sent:", data);
-    console.log("Resume ID:", params.resumeId);
 
     try {
       const { status } = await GlobalApi.UpdateResumeData(params.resumeId, data);
@@ -94,8 +96,6 @@ const SummaryForm = ({
     }
   };
 
-
-
   const handleGenerateSummary = async () => {
     setIsGenerated(true);
     const prompt = resumeInfo?.personalData
@@ -105,9 +105,7 @@ const SummaryForm = ({
     try {
       const { response } = await AIChatSession.sendMessage(prompt);
       const responseText = await response.text();
-      console.log(responseText);
 
-      //** Check if the response text is valid JSON
       if (responseText) {
         try {
           const parsedSummary: IGeneratedSummary[] = JSON.parse(responseText);
@@ -146,17 +144,20 @@ const SummaryForm = ({
       ...prev,
       summary: summaryText,
     }));
+
+    textAreaRef.current?.scrollIntoView({ behavior: 'smooth' });
+    handleActiveTextArea();
   };
 
   return (
     <div className="resume-form">
-      <h2 className="form-title">summary</h2>
+      <h2 className="form-title">Summary</h2>
       <Button onClick={handleGenerateSummary} isLoading={isGenerated} variant={"success"}>
         Generate Summary <Sparkles width={"1rem"} className="ml-2" />
       </Button>
 
       {generatedSummary.length > 0 && (
-        <div className="space-y-2">
+        <div className="space-y-4 rounded-xl">
           {generatedSummary.map((summary, index) => (
             <motion.div
               key={index}
@@ -164,7 +165,7 @@ const SummaryForm = ({
               initial="hidden"
               animate="visible"
               whileHover="hover"
-              className="p-3 bg-white rounded-lg shadow cursor-pointer text-gray-800"
+              className="generated-summary"
               onClick={() => handleSummaryClick(summary.summary)}
             >
               {summary.summary}
@@ -182,6 +183,9 @@ const SummaryForm = ({
           onChange={handleInputChange}
           defaultValue={resumeInfo?.summary}
           errorMessage={errors.summary?.message}
+          ref={textAreaRef}
+          className={activeTextArea ? "shadow-lg shadow-blue-500" : ""}
+          style={{ border: activeTextArea ? "2px solid #2563EB" : "none" }}
         />
 
         <Button

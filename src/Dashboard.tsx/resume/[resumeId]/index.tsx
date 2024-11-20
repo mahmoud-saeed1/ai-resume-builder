@@ -24,11 +24,6 @@ const EditResume = () => {
     });
   };
 
-  useEffect(() => {
-    console.log("here is resumeId", resumeId);
-  }
-    , [resumeId]);
-
   return (
     <ResumeInfoContext.Provider value={{ resumeInfo: resumeInfo || {} as IResumeInfo, setResumeInfo }}>
       <div className="mt-20 grid grid-cols-1 md:grid-cols-2 gap-10">

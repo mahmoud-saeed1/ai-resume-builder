@@ -145,7 +145,7 @@ const SkillsForm = ({
                 className="from__container"
               >
                 {/*~~~~~~~~$ Form Header $~~~~~~~~*/}
-                <div className="flex justify-between items-center mb-2">
+                <div className="form__container-header">
                   <h4 className="font-semibold text-sm">Skill #{index + 1}</h4>
 
                   {/*~~~~~~~~$ Move Buttons $~~~~~~~~*/}

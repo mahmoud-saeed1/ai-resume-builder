@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { ResumeInfoContext } from "@/context/ResumeInfoContext";
 import { IErrorResponse, IEducation, IFormProbs } from "@/interfaces";
 import { motion, AnimatePresence } from "framer-motion";
@@ -32,6 +32,9 @@ const EducationForm = ({
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const params = useParams<{ resumeId: string }>();
+
+  const newEducationRef = useRef<HTMLDivElement | null>(null);
+
 
   /*~~~~~~~~$ Get Form List Data $~~~~~~~~*/
   useEffect(() => {
@@ -122,6 +125,10 @@ const EducationForm = ({
       ...prev,
       education: [...educationList, newEducation],
     }));
+
+    if (newEducationRef.current) {
+      newEducationRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   const handleRemoveEducation = (edId: string) => {
@@ -163,6 +170,7 @@ const EducationForm = ({
                 animate="animate"
                 exit="exit"
                 className="from__container"
+                ref={index === educationList.length - 1 ? newEducationRef : null}
               >
                 {/*~~~~~~~~$ Form Header $~~~~~~~~*/}
                 <div className="form__container-header">

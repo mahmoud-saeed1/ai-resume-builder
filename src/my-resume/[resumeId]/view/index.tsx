@@ -53,7 +53,7 @@ const ViewResume = () => {
     return (
         <ResumeInfoContext.Provider value={{ resumeInfo: resumeInfo || {} as IResumeInfo, setResumeInfo }}>
             <div className="view-resume__container">
-                <div id="no-print">
+                <div id="no-print" className="mt-20">
                     {/*~~~~~~~~$ Celebration Confetti $~~~~~~~~*/}
                     <Confetti className="w-screen h-screen" recycle={false} numberOfPieces={2000} />
                     <Header />

@@ -654,7 +654,7 @@ body {
 }
 
 .header {
-  @apply fixed top-0 left-0 w-full bg-gradient-to-r from-gray-100 to-gray-300 text-white z-50 shadow-lg;
+  @apply fixed top-0 left-0 w-full bg-gradient-to-r from-gray-200 to-gray-300 text-white z-50 shadow-lg;
 }
 
 .landing__header-container {
@@ -727,7 +727,7 @@ body {
 }
 
 .landing__hero-image {
-  @apply relative ;
+  @apply relative;
 }
 
 .landing__hero-img {
@@ -775,11 +775,11 @@ body {
 }
 
 .landing__features-bg-top {
-  @apply absolute top-[-100px] left-[-100px] w-96 h-96 bg-gradient-to-br from-blue-300 to-blue-500 rounded-full opacity-20;
+  @apply absolute top-[-100px] left-[-100px] w-96 h-96 bg-gradient-to-br from-blue-300 to-blue-500 rounded-full opacity-50;
 }
 
 .landing__features-bg-bottom {
-  @apply absolute bottom-[-100px] right-[-100px] w-96 h-96 bg-gradient-to-tl from-blue-400 to-gray-200 rounded-full opacity-20;
+  @apply absolute bottom-[-100px] right-[-100px] w-96 h-96 bg-gradient-to-tl from-blue-400 to-gray-200 rounded-full opacity-50;
 }
 
 .landing__features-container {
@@ -820,8 +820,12 @@ body {
 
 .landing__hero-container {
   @apply mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-8 items-center;
-} 
+}
 
 .landing__hero-content {
   @apply flex flex-col justify-center;
+}
+
+.generated-summary {
+  @apply p-3 bg-white rounded-xl shadow cursor-pointer text-gray-800;
 }

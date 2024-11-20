@@ -30,11 +30,6 @@ const Dashboard = () => {
     );
   };
 
-  useEffect(() => {
-    console.log("Resume List", resumeList);
-  }
-    , [resumeList]);
-
 
   const handleReftch = () => setReftch(true);
 

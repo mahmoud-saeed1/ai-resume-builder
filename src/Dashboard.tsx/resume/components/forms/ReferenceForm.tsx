@@ -142,7 +142,7 @@ const ReferenceForm = ({
     <div className="resume-form">
       <h2 className="form-title">References</h2>
 
-      <div>
+      <div className="form__scroll-bar">
         {referencesList.length === 0 ? (
           <NoData message="No References added yet." />
         ) : (
@@ -183,7 +183,7 @@ const ReferenceForm = ({
                   </div>
                 </div>
 
-                <form>
+                <form className="form-content">
 
                   {/*~~~~~~~~$ Form Inputs $~~~~~~~~*/}
                   <FormInput
@@ -232,7 +232,7 @@ const ReferenceForm = ({
                 </form>
 
                 {/*~~~~~~~~$ Remove Button $~~~~~~~~*/}
-                <div className="flex justify-end">
+                <div className="remove-btn">
                   <Button
                     type="button"
                     variant="danger"

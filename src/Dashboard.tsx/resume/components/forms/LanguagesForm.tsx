@@ -220,7 +220,8 @@ const LanguagesForm = ({
                   </FormSelect>
                 </form>
 
-                <div className="flex justify-end">
+                {/*~~~~~~~~$ Remove Button $~~~~~~~~*/}
+                <div className="remove-btn">
                   <Button
                     type="button"
                     variant="danger"
