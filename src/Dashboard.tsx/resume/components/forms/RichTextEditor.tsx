@@ -38,29 +38,57 @@ const RichTextEditor = ({
 
   const generateSummaryFromAI = async () => {
     if (!resumeInfo) {
-      toast.error("Resume information is missing.");
+      toast.error("Resume information is missing.", {
+        autoClose: 2000,
+        theme: "light",
+        transition: Bounce,
+      });
+      return;
+    }
+    const exp = resumeInfo.experience ? resumeInfo.experience[index] : null;
+    if (!exp) {
+      toast.error("Experience information is missing.", {
+        autoClose: 2000,
+        theme: "light",
+        transition: Bounce,
+      });
+      return;
+    }
+    if (!exp?.title || !exp?.companyName) {
+      toast.error("Please Add Position Title and Company Name", {
+        autoClose: 2000,
+        theme: "light",
+        transition: Bounce,
+      });
       return;
     }
 
+    const prompt = `Please provide a JSON array containing highly engaging work summary based on the following:
+      Position: ${exp.title},
+      Company: ${exp.companyName},
+      Location: ${exp.city}, ${exp.state},
+      Start Date: ${exp.startDate},
+      End Date: ${exp.currentlyWorking ? "Present" : exp.endDate}.
+      Highlight impactful achievements, skill applications, and methodologies suitable for a recruiter.
+      and send me response like this [{"summary":"vlaue"}].
+      `;
+
     setLoading(true);
-
     try {
-      const exp = resumeInfo.experience[index];
-      const result = await AIChatSession.sendMessage(
-        `Generate a summary for ${exp.title} at ${exp.companyName}.`
-      );
-
+      const result = await AIChatSession.sendMessage(prompt);
+      console.log(result)
       const response = await result.response.text();
-      const formattedResponse = response.replace(/\[|\]/g, ""); // Clean brackets
+      console.log(response)
+      const formattedResponse = response.replace("[", "").replace("]", "").replace(/"/g, "").replace("{", "").replace("}", "");
       setValue(formattedResponse);
       onRichTextEditorChange(formattedResponse);
-    } catch {
-      toast.error("Failed to generate AI summary.");
+    } catch (error) {
+      const err = error as AxiosError<IErrorResponse>;
+      toast.error(err.message || "Failed to generate summary.", { autoClose: 2000 });
     } finally {
       setLoading(false);
     }
   };
-
 
   return (
     <div>
