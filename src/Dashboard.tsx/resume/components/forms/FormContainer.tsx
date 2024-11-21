@@ -3,25 +3,26 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 import Button from "@/ui/Button";
 import { VForm } from "@/animation";
 import NoData from "./NoData";
-import { IExperience, IResumeInfo } from "@/interfaces";
+import { useContext } from "react";
+import { ResumeInfoContext } from "@/context/ResumeInfoContext";
+import { ICertification, IEducation, IExperience, ILanguages, IProjects, IReferences, ISkills } from "@/interfaces";
 
-interface IFormContainer {
-    FormInputsList?: IExperience[];
+interface IFormContainer<T> {
+    FormInputsList?: T[];
     formTitle: string;
     noDataMessage?: string;
     multipleForms?: boolean;
     className?: string;
     handleAddNewForm?: () => void;
-    handleRemoveForm?: (exId: string) => void;
+    handleRemoveForm?: (id: string) => void;
     handleMoveForm?: (index: number, direction: "up" | "down") => void;
     handleOnSubmit: () => void;
     isLoading: boolean;
     enableNextBtn: boolean;
-    resumeInfo?: IResumeInfo;
     children: React.ReactNode;
 }
 
-const FormContainer = ({
+const FormContainer = <T extends IExperience | IEducation | IProjects | ICertification | ILanguages | ISkills | IReferences>({
     FormInputsList = [],
     formTitle,
     noDataMessage,
@@ -33,9 +34,11 @@ const FormContainer = ({
     handleOnSubmit,
     isLoading,
     enableNextBtn,
-    resumeInfo,
     children,
-}: IFormContainer) => {
+}: IFormContainer<T>) => {
+
+    const { resumeInfo } = useContext(ResumeInfoContext)!;
+
     return (
         <div className="resume-form">
             <h2 className="form-title">{formTitle}</h2>
@@ -50,12 +53,12 @@ const FormContainer = ({
                 >
                     {multipleForms ?
                         <div className="form__scroll-bar">
-                            {(FormInputsList?.length ?? 0) === 0 ? (
+                            {Array.isArray(FormInputsList) && FormInputsList.length === 0 ? (
                                 <NoData message={noDataMessage || "No data available"} />
                             ) : (
                                 FormInputsList.map((exp, index) => (
                                     <motion.div
-                                        key={exp.exId}
+                                        key={'exId' in exp ? exp.exId : index}
                                         variants={VForm}
                                         initial="initial"
                                         animate="animate"
@@ -103,7 +106,7 @@ const FormContainer = ({
                                                 type="button"
                                                 variant={"danger"}
                                                 size="sm"
-                                                onClick={() => handleRemoveForm && handleRemoveForm(exp.exId)}
+                                                onClick={() => handleRemoveForm && 'exId' in exp && handleRemoveForm(exp.exId)}
                                             >
                                                 Remove
                                             </Button>
