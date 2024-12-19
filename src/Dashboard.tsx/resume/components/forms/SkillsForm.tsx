@@ -11,7 +11,7 @@ import { VForm } from "@/animation";
 import { Bounce, toast } from "react-toastify";
 import GlobalApi from "@/service/GlobalApi";
 import { AxiosError } from "axios";
-import FormInput from "./FormInputs";
+import FormInput from "./FormInput";
 import NoData from "./NoData";
 
 const SkillsForm = ({

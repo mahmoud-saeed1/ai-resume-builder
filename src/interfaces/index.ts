@@ -1,7 +1,3 @@
-// export interface IIcon extends React.SVGProps<SVGSVGElement> {
-//   className?: string;
-// }
-
 export interface IIcon {
   className?: string;
 }
@@ -37,26 +33,16 @@ export interface IPersonalData {
   address: string;
 }
 
-// export interface IExperience {
-//   exId: string;
-//   title: string;
-//   companyName: string;
-//   city: string;
-//   state: string;
-//   startDate: string;
-//   endDate?: string | null;
-//   currentlyWorking?: boolean;
-//   workSummary: string;
-// }
 
 export interface IExperience {
+  id?: string;
   title: string;
   companyName: string;
   city: string;
   state: string;
   startDate: string;
   endDate?: string;
-  currentlyWorking: boolean;
+  currentlyWorking?: boolean;
   workSummary: string;
 }
 

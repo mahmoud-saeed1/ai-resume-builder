@@ -786,7 +786,7 @@ body {
 }
 
 .landing__hero-shape {
-  @apply absolute -z-10 w-96 h-full bg-gradient-to-t to-blue-600 from-teal-400;
+  @apply absolute top-10 left-28 -z-10 w-96 h-full bg-gradient-to-t to-blue-600 from-teal-400;
   padding: 1.3rem;
   display: block;
   border: 2px solid #2563eb;
@@ -799,6 +799,7 @@ body {
   align-items: center;
   justify-content: center;
   animation: morph 6s linear infinite;
+  transform: skewX(160deg)
 }
 
 @keyframes morph {
@@ -827,10 +828,12 @@ body {
 
 .landing__features-bg-top {
   @apply absolute top-[-100px] left-[-100px] w-96 h-96 bg-gradient-to-br from-blue-300 to-blue-500 rounded-full opacity-50;
+  animation: morph 6s linear infinite;
 }
 
 .landing__features-bg-bottom {
   @apply absolute bottom-[-100px] right-[-100px] w-96 h-96 bg-gradient-to-tl from-blue-400 to-gray-200 rounded-full opacity-50;
+  animation: morph 6s linear infinite;
 }
 
 .landing__features-container {

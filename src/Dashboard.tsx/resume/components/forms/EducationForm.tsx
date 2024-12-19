@@ -9,7 +9,7 @@ import { AxiosError } from "axios";
 import GlobalApi from "@/service/GlobalApi";
 import { v4 as uuidv4 } from "uuid";
 import { VForm } from "@/animation";
-import FormInput from "./FormInputs";
+import FormInput from "./FormInput";
 import Label from "@/ui/Label";
 import FormTextarea from "./FormTextArea";
 import FormSelect from "./FormSelect";
@@ -150,6 +150,12 @@ const EducationForm = ({
       education: updatedEducation,
     }));
   };
+
+  useEffect(() => {
+    console.log("resume info", resumeInfo?.education);
+  }
+  , [resumeInfo])
+
 
 
   return (

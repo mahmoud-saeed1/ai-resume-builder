@@ -5,7 +5,7 @@ interface IProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 const Input = forwardRef<HTMLInputElement, IProps>(
-  ({ className, ...rest }, ref) => {
+  ({ className = "", ...rest }, ref) => {
     return (
       <input
         ref={ref}

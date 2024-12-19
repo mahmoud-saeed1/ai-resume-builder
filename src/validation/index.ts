@@ -91,3 +91,20 @@ export const EducationSchema = yup.object().shape({
     .required("At least one education entry is required")
     .min(1, "At least one education entry is required"),
 });
+
+export const experienceSchema = yup.object().shape({
+  experience: yup.array().of(
+    yup.object().shape({
+      title: yup.string().required("Title is required"),
+      companyName: yup.string().required("Company Name is required"),
+      city: yup.string().required("City is required"),
+      state: yup.string().required("State is required"),
+      startDate: yup.string().required("Start Date is required"),
+      endDate: yup.string().when("currentlyWorking", (currentlyWorking, schema) => {
+        return currentlyWorking ? schema.nullable() : schema.required("End Date is required");
+      }),
+      currentlyWorking: yup.boolean(),
+      workSummary: yup.string().required("Work Summary is required"),
+    })
+  ).required(), // Ensure the array itself is required
+});

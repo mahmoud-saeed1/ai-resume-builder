@@ -58,7 +58,7 @@ const FormContainer = <T extends IExperience | IEducation | IProjects | ICertifi
                             ) : (
                                 FormInputsList.map((exp, index) => (
                                     <motion.div
-                                        key={'exId' in exp ? exp.exId : index}
+                                        key={'exId' in exp ? (exp.exId as React.Key) : index}
                                         variants={VForm}
                                         initial="initial"
                                         animate="animate"
@@ -106,7 +106,7 @@ const FormContainer = <T extends IExperience | IEducation | IProjects | ICertifi
                                                 type="button"
                                                 variant={"danger"}
                                                 size="sm"
-                                                onClick={() => handleRemoveForm && 'exId' in exp && handleRemoveForm(exp.exId)}
+                                                onClick={() => handleRemoveForm && 'exId' in exp && handleRemoveForm(exp.exId as string)}
                                             >
                                                 Remove
                                             </Button>

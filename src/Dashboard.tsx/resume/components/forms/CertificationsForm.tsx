@@ -9,7 +9,7 @@ import { AxiosError } from "axios";
 import GlobalApi from "@/service/GlobalApi";
 import Button from "@/ui/Button";
 import { v4 as uuidv4 } from "uuid";
-import FormInput from "./FormInputs";
+import FormInput from "./FormInput";
 import NoData from "./NoData";
 import { VForm } from "@/animation";
 

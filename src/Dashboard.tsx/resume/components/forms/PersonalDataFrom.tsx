@@ -8,7 +8,7 @@ import GlobalApi from "@/service/GlobalApi";
 import { useParams } from "react-router-dom";
 import { toast, Bounce } from "react-toastify";
 import { AxiosError } from "axios";
-import FormInput from "./FormInputs";
+import FormInput from "./FormInput";
 import FormContainer from "./FormContainer";
 
 const PersonalDataForm = ({
@@ -16,10 +16,7 @@ const PersonalDataForm = ({
   handleEnableNextBtn,
   handleDisableNextBtn,
 }: IFormProbs) => {
-  /*~~~~~~~~$ States $~~~~~~~~*/
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  /*~~~~~~~~$ Context $~~~~~~~~*/
   const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext) ?? {};
 
   if (!setResumeInfo) {
@@ -28,29 +25,36 @@ const PersonalDataForm = ({
 
   const params = useParams<{ resumeId: string }>();
 
-  /*~~~~~~~~$ Form $~~~~~~~~*/
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
+    clearErrors,
   } = useForm<IPersonalData>({
     resolver: yupResolver(SPersonalData),
   });
 
-  /*~~~~~~~~$ Handlers $~~~~~~~~*/
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+
+    // Update the context state
     setResumeInfo((prev) => ({
       ...prev,
       personalData: prev?.personalData ?? [],
       [name]: value,
     }));
+
+    // Clear errors for the changed field
+    clearErrors(name as keyof IPersonalData); // Cast name to the correct type
     handleDisableNextBtn();
+
+    // Set the input value in the form
+    setValue(name as keyof IPersonalData, value);
   };
 
   const handleOnSubmit: SubmitHandler<IPersonalData> = async (data) => {
     setIsLoading(true);
-
 
     if (!params?.resumeId) {
       toast.error("ID parameter is missing.", {
@@ -84,6 +88,17 @@ const PersonalDataForm = ({
       setIsLoading(false);
     }
   };
+
+  /*~~~~~~~~$ Get Form List Data $~~~~~~~~*/
+    // useEffect(() => {
+    //   if (resumeInfo?.personalData && resumeInfo.personalData.length > 0) {
+    //     const [personalData] = resumeInfo.personalData;
+    //     Object.keys(personalData).forEach((key) => {
+    //       setValue(key as keyof IPersonalData, personalData[key as keyof IPersonalData]);
+    //     });
+    //   }
+  
+    // }, [])
 
   return (
     <FormContainer
