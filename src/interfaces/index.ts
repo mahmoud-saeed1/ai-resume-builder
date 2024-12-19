@@ -33,7 +33,6 @@ export interface IPersonalData {
   address: string;
 }
 
-
 export interface IExperience {
   id?: string;
   title: string;
