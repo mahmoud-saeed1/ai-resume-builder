@@ -1,61 +1,112 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, ChangeEvent, useCallback } from "react";
+import { useForm, useFieldArray, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { ResumeInfoContext } from "@/context/ResumeInfoContext";
-import { IErrorResponse, IFormProbs, IProjects } from "@/interfaces";
+import { IFormProbs, IProjects, IErrorResponse } from "@/interfaces";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useParams } from "react-router-dom";
 import { Bounce, toast } from "react-toastify";
-import { AxiosError } from "axios";
 import GlobalApi from "@/service/GlobalApi";
 import Button from "@/ui/Button";
-import { v4 as uuidv4 } from "uuid";
-import FormInput from "./FormInput";
-import FormTextarea from "./FormTextArea";
 import NoData from "./NoData";
-import { VForm } from "@/animation";
+import FormInput from "./FormInput";
+import { AxiosError } from "axios";
+import { ProjectSchema } from "@/validation"; // Ensure you import the correct validation schema
 
 const ProjectsForm = ({
   enableNextBtn,
   handleEnableNextBtn,
   handleDisableNextBtn,
 }: IFormProbs) => {
-  const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext)!;
-  const [projects, setProjects] = useState<IProjects[]>(
-    resumeInfo?.projects || []
-  );
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  /*~~~~~~~~$ States $~~~~~~~~*/
+  const [isLoading, setIsLoading] = useState(false);
 
+  /*~~~~~~~~$ Context $~~~~~~~~*/
+  const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext)!;
   const params = useParams<{ resumeId: string }>();
 
-  /*~~~~~~~~$ Get Form List Data $~~~~~~~~*/
+  /*~~~~~~~~$ Forms $~~~~~~~~*/
+  const {
+    control,
+    handleSubmit,
+    watch,
+    reset,
+    setValue,
+    trigger,
+    formState: { errors },
+  } = useForm<{ projects: IProjects[] }>({
+    resolver: yupResolver(ProjectSchema),
+    defaultValues: {
+      projects: resumeInfo?.projects || [],
+    },
+  });
+
+  const { fields, append, remove, move } = useFieldArray({
+    control,
+    name: "projects",
+  });
+
+  const projects = watch("projects");
+
+  /*~~~~~~~~$ Effects $~~~~~~~~*/
   useEffect(() => {
-    if (resumeInfo?.projects && resumeInfo.projects.length > 0) {
-      setProjects(resumeInfo.projects);
-    }
+    reset({ projects: resumeInfo?.projects || [] });
+  }, [reset]);
 
-  }, [])
-
-  /*~~~~~~~~$ Handlers $~~~~~~~~*/
-  const handleInputChange = (
-    projectId: string,
-    field: keyof IProjects,
-    value: string
-  ) => {
-    setProjects((prev) =>
-      prev.map((project) =>
-        project.prId === projectId ? { ...project, [field]: value } : project
-      )
-    );
-    setResumeInfo((prev) => ({
-      ...prev,
-      projects,
+  useEffect(() => {
+    // Ensure this only runs when the projects state changes
+    const updatedProjects = projects.map((project) => ({
+      ...project,
+      // Ensure prId is included
+      prId: project.prId || Date.now().toString(), // Ensure prId is set if not present
     }));
 
+    setResumeInfo((prev) => ({
+      ...prev,
+      projects: updatedProjects,
+    }));
+  }, [projects, setResumeInfo]);
+
+  const handleAddProject = () => {
+    const newProject: IProjects = {
+      prId: Date.now().toString(), 
+      title: "",
+      description: "",
+      projectUrl: "",
+    };
+    append(newProject);
     handleDisableNextBtn();
   };
 
-  const handleOnSubmit = async () => {
+  const handleInputChange = useCallback(
+    (index: number, field: keyof IProjects, value: string) => {
+      setValue(`projects.${index}.${field}`, value, { shouldValidate: true });
+      trigger(`projects.${index}.${field}`);
+      handleDisableNextBtn();
+    },
+    [setValue, trigger, handleDisableNextBtn]
+  );
+
+  const handleChange =
+    (index: number, field: keyof IProjects) =>
+      (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        handleInputChange(index, field, e.target.value);
+      };
+
+  const handleRemoveProject = (index: number) => {
+    remove(index);
+    handleDisableNextBtn();
+  };
+
+  const handleMoveProject = (index: number, direction: "up" | "down") => {
+    const newIndex = direction === "up" ? index - 1 : index + 1;
+    move(index, newIndex);
+  };
+
+  const handleOnSubmit = async (data: { projects: IProjects[] }) => {
     setIsLoading(true);
+
     if (!params?.resumeId) {
       toast.error("ID parameter is missing.", {
         autoClose: 2000,
@@ -68,7 +119,7 @@ const ProjectsForm = ({
 
     try {
       const { status } = await GlobalApi.UpdateResumeData(params.resumeId, {
-        projects,
+        projects: data.projects,
       });
 
       if (status === 200) {
@@ -77,87 +128,78 @@ const ProjectsForm = ({
           theme: "light",
           transition: Bounce,
         });
-
         handleEnableNextBtn();
       }
     } catch (error) {
       const err = error as AxiosError<IErrorResponse>;
-      if (err.response?.data.error.details) {
-        err.response.data.error.details.errors.forEach((e) => {
-          toast.error(e.message, {
-            autoClose: 2000,
-            theme: "light",
-            transition: Bounce,
-          });
-        });
-      } else {
-        toast.error(err.response?.data.error.message, {
-          autoClose: 2000,
-          theme: "light",
-          transition: Bounce,
-        });
-      }
+      toast.error(err.response?.data.error.message || "An error occurred", {
+        autoClose: 2000,
+        theme: "light",
+        transition: Bounce,
+      });
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleAddProject = () => {
-    const newProject: IProjects = {
-      prId: uuidv4(),
-      title: "",
-      description: "",
-    };
-    setProjects((prev) => [...prev, newProject]);
-    setResumeInfo((prev) => ({
-      ...prev,
-      projects: [...projects, newProject],
-    }));
-  };
-
-  const handleRemoveProject = (projectId: string) => {
-    setProjects((prev) => prev.filter((project) => project.prId !== projectId));
-    setResumeInfo((prev) => ({
-      ...prev,
-      projects: projects.filter((project) => project.prId !== projectId),
-    }));
-  };
-
-  const handleMoveProject = (index: number, direction: "up" | "down") => {
-    const newIndex = direction === "up" ? index - 1 : index + 1;
-    const updatedProjects = [...projects];
-    const movedProject = updatedProjects.splice(index, 1);
-    updatedProjects.splice(newIndex, 0, movedProject[0]);
-    setProjects(updatedProjects);
-    setResumeInfo((prev) => ({
-      ...prev,
-      projects: updatedProjects,
-    }));
-  };
+  const dynamicFormInput = ({
+    name,
+    label,
+    index,
+    type = "text",
+  }: {
+    name: `projects.${number}.${keyof IProjects}`;
+    label: string;
+    index: number;
+    type?: string;
+  }) => (
+    <Controller
+      name={name}
+      control={control}
+      defaultValue={projects?.[index]?.[name.split(".")[2] as keyof IProjects] || ""}
+      render={({ field }) => (
+        <FormInput
+          {...field}
+          id={name}
+          type={type}
+          label={label}
+          placeholder={`Enter ${label}`}
+          errorMessage={
+            errors.projects?.[index]?.[
+              name.split(".")[2] as keyof IProjects
+            ]?.message
+          }
+          onChange={(e) =>
+            handleChange(index, name.split(".")[2] as keyof IProjects)(e)
+          }
+        />
+      )}
+    />
+  );
 
   return (
     <div className="resume-form">
       <h2 className="form-title">Projects</h2>
-
       <div className="form__scroll-bar">
-        {projects.length === 0 ? (
+        {fields.length === 0 ? (
           <NoData message="No Projects added yet." />
         ) : (
           <AnimatePresence>
-            {projects.map((project, index) => (
+            {fields.map((field, index) => (
               <motion.div
-                key={project.prId}
-                variants={VForm}
+                key={field.id}
+                variants={{
+                  initial: { opacity: 0, y: 10 },
+                  animate: { opacity: 1, y: 0 },
+                  exit: { opacity: 0, y: -10 },
+                }}
                 initial="initial"
                 animate="animate"
                 exit="exit"
-                className="from__container"
+                className="form__container"
               >
-                {/*~~~~~~~~$ Form Header $~~~~~~~~*/}
                 <div className="form__container-header">
                   <h4>Project #{index + 1}</h4>
-
-                  {/*~~~~~~~~$ Move Buttons $~~~~~~~~*/}
                   <div className="move__btn-container">
                     <Button
                       variant="outline"
@@ -170,48 +212,24 @@ const ProjectsForm = ({
                     <Button
                       variant="outline"
                       size="sm"
+                      disabled={index === fields.length - 1}
                       onClick={() => handleMoveProject(index, "down")}
-                      disabled={index === projects.length - 1}
                     >
                       <ChevronDown className="move-icon" />
                     </Button>
                   </div>
                 </div>
-
-                <form className="form-content">
-                  {/*~~~~~~~~$ Form Inputs $~~~~~~~~*/}
-                  <FormInput
-                    id={uuidv4()}
-                    label={"Title"}
-                    placeholder="Title"
-                    defaultValue={project.title}
-                    onChange={(e) =>
-                      handleInputChange(project.prId, "title", e.target.value)
-                    }
-                  />
-
-                  <FormTextarea
-                    id={uuidv4()}
-                    label={"Description"}
-                    placeholder="Description"
-                    defaultValue={project.description}
-                    onChange={(e) =>
-                      handleInputChange(
-                        project.prId,
-                        "description",
-                        e.target.value
-                      )
-                    }
-                  />
-                </form>
-
-                {/*~~~~~~~~$ Remove Button $~~~~~~~~*/}
+                <div className="form-content">
+                  {dynamicFormInput({ name: `projects.${index}.title`, label: "Title", index })}
+                  {dynamicFormInput({ name: `projects.${index}.description`, label: "Description", index })}
+                  {dynamicFormInput({ name: `projects.${index}.projectUrl`, label: "Project URL", index })}
+                </div>
                 <div className="remove-btn">
                   <Button
                     type="button"
-                    variant={"danger"}
+                    variant="danger"
                     size="sm"
-                    onClick={() => handleRemoveProject(project.prId)}
+                    onClick={() => handleRemoveProject(index)}
                   >
                     Remove
                   </Button>
@@ -221,30 +239,24 @@ const ProjectsForm = ({
           </AnimatePresence>
         )}
       </div>
-
-      {/*~~~~~~~~$ Add & Save Button $~~~~~~~~*/}
-      <div>
-        <Button
-          type="button"
-          onClick={handleAddProject}
-          variant="success"
-          className="mb-4"
-          fullWidth
-        >
-          Add Project
-        </Button>
-
-        <Button
-          type="submit"
-          isLoading={isLoading}
-          onClick={handleOnSubmit}
-          disabled={enableNextBtn}
-          fullWidth
-        >
-          Save Projects
-        </Button>
-      </div>
-
+      <Button
+        type="button"
+        variant="success"
+        className="mb-4"
+        fullWidth
+        onClick={handleAddProject}
+      >
+        Add Project
+      </Button>
+      <Button
+        type="submit"
+        isLoading={isLoading}
+        fullWidth
+        onClick={handleSubmit(handleOnSubmit)}
+        disabled={enableNextBtn}
+      >
+        Save Projects
+      </Button>
     </div>
   );
 };

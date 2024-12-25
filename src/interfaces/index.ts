@@ -71,9 +71,11 @@ export interface ICertification {
 }
 
 export interface IProjects {
+  id?: string;
   prId: string;
   title: string;
-  description: string;
+  description?: string | null;
+  projectUrl?: string | null;
 }
 
 export interface ILanguages {

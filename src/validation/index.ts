@@ -98,3 +98,28 @@ export const experienceSchema = yup.object().shape({
     )
     .required(), // Ensure the array itself is required
 });
+
+export const ProjectSchema = yup.object().shape({
+  projects: yup
+    .array()
+    .of(
+      yup.object().shape({
+        prId: yup.string().required(), // Ensure prId is required
+        title: yup.string().required("Title is required"),
+        description: yup.string().nullable(),
+        projectUrl: yup
+          .string()
+          .nullable() // Allows null or empty values
+          .test(
+            "is-url-valid",
+            "Invalid URL format",
+            (value) =>
+              !value || // Skip validation if the field is empty
+              /^(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)$/.test(
+                value
+              )
+          ),
+      })
+    )
+    .required("At least one project entry is required"),
+});
