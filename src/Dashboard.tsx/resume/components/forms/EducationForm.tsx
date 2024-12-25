@@ -1,68 +1,157 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState, ChangeEvent, useCallback } from "react";
+import { useForm, useFieldArray, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { ResumeInfoContext } from "@/context/ResumeInfoContext";
-import { IErrorResponse, IEducation, IFormProbs } from "@/interfaces";
+import { IFormProbs, IEducation, IErrorResponse } from "@/interfaces";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useParams } from "react-router-dom";
 import { Bounce, toast } from "react-toastify";
-import { AxiosError } from "axios";
 import GlobalApi from "@/service/GlobalApi";
-import { v4 as uuidv4 } from "uuid";
-import { VForm } from "@/animation";
-import FormInput from "./FormInput";
-import Label from "@/ui/Label";
-import FormTextarea from "./FormTextArea";
-import FormSelect from "./FormSelect";
 import Button from "@/ui/Button";
 import NoData from "./NoData";
+import FormInput from "./FormInput";
+import FormSelect from "./FormSelect";
+import { AxiosError } from "axios";
+import { EducationSchema } from "@/validation";
+import { EducationDegrees } from "@/constants";
 
 const EducationForm = ({
   enableNextBtn,
   handleEnableNextBtn,
   handleDisableNextBtn,
 }: IFormProbs) => {
+  /*~~~~~~~~$ States $~~~~~~~~*/
+  const [isLoading, setIsLoading] = useState(false);
 
   /*~~~~~~~~$ Context $~~~~~~~~*/
   const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext)!;
-
-  /*~~~~~~~~$ States $~~~~~~~~*/
-  const [educationList, setEducationList] = useState<IEducation[]>(
-    resumeInfo?.education || []
-  );
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-
   const params = useParams<{ resumeId: string }>();
 
-  const newEducationRef = useRef<HTMLDivElement | null>(null);
+  /*~~~~~~~~$ Forms $~~~~~~~~*/
+  const {
+    control,
+    handleSubmit,
+    watch,
+    reset,
+    setValue,
+    trigger,
+    formState: { errors },
+  } = useForm<{ education: IEducation[] }>({
+    resolver: yupResolver(EducationSchema),
+    defaultValues: {
+      education: resumeInfo?.education || [],
+    },
+  });
 
+  const { fields, append, remove, move } = useFieldArray({
+    control,
+    name: "education",
+  });
 
-  /*~~~~~~~~$ Get Form List Data $~~~~~~~~*/
+  const education = watch("education");
+
+  /*~~~~~~~~$ Effects $~~~~~~~~*/
+  //! Sync local state with resumeInfo context
   useEffect(() => {
-    if (resumeInfo?.education && resumeInfo.education.length > 0) {
-      setEducationList(resumeInfo.education);
+    if (resumeInfo?.education) {
+      reset({ education: resumeInfo.education });
     }
+  }, [reset]);
 
-  }, [])
+  useEffect(() => {
+    education?.forEach((exp, index) => {
+      if (exp.currentlyStudy) {
+        setValue(`education.${index}.endDate`, "");
+        trigger(`education.${index}.endDate`);
+      }
+    });
 
-  /*~~~~~~~~$ Handlers $~~~~~~~~*/
-  const handleInputChange = (
-    edId: string,
-    field: keyof IEducation,
-    value: string | boolean
-  ) => {
-    setEducationList((prev) =>
-      prev.map((edu) => (edu.edId === edId ? { ...edu, [field]: value } : edu))
-    );
+    // Real-time update of context when education changes
     setResumeInfo((prev) => ({
       ...prev,
-      education: educationList,
+      education: (education ?? []).map(exp => ({
+        ...exp,
+        currentlyStudy: exp.currentlyStudy ?? false,
+      })),
     }));
+  }, [setValue, trigger, setResumeInfo]);
 
+  const handleUpdateResumeInfo = useCallback(
+    (updatedEducation: IEducation[]) => {
+      setResumeInfo((prev) => ({
+        ...prev,
+        education: updatedEducation,
+      }));
+    },
+    [setResumeInfo]
+  );
+
+  const handleAddEducation = () => {
+    const newEducation: IEducation = {
+      universityName: "",
+      startDate: "",
+      endDate: "",
+      currentlyStudy: false,
+      degree: "",
+      major: "",
+      minor: "",
+      description: "",
+    };
+    append(newEducation);
     handleDisableNextBtn();
   };
 
-  const handleOnSubmit = async () => {
+  const handleInputChange = useCallback(
+    (index: number, field: keyof IEducation, value: string | boolean) => {
+      setValue(`education.${index}.${field}`, value, { shouldValidate: true });
+      trigger(`education.${index}.${field}`);
+
+      handleDisableNextBtn();
+
+      setResumeInfo((prev) => {
+        const updatedEducation = [...(prev?.education || [])];
+        updatedEducation[index] = {
+          ...updatedEducation[index],
+          [field]: value,
+          ...(field === "currentlyStudy" && !value
+            ? { endDate: "" } // Reset endDate if currentlyStudy is toggled to false
+            : {}),
+        };
+        return { ...prev, education: updatedEducation };
+      });
+
+      // If currentlyStudy is toggled to false, set endDate to today's date or a default value
+      if (field === "currentlyStudy" && !value) {
+        setValue(
+          `education.${index}.endDate`,
+          new Date().toISOString().split("T")[0]
+        );
+        trigger(`education.${index}.endDate`);
+      }
+    },
+    [setValue, trigger, setResumeInfo, handleDisableNextBtn]
+  );
+
+  const handleChange =
+    (index: number, field: keyof IEducation) =>
+      (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        handleInputChange(index, field, e.target.type === "checkbox" ? e.target.checked : e.target.value);
+      };
+
+  const handleRemoveEducation = (index: number) => {
+    remove(index);
+    handleDisableNextBtn();
+  };
+
+  const handleMoveEducation = (index: number, direction: "up" | "down") => {
+    const newIndex = direction === "up" ? index - 1 : index + 1;
+    move(index, newIndex);
+  };
+
+  const handleOnSubmit = async (data: { education: IEducation[] }) => {
     setIsLoading(true);
+
     if (!params?.resumeId) {
       toast.error("ID parameter is missing.", {
         autoClose: 2000,
@@ -74,17 +163,12 @@ const EducationForm = ({
     }
 
     try {
-      const educationWithoutId = educationList.map((edu) => {
-        const { id, ...rest } = edu;
-        return rest;
+      const educationWithoutId = data.education.map(({ id, ...rest }) => {
+        console.log(id)
+        return rest
       });
 
-      const personalDataWithoutId = resumeInfo?.personalData
-        ? resumeInfo.personalData.map(({ id, ...rest }) => rest)
-        : [];
-
       const { status } = await GlobalApi.UpdateResumeData(params.resumeId, {
-        personalData: personalDataWithoutId,
         education: educationWithoutId,
       });
 
@@ -94,11 +178,12 @@ const EducationForm = ({
           theme: "light",
           transition: Bounce,
         });
+        handleUpdateResumeInfo(educationWithoutId);
         handleEnableNextBtn();
       }
     } catch (error) {
       const err = error as AxiosError<IErrorResponse>;
-      toast.error(err.response?.data.error.message, {
+      toast.error(err.response?.data.error.message || "An error occurred", {
         autoClose: 2000,
         theme: "light",
         transition: Bounce,
@@ -108,83 +193,68 @@ const EducationForm = ({
     }
   };
 
-  const handleAddEducation = () => {
-    const newEducation: IEducation = {
-      edId: uuidv4(),
-      universityName: "",
-      startDate: "",
-      endDate: "",
-      currentlyStudy: false,
-      degree: "",
-      major: "",
-      minor: "",
-      description: "",
-    };
-    setEducationList((prev) => [...prev, newEducation]);
-    setResumeInfo((prev) => ({
-      ...prev,
-      education: [...educationList, newEducation],
-    }));
-
-    if (newEducationRef.current) {
-      newEducationRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
-  const handleRemoveEducation = (edId: string) => {
-    setEducationList((prev) => prev.filter((edu) => edu.edId !== edId));
-    setResumeInfo((prev) => ({
-      ...prev,
-      education: educationList.filter((edu) => edu.edId !== edId),
-    }));
-  };
-
-  const handleMoveEducation = (index: number, direction: "up" | "down") => {
-    const newIndex = direction === "up" ? index - 1 : index + 1;
-    const updatedEducation = [...educationList];
-    const movedEducation = updatedEducation.splice(index, 1);
-    updatedEducation.splice(newIndex, 0, movedEducation[0]);
-    setEducationList(updatedEducation);
-    setResumeInfo((prev) => ({
-      ...prev,
-      education: updatedEducation,
-    }));
-  };
-
-  useEffect(() => {
-    console.log("resume info", resumeInfo?.education);
-  }
-  , [resumeInfo])
-
-
+  const dynamicFormInput = ({
+    name,
+    label,
+    index,
+    type = "text",
+    className,
+  }: {
+    name: `education.${number}.${keyof IEducation}`;
+    label: string;
+    index: number;
+    type?: string;
+    className?: string;
+  }) => (
+    <Controller
+      name={name}
+      control={control}
+      defaultValue={education?.[index]?.[name.split(".")[2] as keyof IEducation] || ""}
+      render={({ field }) => (
+        <FormInput
+          {...field}
+          ref={field.ref}
+          id={name}
+          type={type}
+          label={label}
+          placeholder={`Enter ${label}`}
+          errorMessage={
+            errors.education?.[index]?.[
+              name.split(".")[2] as keyof IEducation
+            ]?.message
+          }
+          onChange={(e) =>
+            handleChange(index, name.split(".")[2] as keyof IEducation)(e)
+          }
+          className={className}
+        />
+      )}
+    />
+  );
 
   return (
     <div className="resume-form">
-      <h2 className="form-title">education</h2>
-
-
+      <h2 className="form-title">Education</h2>
       <div className="form__scroll-bar">
-        {educationList.length === 0 ? (
+        {fields.length === 0 ? (
           <NoData message="No Education added yet." />
         ) : (
           <AnimatePresence>
-            {educationList.map((edu, index) => (
+            {fields.map((field, index) => (
               <motion.div
-                key={edu.edId}
-                variants={VForm}
+                key={field.id + index}
+                variants={{
+                  initial: { opacity: 0, y: 10 },
+                  animate: { opacity: 1, y: 0 },
+                  exit: { opacity: 0, y: -10 },
+                }}
                 initial="initial"
                 animate="animate"
                 exit="exit"
-                className="from__container"
-                ref={index === educationList.length - 1 ? newEducationRef : null}
+                className="form__container"
               >
-                {/*~~~~~~~~$ Form Header $~~~~~~~~*/}
                 <div className="form__container-header">
-                  <h4>
-                    Education #{index + 1}
-                  </h4>
-
-                  {/*~~~~~~~~$ Move Buttons $~~~~~~~~*/}
+                  <h4>Education #{index + 1}</h4>
                   <div className="move__btn-container">
                     <Button
                       variant="outline"
@@ -194,105 +264,41 @@ const EducationForm = ({
                     >
                       <ChevronUp className="move-icon" />
                     </Button>
-
                     <Button
                       variant="outline"
                       size="sm"
+                      disabled={index === fields.length - 1}
                       onClick={() => handleMoveEducation(index, "down")}
-                      disabled={
-                        index === (resumeInfo?.education || []).length - 1
-                      }
                     >
                       <ChevronDown className="move-icon" />
                     </Button>
                   </div>
                 </div>
-
                 <form className="form-content">
-                  {/*~~~~~~~~$ Form Inputs $~~~~~~~~*/}
-                  <FormInput
-                    id={uuidv4()}
-                    label="University Name"
-                    placeholder="University Name"
-                    defaultValue={edu.universityName}
-                    onChange={(e) =>
-                      handleInputChange(
-                        edu.edId,
-                        "universityName",
-                        e.target.value
-                      )
-                    }
-                    required
+                  {dynamicFormInput({ name: `education.${index}.universityName`, label: "University Name", index })}
+                  {/* {dynamicFormInput({ name: `education.${index}.degree`, label: "Degree", index })} */}
+                  <Controller
+                    name={`education.${index}.degree`}
+                    control={control}
+                    defaultValue={education?.[index]?.degree || ""}
+                    render={({ field }) => (
+                      <FormSelect
+                        {...field}
+                        id={`education.${index}.degree`}
+                        label="Degree"
+                        errorMessage={errors.education?.[index]?.degree?.message}
+                        onChange={(e) => handleChange(index, "degree")(e as ChangeEvent<HTMLInputElement | HTMLSelectElement>)}
+                      >
+                        {EducationDegrees.map((degree) => (<option key={degree.value} value={degree.value}>{degree.label}</option>))}
+                      </FormSelect>
+                    )}
                   />
-
-                  <FormSelect
-                    id={uuidv4()}
-                    label="Degree"
-                    defaultValue={edu.degree}
-                    onChange={(e) =>
-                      handleInputChange(edu.edId, "degree", e.target.value)
-                    }
-                    required
-                  >
-                    <option value="" disabled>
-                      Select Degree
-                    </option>
-                    <option value="Bachelor">Bachelor</option>
-                    <option value="Master">Master</option>
-                    <option value="Doctorate">Doctorate</option>
-                    <option value="Associate">Associate</option>
-                    <option value="Diploma">Diploma</option>
-                    <option value="Certificate">Certificate</option>
-                    <option value="High School">High School</option>
-                    <option value="Vocational">Vocational</option>
-                  </FormSelect>
-
-                  <FormInput
-                    id={uuidv4()}
-                    label="Major"
-                    placeholder="Major"
-                    defaultValue={edu.major}
-                    onChange={(e) =>
-                      handleInputChange(edu.edId, "major", e.target.value)
-                    }
-                    required
-                  />
-
-                  <FormInput
-                    id={uuidv4()}
-                    label="Minor"
-                    placeholder="Minor"
-                    defaultValue={edu.minor}
-                    onChange={(e) =>
-                      handleInputChange(edu.edId, "minor", e.target.value)
-                    }
-                  />
-
-                  {/*~~~~~~~~$ Date Inputs $~~~~~~~~*/}
+                  {dynamicFormInput({ name: `education.${index}.major`, label: "Major", index })}
+                  {dynamicFormInput({ name: `education.${index}.minor`, label: "Minor", index })}
                   <div className="form__date-btn">
-                    <FormInput
-                      id={uuidv4()}
-                      type="date"
-                      label="Start Date"
-                      placeholder="Start Date"
-                      defaultValue={edu.startDate}
-                      onChange={(e) =>
-                        handleInputChange(edu.edId, "startDate", e.target.value)
-                      }
-                      required
-                    />
-                    {!edu.currentlyStudy && (
-                      <FormInput
-                        id={uuidv4()}
-                        type="date"
-                        label="End Date"
-                        placeholder="End Date"
-                        defaultValue={edu.endDate}
-                        onChange={(e) =>
-                          handleInputChange(edu.edId, "endDate", e.target.value)
-                        }
-                        required
-                      />
+                    {dynamicFormInput({ name: `education.${index}.startDate`, label: "Start Date", index, type: "date" })}
+                    {!education[index].currentlyStudy && (
+                      dynamicFormInput({ name: `education.${index}.endDate`, label: "End Date", index, type: "date" })
                     )}
                   </div>
 
@@ -300,37 +306,23 @@ const EducationForm = ({
                     <input
                       type="checkbox"
                       title="Currently Studying"
-                      checked={edu.currentlyStudy}
-                      onChange={(e) =>
-                        handleInputChange(
-                          edu.edId,
-                          "currentlyStudy",
-                          e.target.checked
-                        )
-                      }
+                      checked={education[index].currentlyStudy}
+                      onChange={(e) => handleInputChange(index, "currentlyStudy", e.target.checked)}
                     />
-                    <Label>Currently Studying</Label>
+                    <label>Currently Studying</label>
                   </div>
 
-                  {/*~~~~~~~~$ Description $~~~~~~~~*/}
-                  <FormTextarea
-                    id={uuidv4()}
-                    label="Description"
-                    placeholder="Description"
-                    defaultValue={edu.description}
-                    onChange={(e) =>
-                      handleInputChange(edu.edId, "description", e.target.value)
-                    }
-                  />
-                </form>
+                  {dynamicFormInput({ name: `education.${index}.description`, label: "Description", index })}
 
-                {/*~~~~~~~~$ Remove Button $~~~~~~~~*/}
+
+
+                </form>
                 <div className="remove-btn">
                   <Button
                     type="button"
-                    variant={"danger"}
+                    variant="danger"
                     size="sm"
-                    onClick={() => handleRemoveEducation(edu.edId)}
+                    onClick={() => handleRemoveEducation(index)}
                   >
                     Remove
                   </Button>
@@ -340,33 +332,26 @@ const EducationForm = ({
           </AnimatePresence>
         )}
       </div>
-
-
-      {/*~~~~~~~~$ Add & Save Buttons $~~~~~~~~*/}
-      <div>
-        <Button
-          type="button"
-          onClick={handleAddEducation}
-          variant="success"
-          className="mb-4"
-          fullWidth
-        >
-          Add Education
-        </Button>
-
-        <Button
-          type="submit"
-          isLoading={isLoading}
-          onClick={handleOnSubmit}
-          disabled={enableNextBtn}
-          fullWidth
-        >
-          Save Education
-        </Button>
-      </div>
-
+      <Button
+        type="button"
+        variant="success"
+        className="mb-4"
+        fullWidth
+        onClick={handleAddEducation}
+      >
+        Add Education
+      </Button>
+      <Button
+        type="submit"
+        isLoading={isLoading}
+        fullWidth
+        onClick={handleSubmit(handleOnSubmit)}
+        disabled={enableNextBtn}
+      >
+        Save Education
+      </Button>
     </div>
   );
-};
+}
 
 export default EducationForm;

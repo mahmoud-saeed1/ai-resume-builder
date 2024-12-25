@@ -46,7 +46,7 @@ const Dashboard = () => {
           <div className="dashboard__resume-actions">
             <AddResume />
           </div>
-          {resumeList.map(({ documentId, createdAt, updatedAt, title }) => (
+          {resumeList && resumeList.map(({ documentId, createdAt, updatedAt, title }) => (
             <ResumeCard
               key={documentId}
               createdAt={createdAt}

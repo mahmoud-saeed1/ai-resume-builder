@@ -47,15 +47,14 @@ export interface IExperience {
 
 export interface IEducation {
   id?: number;
-  edId: string;
   universityName: string;
   startDate: string;
   endDate?: string;
   currentlyStudy?: boolean;
   degree: string;
   major: string;
-  minor?: string;
-  description: string;
+  minor?: string | null;
+  description?: string | null;
 }
 
 export interface ISkills {

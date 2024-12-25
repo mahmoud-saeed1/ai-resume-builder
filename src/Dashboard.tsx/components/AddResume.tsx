@@ -83,6 +83,8 @@ const AddResume = () => {
   const handleCancel = () => {
     reset();
     handleCloseDialog();
+
+    setIsLoading(false);
   }
 
   return (

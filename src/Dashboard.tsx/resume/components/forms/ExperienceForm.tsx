@@ -53,6 +53,7 @@ const ExperienceForm = ({
 
   const experience = watch("experience");
 
+  /*~~~~~~~~$ Effects $~~~~~~~~*/
   //! Sync local state with resumeInfo context
   useEffect(() => {
     if (resumeInfo?.experience) {
@@ -79,6 +80,7 @@ const ExperienceForm = ({
   }, [setValue, trigger, setResumeInfo]);
 
 
+  /*~~~~~~~~$ Handlers $~~~~~~~~*/
   const handleUpdateResumeInfo = useCallback(
     (updatedExperience: IExperience[]) => {
       setResumeInfo((prev) => ({
@@ -89,7 +91,6 @@ const ExperienceForm = ({
     [setResumeInfo]
   );
 
-  /*~~~~~~~~$ Handlers $~~~~~~~~*/
   const handleAddExperience = () => {
     const newExperience = {
       title: "",
@@ -119,7 +120,7 @@ const ExperienceForm = ({
           ...updatedExperience[index],
           [field]: value,
           ...(field === "currentlyWorking" && !value
-            ? { endDate: "" } // Clear endDate only when currentlyWorking is set to false
+            ? { endDate: "" } // Reset endDate if currentlyWorking is toggled to false
             : {}),
         };
         return { ...prev, experience: updatedExperience };
@@ -131,7 +132,7 @@ const ExperienceForm = ({
         trigger(`experience.${index}.endDate`);
       }
     },
-    [setValue, trigger, setResumeInfo]
+    [setValue, trigger, setResumeInfo, handleDisableNextBtn]
   );
 
   const handleChange =
@@ -153,7 +154,6 @@ const ExperienceForm = ({
 
   const handleOnSubmit = async (data: { experience: IExperience[] }) => {
     setIsLoading(true);
-    console.log("Submitted Data:", data);
 
     if (!params?.resumeId) {
       toast.error("ID parameter is missing.", {
@@ -170,6 +170,7 @@ const ExperienceForm = ({
         console.log(id)
         return rest;
       });
+      
       const { status } = await GlobalApi.UpdateResumeData(params.resumeId, {
         experience: experienceWithoutId,
       });

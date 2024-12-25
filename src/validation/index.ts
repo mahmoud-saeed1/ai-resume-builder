@@ -52,59 +52,49 @@ export const SSummary = yup
   .required();
 
 export const EducationSchema = yup.object().shape({
-  educationList: yup
+  education: yup
     .array()
     .of(
       yup.object().shape({
-        universityName: yup
+        universityName: yup.string().required("University Name is required"),
+        startDate: yup.string().required("Start Date is required"),
+        endDate: yup
           .string()
-          .required("University Name is required")
-          .max(100, "University Name must be at most 100 characters"),
+          .when("currentlyStudy", (currentlyStudy, schema) =>
+            currentlyStudy
+              ? schema.nullable()
+              : schema.required("End Date is required")
+          ),
+        currentlyStudy: yup.boolean(),
         degree: yup.string().required("Degree is required"),
         major: yup.string().required("Major is required"),
-        minor: yup.string(),
-        startDate: yup
-          .date()
-          .required("Start Date is required")
-          .typeError("Start Date must be a valid date"),
-        endDate: yup
-          .date()
-          .nullable()
-          .when("currentlyStudy", {
-            is: false,
-            then: (schema) =>
-              schema
-                .required("End Date is required")
-                .typeError("End Date must be a valid date")
-                .min(
-                  yup.ref("startDate"),
-                  "End Date cannot be before Start Date"
-                ),
-            otherwise: (schema) => schema.nullable(),
-          }),
-        currentlyStudy: yup.boolean(),
-        description: yup
-          .string()
-          .max(500, "Description must be at most 500 characters"),
+        minor: yup.string().nullable(),
+        description: yup.string().nullable(),
       })
     )
-    .required("At least one education entry is required")
-    .min(1, "At least one education entry is required"),
+    .required("At least one education entry is required"),
 });
 
 export const experienceSchema = yup.object().shape({
-  experience: yup.array().of(
-    yup.object().shape({
-      title: yup.string().required("Title is required"),
-      companyName: yup.string().required("Company Name is required"),
-      city: yup.string().required("City is required"),
-      state: yup.string().required("State is required"),
-      startDate: yup.string().required("Start Date is required"),
-      endDate: yup.string().when("currentlyWorking", (currentlyWorking, schema) => {
-        return currentlyWorking ? schema.nullable() : schema.required("End Date is required");
-      }),
-      currentlyWorking: yup.boolean(),
-      workSummary: yup.string().required("Work Summary is required"),
-    })
-  ).required(), // Ensure the array itself is required
+  experience: yup
+    .array()
+    .of(
+      yup.object().shape({
+        title: yup.string().required("Title is required"),
+        companyName: yup.string().required("Company Name is required"),
+        city: yup.string().required("City is required"),
+        state: yup.string().required("State is required"),
+        startDate: yup.string().required("Start Date is required"),
+        endDate: yup
+          .string()
+          .when("currentlyWorking", (currentlyWorking, schema) => {
+            return currentlyWorking
+              ? schema.nullable()
+              : schema.required("End Date is required");
+          }),
+        currentlyWorking: yup.boolean(),
+        workSummary: yup.string().required("Work Summary is required"),
+      })
+    )
+    .required(), // Ensure the array itself is required
 });
