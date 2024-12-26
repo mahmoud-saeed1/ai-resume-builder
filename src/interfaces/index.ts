@@ -33,18 +33,6 @@ export interface IPersonalData {
   address: string;
 }
 
-export interface IExperience {
-  id?: string;
-  title: string;
-  companyName: string;
-  city: string;
-  state: string;
-  startDate: string;
-  endDate?: string;
-  currentlyWorking?: boolean;
-  workSummary: string;
-}
-
 export interface IEducation {
   id?: number;
   universityName: string;
@@ -57,10 +45,29 @@ export interface IEducation {
   description?: string | null;
 }
 
+export interface IExperience {
+  id?: string;
+  title: string;
+  companyName: string;
+  city: string;
+  state: string;
+  startDate: string;
+  endDate?: string;
+  currentlyWorking?: boolean;
+  workSummary: string;
+}
+
+export interface IProjects {
+  id?: string;
+=  title: string;
+  description?: string | null;
+  projectUrl?: string | null;
+}
+
 export interface ISkills {
   skId: string;
   name: string;
-  rating: number;
+  rating: number | null;
 }
 
 export interface ICertification {
@@ -68,14 +75,6 @@ export interface ICertification {
   title: string;
   issuer: string;
   date: string;
-}
-
-export interface IProjects {
-  id?: string;
-  prId: string;
-  title: string;
-  description?: string | null;
-  projectUrl?: string | null;
 }
 
 export interface ILanguages {

@@ -50,27 +50,38 @@ const ProjectsForm = ({
   const projects = watch("projects");
 
   /*~~~~~~~~$ Effects $~~~~~~~~*/
+  //! Sync local state with resumeInfo context
   useEffect(() => {
-    reset({ projects: resumeInfo?.projects || [] });
+    if (resumeInfo?.projects) {
+      reset({ projects: resumeInfo.projects });
+    }
   }, [reset]);
 
+  //? Real-time update of context when education changes
   useEffect(() => {
-    // Ensure this only runs when the projects state changes
-    const updatedProjects = projects.map((project) => ({
-      ...project,
-      // Ensure prId is included
-      prId: project.prId || Date.now().toString(), // Ensure prId is set if not present
-    }));
-
+    const education = resumeInfo?.education || [];
     setResumeInfo((prev) => ({
       ...prev,
-      projects: updatedProjects,
+      education: (education ?? []).map(exp => ({
+        ...exp,
+        currentlyStudy: exp.currentlyStudy ?? false,
+      })),
     }));
-  }, [projects, setResumeInfo]);
+  }, [trigger, setValue, setResumeInfo]);
+
+  /*~~~~~~~~$ Handlers $~~~~~~~~*/
+  const handleUpdateResumeInfo = useCallback(
+    (updatedProjects: IProjects[]) => {
+      setResumeInfo((prev) => ({
+        ...prev,
+        projects: updatedProjects,
+      }));
+    },
+    [setResumeInfo]
+  );
 
   const handleAddProject = () => {
     const newProject: IProjects = {
-      prId: Date.now().toString(), 
       title: "",
       description: "",
       projectUrl: "",
@@ -84,6 +95,16 @@ const ProjectsForm = ({
       setValue(`projects.${index}.${field}`, value, { shouldValidate: true });
       trigger(`projects.${index}.${field}`);
       handleDisableNextBtn();
+
+      //! Real-time update of context when project changes
+      setResumeInfo((prev) => {
+        const updatedProjects = [...(prev?.projects || [])];
+        updatedProjects[index] = {
+          ...updatedProjects[index],
+          [field]: value,
+        };
+        return { ...prev, projects: updatedProjects };
+      });
     },
     [setValue, trigger, handleDisableNextBtn]
   );
@@ -118,8 +139,9 @@ const ProjectsForm = ({
     }
 
     try {
+      const projectsWithoutId = data.projects.map(({ id, ...rest }) => { console.log(id); return rest; });
       const { status } = await GlobalApi.UpdateResumeData(params.resumeId, {
-        projects: data.projects,
+        projects: projectsWithoutId,
       });
 
       if (status === 200) {
@@ -128,6 +150,7 @@ const ProjectsForm = ({
           theme: "light",
           transition: Bounce,
         });
+        handleUpdateResumeInfo(data.projects);
         handleEnableNextBtn();
       }
     } catch (error) {
@@ -219,11 +242,11 @@ const ProjectsForm = ({
                     </Button>
                   </div>
                 </div>
-                <div className="form-content">
+                <form className="form-content">
                   {dynamicFormInput({ name: `projects.${index}.title`, label: "Title", index })}
                   {dynamicFormInput({ name: `projects.${index}.description`, label: "Description", index })}
                   {dynamicFormInput({ name: `projects.${index}.projectUrl`, label: "Project URL", index })}
-                </div>
+                </form>
                 <div className="remove-btn">
                   <Button
                     type="button"

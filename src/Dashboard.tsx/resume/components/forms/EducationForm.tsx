@@ -109,6 +109,7 @@ const EducationForm = ({
 
       handleDisableNextBtn();
 
+      //! Real-time update of context when education changes
       setResumeInfo((prev) => {
         const updatedEducation = [...(prev?.education || [])];
         updatedEducation[index] = {
@@ -276,7 +277,6 @@ const EducationForm = ({
                 </div>
                 <form className="form-content">
                   {dynamicFormInput({ name: `education.${index}.universityName`, label: "University Name", index })}
-                  {/* {dynamicFormInput({ name: `education.${index}.degree`, label: "Degree", index })} */}
                   <Controller
                     name={`education.${index}.degree`}
                     control={control}
