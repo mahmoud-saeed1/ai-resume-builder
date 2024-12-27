@@ -59,22 +59,22 @@ export interface IExperience {
 
 export interface IProjects {
   id?: string;
-=  title: string;
+  title: string;
   description?: string | null;
   projectUrl?: string | null;
+}
+
+export interface ICertification {
+  id?: string;
+  title: string;
+  issuer: string;
+  date: string;
 }
 
 export interface ISkills {
   skId: string;
   name: string;
   rating: number | null;
-}
-
-export interface ICertification {
-  ceId: string;
-  title: string;
-  issuer: string;
-  date: string;
 }
 
 export interface ILanguages {

@@ -19,10 +19,12 @@ const CertificationsForm = ({
   handleEnableNextBtn,
   handleDisableNextBtn,
 }: IFormProbs) => {
+  /*~~~~~~~~$ States $~~~~~~~~*/
+  const [isLoading, setIsLoading] = useState(false);
+
   /*~~~~~~~~$ Context $~~~~~~~~*/
   const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext)!;
   const params = useParams<{ resumeId: string }>();
-  const [isLoading, setIsLoading] = useState(false);
 
   /*~~~~~~~~$ Forms $~~~~~~~~*/
   const {
@@ -45,26 +47,26 @@ const CertificationsForm = ({
   });
 
   /*~~~~~~~~$ Effects $~~~~~~~~*/
+  //! Sync local state with resumeInfo context
   useEffect(() => {
-    reset({ certifications: resumeInfo?.certifications || [] });
+    if (resumeInfo?.certifications) {
+      reset({ certifications: resumeInfo.certifications });
+    }
   }, [reset]);
 
-  useEffect(() => {
-    const updatedCertifications = fields.map((cert) => ({
-      ...cert,
-      ceId: cert.ceId || Date.now().toString(), // Ensure ceId is set if not present
-    }));
-
-    setResumeInfo((prev) => ({
-      ...prev,
-      certifications: updatedCertifications,
-    }));
-  }, [fields, setResumeInfo]);
-
   /*~~~~~~~~$ Handlers $~~~~~~~~*/
+  const handleUpdateResumeInfo = useCallback(
+    (certifications: ICertification[]) => {
+      setResumeInfo((prev) => ({
+        ...prev,
+        certifications: certifications,
+      }));
+    },
+    [setResumeInfo]
+  );
+
   const handleAddCertification = () => {
     const newCertification: ICertification = {
-      ceId: Date.now().toString(), // Unique ID for each certification
       title: "",
       issuer: "",
       date: "",
@@ -78,6 +80,16 @@ const CertificationsForm = ({
       setValue(`certifications.${index}.${field}`, value, { shouldValidate: true });
       trigger(`certifications.${index}.${field}`);
       handleDisableNextBtn();
+
+      //! Real-time update of context when project changes
+      setResumeInfo((prev) => {
+        const updatedCertifications = [...(prev?.certifications || [])];
+        updatedCertifications[index] = {
+          ...updatedCertifications[index],
+          [field]: value,
+        };
+        return { ...prev, certifications: updatedCertifications };
+      });
     },
     [setValue, trigger, handleDisableNextBtn]
   );
@@ -112,8 +124,9 @@ const CertificationsForm = ({
     }
 
     try {
+      const certificationsWithoutId = data.certifications.map((certification) => certification);
       const { status } = await GlobalApi.UpdateResumeData(params.resumeId, {
-        certifications: data.certifications,
+        certifications: certificationsWithoutId,
       });
 
       if (status === 200) {
@@ -122,6 +135,7 @@ const CertificationsForm = ({
           theme: "light",
           transition: Bounce,
         });
+        handleUpdateResumeInfo(certificationsWithoutId);
         handleEnableNextBtn();
       }
     } catch (error) {

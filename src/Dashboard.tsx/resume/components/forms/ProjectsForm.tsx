@@ -57,18 +57,6 @@ const ProjectsForm = ({
     }
   }, [reset]);
 
-  //? Real-time update of context when education changes
-  useEffect(() => {
-    const education = resumeInfo?.education || [];
-    setResumeInfo((prev) => ({
-      ...prev,
-      education: (education ?? []).map(exp => ({
-        ...exp,
-        currentlyStudy: exp.currentlyStudy ?? false,
-      })),
-    }));
-  }, [trigger, setValue, setResumeInfo]);
-
   /*~~~~~~~~$ Handlers $~~~~~~~~*/
   const handleUpdateResumeInfo = useCallback(
     (updatedProjects: IProjects[]) => {

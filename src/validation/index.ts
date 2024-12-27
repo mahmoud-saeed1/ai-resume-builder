@@ -128,7 +128,6 @@ export const CertificationSchema = yup.object().shape({
     .array()
     .of(
       yup.object().shape({
-        ceId: yup.string().required(),
         title: yup.string().required("Title is required"),
         issuer: yup.string().required("Issuer is required"),
         date: yup.string().required("Date is required"), // Consider using a date type if needed
