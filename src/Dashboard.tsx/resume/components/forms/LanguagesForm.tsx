@@ -39,7 +39,7 @@ const LanguagesForm = ({
     trigger,
     formState: { errors },
   } = useForm<{ languages: ILanguages[] }>({
-    resolver: yupResolver(LanguagesSchema), 
+    resolver: yupResolver(LanguagesSchema),
     defaultValues: {
       languages: resumeInfo?.languages || [],
     },
@@ -59,14 +59,16 @@ const LanguagesForm = ({
     }
   }, [reset]);
 
-  useEffect(() => {
-    setResumeInfo((prev) => ({
-      ...prev,
-      languages: languages.map((lang) => ({
-        ...lang,
-      })),
-    }));
-  }, [languages, setResumeInfo]);
+  /*~~~~~~~~$ Handlers $~~~~~~~~*/
+  const handleUpdateResumeInfo = useCallback(
+    (updatedLanguages: ILanguages[]) => {
+      setResumeInfo((prev) => ({
+        ...prev,
+        languages: updatedLanguages,
+      }));
+    },
+    [setResumeInfo]
+  );
 
   const handleAddLanguage = () => {
     const newLanguage: ILanguages = {
@@ -82,6 +84,16 @@ const LanguagesForm = ({
       setValue(`languages.${index}.${field}`, value, { shouldValidate: true });
       trigger(`languages.${index}.${field}`);
       handleDisableNextBtn();
+
+      //! Real-time update of context when project changes
+      setResumeInfo((prev) => {
+        const updatedLanguages = [...(prev?.languages || [])];
+        updatedLanguages[index] = {
+          ...updatedLanguages[index],
+          [field]: value,
+        };
+        return { ...prev, languages: updatedLanguages };
+      });
     },
     [setValue, trigger, handleDisableNextBtn]
   );
@@ -116,8 +128,9 @@ const LanguagesForm = ({
     }
 
     try {
+      const languagesWithoutId = data.languages.map(({ id, ...rest }) => { console.log(id); return rest; });
       const { status } = await GlobalApi.UpdateResumeData(params.resumeId, {
-        languages: data.languages,
+        languages: languagesWithoutId,
       });
 
       if (status === 200) {
@@ -130,6 +143,7 @@ const LanguagesForm = ({
           ...prev,
           languages: data.languages,
         }));
+        handleUpdateResumeInfo(data.languages);
         handleEnableNextBtn();
       }
     } catch (error) {

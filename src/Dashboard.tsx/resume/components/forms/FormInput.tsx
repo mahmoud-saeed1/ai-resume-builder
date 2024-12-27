@@ -8,7 +8,7 @@ interface FormInputProp {
   id: string;
   label: string;
   placeholder: string;
-  register?: UseFormRegisterReturn; 
+  register?: UseFormRegisterReturn;
   required?: boolean;
   errorMessage?: string;
   type?: string;
@@ -31,10 +31,10 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProp>(
       errorMessage,
       type = "text",
     },
-    ref 
+    ref
   ) => {
     return (
-      <div className={type === "checkbox" ? "w-fit flex items-center flex-row-reverse" : ""}>
+      <div className={`${type === "checkbox" ? "w-fit flex items-center flex-row-reverse" : ""} ${className}`}>
         <Label htmlFor={id} className={type === "checkbox" ? "ml-2" : ""}>{label}</Label>
         <Input
           id={id}
@@ -43,9 +43,9 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProp>(
           onChange={onChange}
           defaultValue={defaultValue}
           required={required}
-          className={className}
-          {...register} 
-          ref={ref} 
+          className={type === "checkbox" ? "w-fit" : "w-full"}
+          {...register}
+          ref={ref}
         />
         {errorMessage && <InputErrorMessage msg={errorMessage} />}
       </div>

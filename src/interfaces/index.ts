@@ -84,7 +84,6 @@ export interface ILanguages {
 }
 export interface IReferences {
   id?: string;
-  reId: string;
   name: string;
   position: string;
   company: string;

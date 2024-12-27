@@ -149,21 +149,29 @@ export const SkillsSchema = yup.object().shape({
 });
 
 export const LanguagesSchema = yup.object().shape({
-  languages: yup.array().of(
-    yup.object().shape({
-      name: yup.string().required("Language name is required"),
-      proficiency: yup.string().nullable(),
-    })
-  ),
+  languages: yup
+    .array()
+    .of(
+      yup.object().shape({
+        name: yup.string().required("Language name is required"),
+        proficiency: yup.string().nullable(),
+      })
+    )
+    .required("Languages array is required")
+    .min(1, "At least one language is required"),
 });
 
 export const ReferenceSchema = yup.object().shape({
-  references: yup.array().of(
-    yup.object().shape({
-      name: yup.string().required("Name is required"),
-      position: yup.string().required("Position is required"),
-      company: yup.string().required("Company is required"),
-      contact: yup.string().required("Cotact is required"),
-    })
-  ),
+  references: yup
+    .array()
+    .of(
+      yup.object().shape({
+        name: yup.string().required("Name is required"),
+        position: yup.string().required("Position is required"),
+        company: yup.string().required("Company is required"),
+        contact: yup.string().required("Contact is required"),
+      })
+    )
+    .required("References are required") 
+    .min(1, "At least one reference is required"), 
 });

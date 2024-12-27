@@ -688,7 +688,7 @@ body {
 }
 
 .remove-btn {
-  @apply flex justify-end;
+  @apply flex justify-end mt-3;
 }
 
 /* preview */
