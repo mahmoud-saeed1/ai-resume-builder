@@ -67,7 +67,7 @@ const EducationForm = ({
       }
     });
 
-    // Real-time update of context when education changes
+  
     setResumeInfo((prev) => ({
       ...prev,
       education: (education ?? []).map(exp => ({

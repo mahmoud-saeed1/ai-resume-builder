@@ -72,28 +72,28 @@ export interface ICertification {
 }
 
 export interface ISkills {
-  skId: string;
+  id?: string;
   name: string;
-  rating: number | null;
+  rating?: number | null | undefined;
 }
 
 export interface ILanguages {
+  id?: string;
   laId: string;
   name: string;
-  proficiency: string;
+  proficiency?: string | null | undefined;
 }
-
-export interface IHobby {
-  id: string;
-  name: string;
-}
-
 export interface IReferences {
+  id?: string;
   reId: string;
   name: string;
   position: string;
   company: string;
   contact: string;
+}
+export interface IHobby {
+  id: string;
+  name: string;
 }
 
 export interface IResumeInfo {

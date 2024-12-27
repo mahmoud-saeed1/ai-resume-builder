@@ -1,14 +1,14 @@
-import { IErrorResponse, IFormProbs, IPersonalData } from "@/interfaces";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { SPersonalData } from "@/validation";
-import { ResumeInfoContext } from "@/context/ResumeInfoContext";
-import { useContext, useState } from "react";
-import GlobalApi from "@/service/GlobalApi";
+import { useContext, useEffect, useState, ChangeEvent, useCallback } from "react";
 import { useParams } from "react-router-dom";
-import { toast, Bounce } from "react-toastify";
-import { AxiosError } from "axios";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { ResumeInfoContext } from "@/context/ResumeInfoContext";
+import { IFormProbs, IPersonalData, IErrorResponse } from "@/interfaces";
+import { Bounce, toast } from "react-toastify";
+import GlobalApi from "@/service/GlobalApi";
 import FormInput from "./FormInput";
+import { AxiosError } from "axios";
+import { SPersonalData } from "@/validation"; // Ensure you import the correct validation schema
 import FormContainer from "./FormContainer";
 
 const PersonalDataForm = ({
@@ -16,44 +16,70 @@ const PersonalDataForm = ({
   handleEnableNextBtn,
   handleDisableNextBtn,
 }: IFormProbs) => {
+  /*~~~~~~~~$ States $~~~~~~~~*/
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  /*~~~~~~~~$ Context $~~~~~~~~*/
   const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext) ?? {};
-
-  if (!setResumeInfo) {
-    throw new Error("ResumeInfoContext is undefined");
-  }
-
   const params = useParams<{ resumeId: string }>();
 
+  /*~~~~~~~~$ Forms $~~~~~~~~*/
   const {
     register,
     handleSubmit,
-    formState: { errors },
     setValue,
-    clearErrors,
+    formState: { errors },
   } = useForm<IPersonalData>({
     resolver: yupResolver(SPersonalData),
+    defaultValues: resumeInfo?.personalData?.[0] || {},
   });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
 
-    // Update the context state
-    setResumeInfo((prev) => ({
-      ...prev,
-      personalData: prev?.personalData ?? [],
-      [name]: value,
-    }));
+  /*~~~~~~~~$ Effects $~~~~~~~~*/
+  useEffect(() => {
+    if (resumeInfo?.personalData?.length) {
+      const data = resumeInfo.personalData[0];
+      Object.keys(data).forEach((key) => {
+        setValue(key as keyof IPersonalData, data[key as keyof IPersonalData]);
+      });
+    }
+  }, [resumeInfo, setValue]);
 
-    // Clear errors for the changed field
-    clearErrors(name as keyof IPersonalData); // Cast name to the correct type
-    handleDisableNextBtn();
+  /*~~~~~~~~$ Handlers $~~~~~~~~*/
+  const handleInputChange = useCallback(
+    (name: keyof IPersonalData, value: string) => {
+      setValue(name, value, { shouldValidate: true });
+      handleDisableNextBtn();
 
-    // Set the input value in the form
-    setValue(name as keyof IPersonalData, value);
-  };
+      // Real-time update of context
+      setResumeInfo?.((prev) => {
+        if (!prev) return prev;
+        const updatedPersonalData: IPersonalData = {
+          firstName: prev.personalData?.[0]?.firstName || '',
+          lastName: prev.personalData?.[0]?.lastName || '',
+          jobTitle: prev.personalData?.[0]?.jobTitle || '',
+          phone: prev.personalData?.[0]?.phone || '',
+          email: prev.personalData?.[0]?.email || '',
+          address: prev.personalData?.[0]?.address || '',
+          [name]: value,
+        };
+        return { ...prev, personalData: [updatedPersonalData] };
+      });
+    },
+    [setValue, handleDisableNextBtn, setResumeInfo]
+  );
 
-  const handleOnSubmit: SubmitHandler<IPersonalData> = async (data) => {
+  const handleUpdateResumeInfo = useCallback(
+    (updatedPersonalData: IPersonalData) => {
+      setResumeInfo?.((prev) => ({
+        ...prev,
+        personalData: [updatedPersonalData],
+      }));
+    },
+    [setResumeInfo]
+  );
+
+  const handleOnSubmit = async (data: IPersonalData) => {
     setIsLoading(true);
 
     if (!params?.resumeId) {
@@ -62,24 +88,35 @@ const PersonalDataForm = ({
         theme: "light",
         transition: Bounce,
       });
+      setIsLoading(false);
       return;
     }
 
     try {
+      const personalDataWithoutId = {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        jobTitle: data.jobTitle,
+        phone: data.phone,
+        email: data.email,
+        address: data.address
+      };
       const { status } = await GlobalApi.UpdateResumeData(params.resumeId, {
-        personalData: [data],
+        personalData: [personalDataWithoutId],
       });
+
       if (status === 200) {
-        toast.success("Data saved successfully.", {
+        toast.success("Personal data saved successfully.", {
           autoClose: 1000,
           theme: "light",
           transition: Bounce,
         });
+        handleUpdateResumeInfo(personalDataWithoutId);
         handleEnableNextBtn();
       }
     } catch (error) {
       const err = error as AxiosError<IErrorResponse>;
-      toast.error(err.response?.data.error.message, {
+      toast.error(err.response?.data.error.message || "An error occurred", {
         autoClose: 2000,
         theme: "light",
         transition: Bounce,
@@ -89,41 +126,20 @@ const PersonalDataForm = ({
     }
   };
 
-  /*~~~~~~~~$ Get Form List Data $~~~~~~~~*/
-    // useEffect(() => {
-    //   if (resumeInfo?.personalData && resumeInfo.personalData.length > 0) {
-    //     const [personalData] = resumeInfo.personalData;
-    //     Object.keys(personalData).forEach((key) => {
-    //       setValue(key as keyof IPersonalData, personalData[key as keyof IPersonalData]);
-    //     });
-    //   }
-  
-    // }, [])
-
   return (
-    <FormContainer
-      formTitle="Personal Data"
-      handleOnSubmit={handleSubmit(handleOnSubmit)}
-      isLoading={isLoading}
-      enableNextBtn={enableNextBtn}
-    >
-      <form className="form-content" onSubmit={handleSubmit(handleOnSubmit)}>
-        {["firstName", "lastName", "jobTitle", "phone", "email", "address"].map(
-          (field) => (
-            <FormInput
-              id={field}
-              label={field}
-              key={field}
-              placeholder={field.replace(/^\w/, (c) => c.toUpperCase())}
-              register={register(field as keyof IPersonalData)}
-              onChange={handleInputChange}
-              defaultValue={
-                resumeInfo?.personalData?.[0]?.[field as keyof IPersonalData] ?? ""
-              }
-              errorMessage={errors[field as keyof IPersonalData]?.message}
-            />
-          )
-        )}
+    <FormContainer formTitle="Personal Data" handleOnSubmit={handleSubmit(handleOnSubmit)} isLoading={isLoading} enableNextBtn={enableNextBtn}>
+      <form onSubmit={handleSubmit(handleOnSubmit)} className="form-content">
+        {["firstName", "lastName", "jobTitle", "phone", "email", "address"].map((field) => (
+          <FormInput
+            key={field}
+            id={field}
+            label={field.charAt(0).toUpperCase() + field.slice(1)}
+            placeholder={`Enter ${field.charAt(0).toUpperCase() + field.slice(1)}`}
+            {...register(field as keyof IPersonalData)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(field as keyof IPersonalData, e.target.value)}
+            errorMessage={errors[field as keyof IPersonalData]?.message}
+          />
+        ))}
       </form>
     </FormContainer>
   );

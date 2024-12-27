@@ -137,20 +137,22 @@ export const CertificationSchema = yup.object().shape({
 });
 
 export const SkillsSchema = yup.object().shape({
-  skills: yup.array().of(
-    yup.object().shape({
-      name: yup.string().required("Skill name is required"),
-      rating: yup.number().min(0).max(5).nullable(),
-    })
-  ),
+  skills: yup
+    .array()
+    .of(
+      yup.object().shape({
+        name: yup.string().required("Skill name is required"),
+        rating: yup.number().min(0).max(5).nullable(),
+      })
+    )
+    .required("Skills array is required"), // Required array
 });
 
 export const LanguagesSchema = yup.object().shape({
   languages: yup.array().of(
     yup.object().shape({
-      laId: yup.string().required(),
       name: yup.string().required("Language name is required"),
-      proficiency: yup.string().required("Proficiency is required"),
+      proficiency: yup.string().nullable(),
     })
   ),
 });
@@ -158,12 +160,10 @@ export const LanguagesSchema = yup.object().shape({
 export const ReferenceSchema = yup.object().shape({
   references: yup.array().of(
     yup.object().shape({
-      reId: yup.string().required(),
       name: yup.string().required("Name is required"),
       position: yup.string().required("Position is required"),
       company: yup.string().required("Company is required"),
-      phone: yup.string().required("Phone is required"),
-      email: yup.string().required("Email is required"),
+      contact: yup.string().required("Cotact is required"),
     })
   ),
 });

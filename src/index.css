@@ -880,3 +880,30 @@ body {
   @apply flex flex-col justify-center;
 }
 
+
+/* PersonalDataPreview.css */
+.resume-preview__section {
+  @apply p-4 bg-gray-50; /* Light background for better visibility */
+}
+
+.resume-preview__title {
+  @apply text-xl font-bold mb-4 text-gray-900; /* Bold title for emphasis */
+}
+
+.resume-preview__personal-details {
+  @apply mb-4 p-2; /* Clean padding */
+}
+
+.resume-preview__name {
+  @apply text-lg font-semibold text-gray-800; /* Clear name display */
+}
+
+.resume-preview__job-title {
+  @apply text-lg text-gray-700; /* Subtle job title */
+}
+
+.resume-preview__details {
+  @apply mt-1 text-gray-600; /* Text color for details */
+  @apply text-sm; /* Smaller text for details */
+}
+

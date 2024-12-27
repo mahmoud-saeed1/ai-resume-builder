@@ -1,32 +1,28 @@
-import { IPersonalData } from "@/interfaces";
+import { useContext } from "react";
+import { ResumeInfoContext } from "@/context/ResumeInfoContext";
 
-const PersonalDataPreview = ({
-  personalData,
-}: {
-  personalData: IPersonalData[];
-}) => {
+const PersonalDataPreview = () => {
+  const { resumeInfo } = useContext(ResumeInfoContext) ?? {};
+  
+  if (!resumeInfo?.personalData?.length) {
+    return <div>No personal data available.</div>;
+  }
+
+  const personalData = resumeInfo.personalData[0];
+
   return (
-    <>
-      {personalData.map(
-        ({ firstName, lastName, address, email, jobTitle, phone }) => (
-          <section
-            key={firstName + lastName + address + email}
-            className="resume-preview__section resume-preview__personal-details"
-          >
-            <h3 className="resume-preview__section-title">Personal Details</h3>
-            <div className="resume-preview__personal-details-item">
-              <h4 className="resume-preview__name">
-                {firstName} {lastName}
-              </h4>
-              <p className="resume-preview__job-title">{jobTitle}</p>
-              <p className="resume-preview__address">{address}</p>
-              <p className="resume-preview__email">{email}</p>
-              <p className="resume-preview__phone">{phone}</p>
-            </div>
-          </section>
-        )
-      )}
-    </>
+    <section className="resume-preview__section">
+      <h3 className="resume-preview__title">Personal Data</h3>
+      <div className="resume-preview__personal-details">
+        <h4 className="resume-preview__name">
+          {personalData.firstName} {personalData.lastName}
+        </h4>
+        <p className="resume-preview__job-title">{personalData.jobTitle}</p>
+        <p className="resume-preview__details">
+          {personalData.address} | {personalData.email} | {personalData.phone}
+        </p>
+      </div>
+    </section>
   );
 };
 

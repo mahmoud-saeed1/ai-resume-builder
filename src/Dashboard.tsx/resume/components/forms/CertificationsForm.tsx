@@ -30,6 +30,7 @@ const CertificationsForm = ({
   const {
     control,
     handleSubmit,
+    watch,
     reset,
     setValue,
     trigger,
@@ -46,6 +47,9 @@ const CertificationsForm = ({
     name: "certifications",
   });
 
+  const certifications = watch("certifications")
+
+
   /*~~~~~~~~$ Effects $~~~~~~~~*/
   //! Sync local state with resumeInfo context
   useEffect(() => {
@@ -56,10 +60,10 @@ const CertificationsForm = ({
 
   /*~~~~~~~~$ Handlers $~~~~~~~~*/
   const handleUpdateResumeInfo = useCallback(
-    (certifications: ICertification[]) => {
+    (updatedCertifications: ICertification[]) => {
       setResumeInfo((prev) => ({
         ...prev,
-        certifications: certifications,
+        certifications: updatedCertifications,
       }));
     },
     [setResumeInfo]
@@ -124,7 +128,7 @@ const CertificationsForm = ({
     }
 
     try {
-      const certificationsWithoutId = data.certifications.map((certification) => certification);
+      const certificationsWithoutId = data.certifications.map(({ id, ...rest }) => { console.log(id); return rest });
       const { status } = await GlobalApi.UpdateResumeData(params.resumeId, {
         certifications: certificationsWithoutId,
       });
@@ -164,6 +168,7 @@ const CertificationsForm = ({
     <Controller
       name={name}
       control={control}
+      defaultValue={certifications?.[index]?.[name.split("")[2] as keyof ICertification] || ""}
       render={({ field }) => (
         <FormInput
           {...field}
