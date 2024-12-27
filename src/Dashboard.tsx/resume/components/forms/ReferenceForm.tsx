@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, ChangeEvent, useCallback } from "react";
+import { useContext, useEffect, useState, ChangeEvent, useCallback } from "react";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ResumeInfoContext } from "@/context/ResumeInfoContext";
