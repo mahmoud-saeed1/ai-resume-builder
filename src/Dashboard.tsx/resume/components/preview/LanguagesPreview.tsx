@@ -7,8 +7,8 @@ const LanguagesPreview = ({ languages }: { languages: ILanguages[] }) => {
         Languages
       </h3>
       <ul className="preview__list-container">
-        {languages.map(({ laId, name, proficiency }) => (
-          <li key={laId}>
+        {languages.map(({ name, proficiency }) => (
+          <li key={name + proficiency} className="resume-preview__list-item">
             <span className="resume-preview__language-name">{name}</span>
             {proficiency && <span className="resume-preview__language-proficiency">{proficiency}</span>}
           </li>

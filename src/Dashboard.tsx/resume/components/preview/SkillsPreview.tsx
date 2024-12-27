@@ -7,20 +7,24 @@ const SkillsPreview = ({ skills }: { skills: ISkills[] }) => {
         Skills
       </h3>
       <ul className="preview__list-container">
-        {skills.map(({ name, rating, skId }) => (
-          <li key={skId}>
-            <h4 className="inline-block">{name}</h4>
-
-            {rating > 0 && <div className="w-1/3 bg-gray-300 rounded-full mt-1">
-              <div
-                className="bg-blue-500 text-xs leading-none py-1 text-center text-white rounded-full"
-                style={{ width: `${rating}%` }}
-              >
-                {rating}%
-              </div>
-            </div>}
-          </li>
-        ))}
+        {skills.map(({ name, rating }, index) => {
+          const validRating = rating ?? 0; // Fallback to 0 if rating is null
+          return (
+            <li key={index} className="mb-2">
+              <h4 className="inline-block">{name}</h4>
+              {validRating > 0 && (
+                <div className="w-1/3 bg-gray-300 rounded-full mt-1 overflow-hidden">
+                  <div
+                    className="bg-blue-500 text-xs leading-none py-1 text-center text-white rounded-full"
+                    style={{ width: `${validRating * 100}%` }}
+                  >
+                    {(Math.round(validRating)/5)*100}%
+                  </div>
+                </div>
+              )}
+            </li>
+          );
+        })}
       </ul>
     </section>
   );

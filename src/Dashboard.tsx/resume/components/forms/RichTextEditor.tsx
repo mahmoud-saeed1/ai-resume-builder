@@ -88,12 +88,11 @@ const RichTextEditor = forwardRef<RichTextEditorHandle, IRichTextEditorProps>(
       try {
         const result = await AIChatSession.sendMessage(prompt);
         const response = await result.response.text();
-        const formattedResponse = response
-          .replace("[", "")
-          .replace("]", "")
-          .replace(/"/g, "")
-          .replace("{", "")
-          .replace("}", "");
+
+        // Extract the summary value from the response
+        const summaryMatch = response.match(/"summary":\s*"([^"]+)"/);
+        const formattedResponse = summaryMatch ? summaryMatch[1] : ""; // Get the summary value only
+
         setValue(formattedResponse);
         onRichTextEditorChange(formattedResponse);
       } catch (error) {

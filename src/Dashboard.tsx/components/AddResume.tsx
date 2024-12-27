@@ -63,7 +63,7 @@ const AddResume = () => {
 
     try {
       const res = await GlobalApi.createNewResume(resumeData);
-      console.log(res);
+      
 
       if (res) {
         toast.success("Resume created successfully!");

@@ -8,7 +8,7 @@ interface FormInputProp {
   id: string;
   label: string;
   placeholder: string;
-  register?: UseFormRegisterReturn; // react-hook-form's register
+  register?: UseFormRegisterReturn; 
   required?: boolean;
   errorMessage?: string;
   type?: string;
@@ -31,13 +31,11 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProp>(
       errorMessage,
       type = "text",
     },
-    ref
+    ref 
   ) => {
-    const inputRef = register?.ref || ref;
-
     return (
-      <div className={className}>
-        <Label htmlFor={id}>{label}</Label>
+      <div className={type === "checkbox" ? "w-fit flex items-center flex-row-reverse" : ""}>
+        <Label htmlFor={id} className={type === "checkbox" ? "ml-2" : ""}>{label}</Label>
         <Input
           id={id}
           type={type}
@@ -45,9 +43,9 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProp>(
           onChange={onChange}
           defaultValue={defaultValue}
           required={required}
-          className="bg-white"
-          {...register} // Spread register properties safely
-          ref={inputRef} // Ensure no ref conflict
+          className={className}
+          {...register} 
+          ref={ref} 
         />
         {errorMessage && <InputErrorMessage msg={errorMessage} />}
       </div>

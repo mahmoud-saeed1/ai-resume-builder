@@ -79,7 +79,6 @@ export interface ISkills {
 
 export interface ILanguages {
   id?: string;
-  laId: string;
   name: string;
   proficiency?: string | null | undefined;
 }

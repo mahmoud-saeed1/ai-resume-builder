@@ -12,7 +12,7 @@ import Button from "@/ui/Button";
 import FormInput from "./FormInput";
 import NoData from "./NoData";
 import { AxiosError } from "axios";
-import { CertificationSchema } from "@/validation"; // Ensure you import the correct validation schema
+import { CertificationSchema } from "@/validation"; 
 
 const CertificationsForm = ({
   enableNextBtn,

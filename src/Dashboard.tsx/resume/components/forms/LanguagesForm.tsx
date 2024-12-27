@@ -70,7 +70,6 @@ const LanguagesForm = ({
 
   const handleAddLanguage = () => {
     const newLanguage: ILanguages = {
-      laId: Date.now().toString(),
       name: "",
       proficiency: "",
     };

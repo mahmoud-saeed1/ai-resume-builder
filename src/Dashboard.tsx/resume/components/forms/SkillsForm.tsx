@@ -228,17 +228,19 @@ const SkillsForm = ({
                 </div>
                 <form className="form-content">
                   {dynamicFormInput({ name: `skills.${index}.name`, label: "Skill Name", index })}
-                  <label>Rating</label>
-                  <StarRatings
-                    rating={field.rating ?? 0}
-                    starRatedColor="gold"
-                    starHoverColor="gold"
-                    changeRating={(newRating) => handleStarRatingChange(index, newRating)}
-                    numberOfStars={5}
-                    name={`rating-${index}`}
-                    starDimension="20px"
-                    starSpacing="5px"
-                  />
+                  <div className="space-x-2">
+                    <label>Rating</label>
+                    <StarRatings
+                      rating={skills[index]?.rating ?? 0}
+                      starRatedColor="gold"
+                      starHoverColor="gold"
+                      changeRating={(newRating) => handleStarRatingChange(index, newRating)}
+                      numberOfStars={5}
+                      name={`rating-${index}`}
+                      starDimension="20px"
+                      starSpacing="5px"
+                    />
+                  </div>
                 </form>
                 <div className="remove-btn">
                   <Button

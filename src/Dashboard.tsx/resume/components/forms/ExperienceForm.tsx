@@ -128,12 +128,39 @@ const ExperienceForm = ({
 
       // If currentlyWorking is toggled to false, set endDate to today's date or a default value
       if (field === "currentlyWorking" && !value) {
-        setValue(`experience.${index}.endDate`, new Date().toISOString().split("T")[0]); // Set to today's date
+        setValue(`experience.${index}.endDate`, new Date().toISOString().split("T")[0]);
         trigger(`experience.${index}.endDate`);
       }
     },
     [setValue, trigger, setResumeInfo, handleDisableNextBtn]
   );
+  // const handleInputChange = useCallback(
+  //   (index: number, field: keyof IExperience, value: string | boolean) => {
+  //     setValue(`experience.${index}.${field}`, value, { shouldValidate: true });
+  //     trigger(`experience.${index}.${field}`);
+
+  //     handleDisableNextBtn();
+
+  //     setResumeInfo((prev) => {
+  //       const updatedExperience = [...(prev?.experience || [])];
+  //       updatedExperience[index] = {
+  //         ...updatedExperience[index],
+  //         [field]: value,
+  //         ...(field === "currentlyWorking" && !value
+  //           ? { endDate: "" } // Reset endDate if currentlyWorking is toggled to false
+  //           : {}),
+  //       };
+  //       return { ...prev, experience: updatedExperience };
+  //     });
+
+  //     // If currentlyWorking is toggled to false, set endDate to today's date or a default value
+  //     if (field === "currentlyWorking" && !value) {
+  //       setValue(`experience.${index}.endDate`, new Date().toISOString().split("T")[0]); // Set to today's date
+  //       trigger(`experience.${index}.endDate`);
+  //     }
+  //   },
+  //   [setValue, trigger, setResumeInfo, handleDisableNextBtn]
+  // );
 
   const handleChange =
     (index: number, field: keyof IExperience) =>
@@ -170,7 +197,7 @@ const ExperienceForm = ({
         console.log(id)
         return rest;
       });
-      
+
       const { status } = await GlobalApi.UpdateResumeData(params.resumeId, {
         experience: experienceWithoutId,
       });
@@ -203,7 +230,6 @@ const ExperienceForm = ({
     label,
     index,
     type = "text",
-    className,
   }: {
     name: `experience.${number}.${keyof IExperience}`;
     label: string;
@@ -232,7 +258,7 @@ const ExperienceForm = ({
             onChange={(e) =>
               handleChange(index, name.split(".")[2] as keyof IExperience)(e)
             }
-            className={className}
+            className={type === "checkbox" ? "w-fit" : "w-full"}
           />
         )}
       />
@@ -327,9 +353,9 @@ const ExperienceForm = ({
                         {...field}
                         index={index}
                         defaultValue={field.value}
-                        onRichTextEditorChange={(value) =>
-                          setValue(`experience.${index}.workSummary`, value)
-                        }
+                        onRichTextEditorChange={(value) => {
+                          handleInputChange(index, "workSummary", value);
+                        }}
                       />
                     )}
                   />

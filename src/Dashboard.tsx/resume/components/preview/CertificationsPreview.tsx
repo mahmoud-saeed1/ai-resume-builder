@@ -11,9 +11,9 @@ const CertificationsPreview = ({
         Certifications
       </h3>
       <ul className="preview__list-container">
-        {certifications.map(({ ceId, date, issuer, title }) => (
+        {certifications.map(({ date, issuer, title }) => (
           <li
-            key={ceId}
+            key={date + issuer + title}
           >
             {title} - {issuer} ({date})
           </li>

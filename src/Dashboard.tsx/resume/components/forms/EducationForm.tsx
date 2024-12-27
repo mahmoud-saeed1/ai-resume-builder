@@ -25,7 +25,11 @@ const EducationForm = ({
   const [isLoading, setIsLoading] = useState(false);
 
   /*~~~~~~~~$ Context $~~~~~~~~*/
-  const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext)!;
+  const context = useContext(ResumeInfoContext);
+  if (!context) {
+    throw new Error("ResumeInfoContext is not available");
+  }
+  const { resumeInfo, setResumeInfo } = context;
   const params = useParams<{ resumeId: string }>();
 
   /*~~~~~~~~$ Forms $~~~~~~~~*/
@@ -60,23 +64,23 @@ const EducationForm = ({
   }, [reset]);
 
   useEffect(() => {
-    education?.forEach((exp, index) => {
-      if (exp.currentlyStudy) {
-        setValue(`education.${index}.endDate`, "");
-        trigger(`education.${index}.endDate`);
-      }
-    });
+    if (education) {
+      education.forEach((exp, index) => {
+        if (exp.currentlyStudy) {
+          setValue(`education.${index}.endDate`, "");
+          trigger(`education.${index}.endDate`);
+        }
+      });
 
-  
-    setResumeInfo((prev) => ({
-      ...prev,
-      education: (education ?? []).map(exp => ({
-        ...exp,
-        currentlyStudy: exp.currentlyStudy ?? false,
-      })),
-    }));
-  }, [setValue, trigger, setResumeInfo]);
-
+      setResumeInfo((prev) => ({
+        ...prev,
+        education: (education ?? []).map(exp => ({
+          ...exp,
+          currentlyStudy: exp.currentlyStudy ?? false,
+        })),
+      }));
+    }
+  }, [setValue, trigger, setResumeInfo, education]);
   const handleUpdateResumeInfo = useCallback(
     (updatedEducation: IEducation[]) => {
       setResumeInfo((prev) => ({
@@ -87,6 +91,26 @@ const EducationForm = ({
     [setResumeInfo]
   );
 
+
+  // useEffect(() => {
+  //   education?.forEach((exp, index) => {
+  //     if (exp.currentlyStudy) {
+  //       setValue(`education.${index}.endDate`, "");
+  //       trigger(`education.${index}.endDate`);
+  //     }
+  //   });
+
+
+  //   setResumeInfo((prev) => ({
+  //     ...prev,
+  //     education: (education ?? []).map(exp => ({
+  //       ...exp,
+  //       currentlyStudy: exp.currentlyStudy ?? false,
+  //     })),
+  //   }));
+  // }, [setValue, trigger, setResumeInfo]);
+
+  /*~~~~~~~~$ Handlers $~~~~~~~~*/
   const handleAddEducation = () => {
     const newEducation: IEducation = {
       universityName: "",
@@ -193,7 +217,6 @@ const EducationForm = ({
       setIsLoading(false);
     }
   };
-
   const dynamicFormInput = ({
     name,
     label,
@@ -206,32 +229,71 @@ const EducationForm = ({
     index: number;
     type?: string;
     className?: string;
-  }) => (
-    <Controller
-      name={name}
-      control={control}
-      defaultValue={education?.[index]?.[name.split(".")[2] as keyof IEducation] || ""}
-      render={({ field }) => (
-        <FormInput
-          {...field}
-          ref={field.ref}
-          id={name}
-          type={type}
-          label={label}
-          placeholder={`Enter ${label}`}
-          errorMessage={
-            errors.education?.[index]?.[
-              name.split(".")[2] as keyof IEducation
-            ]?.message
-          }
-          onChange={(e) =>
-            handleChange(index, name.split(".")[2] as keyof IEducation)(e)
-          }
-          className={className}
-        />
-      )}
-    />
-  );
+  }) => {
+    const defaultValue = education?.[index]?.[name.split(".")[2] as keyof IEducation] || "";
+    return (
+      <Controller
+        name={name}
+        control={control}
+        defaultValue={defaultValue}
+        render={({ field }) => (
+          <FormInput
+            {...field}
+            ref={field.ref}
+            id={name}
+            type={type}
+            label={label}
+            placeholder={`Enter ${label}`}
+            errorMessage={
+              errors.education?.[index]?.[name.split(".")[2] as keyof IEducation]?.message
+            }
+            onChange={(e) =>
+              handleChange(index, name.split(".")[2] as keyof IEducation)(e)
+            }
+            className={className}
+          />
+        )}
+      />
+    );
+  };
+  // const dynamicFormInput = ({
+  //   name,
+  //   label,
+  //   index,
+  //   type = "text",
+  //   className,
+  // }: {
+  //   name: `education.${number}.${keyof IEducation}`;
+  //   label: string;
+  //   index: number;
+  //   type?: string;
+  //   className?: string;
+  // }) => (
+  //   <Controller
+  //     name={name}
+  //     control={control}
+  //     defaultValue={education?.[index]?.[name.split(".")[2] as keyof IEducation] || ""}
+  //     render={({ field }) => (
+  //       <FormInput
+  //         {...field}
+  //         ref={field.ref}
+  //         id={name}
+  //         type={type}
+  //         label={label}
+  //         placeholder={`Enter ${label}`}
+  //         errorMessage={
+  //           errors.education?.[index]?.[
+  //             name.split(".")[2] as keyof IEducation
+  //           ]?.message
+  //         }
+  //         onChange={(e) =>
+  //           handleChange(index, name.split(".")[2] as keyof IEducation)(e)
+  //         }
+  //         className={className}
+  //       />
+  //     )}
+  //   />
+  // );
 
   return (
     <div className="resume-form">
@@ -243,7 +305,7 @@ const EducationForm = ({
           <AnimatePresence>
             {fields.map((field, index) => (
               <motion.div
-                key={field.id + index}
+                key={ field.id }
                 variants={{
                   initial: { opacity: 0, y: 10 },
                   animate: { opacity: 1, y: 0 },

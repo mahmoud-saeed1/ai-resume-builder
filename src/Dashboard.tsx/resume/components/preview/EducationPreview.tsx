@@ -7,8 +7,8 @@ const EducationPreview = ({ education = [] }: { education: IEducation[] }) => {
       <h3 className="resume-preview__section-title">Education</h3>
 
       <ul className="preview__list-container">
-        {education.map(({ edId, universityName, degree, major, minor, startDate, endDate, description, currentlyStudy }) => (
-          <li key={edId}>
+        {education.map(({ universityName, degree, major, minor, startDate, endDate, description, currentlyStudy }) => (
+          <li key={universityName + startDate + endDate}>
             <h4 className="resume-preview__university-name inline-block">{universityName}</h4>
             <p className="resume-preview__degree ">{degree} in {major}{minor ? `, ${minor}` : ''}</p>
             <p className="resume-preview__dates">{startDate} - {currentlyStudy ? "Present" : endDate}</p>
