@@ -13,7 +13,6 @@ import ReferencesPreview from "./preview/ReferencesPreview";
 const ResumePreview = () => {
   const resumeInfo = useContext(ResumeInfoContext);
 
-  // Check if resumeInfo and resumeInfo.resumeInfo are not null
   const resumeData = resumeInfo?.resumeInfo;
 
   return (
