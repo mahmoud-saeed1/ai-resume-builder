@@ -54,7 +54,7 @@ const ReferenceForm = ({
     if (resumeInfo?.references) {
       reset({ references: resumeInfo.references });
     }
-  }, [resumeInfo, reset]);
+  }, [reset]);
 
   /*~~~~~~~~$ Handlers $~~~~~~~~*/
   const handleUpdateResumeInfo = useCallback(

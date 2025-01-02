@@ -110,7 +110,7 @@ const AddResume = () => {
                     required: "Resume title is required",
                     minLength: { value: 3, message: "Title must be at least 3 characters" },
                   })}
-                  className={`${errors.title ? "resume__input--error" : ""}`}
+                  className={`${errors.title ? "resume__input--error" : ""} w-full`}
                 />
                 {errors.title && <InputErrorMessage msg={errors.title.message} />}
               </div>

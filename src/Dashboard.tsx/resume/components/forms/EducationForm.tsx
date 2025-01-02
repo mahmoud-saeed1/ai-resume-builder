@@ -63,6 +63,16 @@ const EducationForm = ({
     }
   }, [reset]);
 
+
+  // get data from context and set it to the form fields
+  useEffect(() => {
+    if (resumeInfo?.education?.length) {
+      resumeInfo.education.forEach((item, index) => {
+        setValue(`education.${index}`, item);
+      });
+    }
+  }, [resumeInfo, setValue]);
+
   useEffect(() => {
     if (education) {
       education.forEach((exp, index) => {
@@ -305,7 +315,7 @@ const EducationForm = ({
           <AnimatePresence>
             {fields.map((field, index) => (
               <motion.div
-                key={ field.id }
+                key={field.id}
                 variants={{
                   initial: { opacity: 0, y: 10 },
                   animate: { opacity: 1, y: 0 },

@@ -774,19 +774,15 @@ body {
 }
 
 .landing__hero-image__container {
-  @apply flex items-center justify-center mt-10 md:mt-0 bg-transparent;
-}
-
-.landing__hero-image {
-  @apply relative;
+  @apply h-full relative flex items-center justify-center mt-10 md:mt-0 bg-transparent overflow-hidden;
 }
 
 .landing__hero-img {
-  @apply w-72 h-auto rounded-xl;
+  @apply w-32 lg:w-52 h-auto rounded-xl;
 }
 
 .landing__hero-shape {
-  @apply absolute top-10 left-28 -z-10 w-96 h-full bg-gradient-to-t to-blue-600 from-teal-400;
+  @apply absolute top-14 lg:top-20 left-32 -z-10 w-96 h-full bg-gradient-to-t to-blue-600 from-teal-400;
   padding: 1.3rem;
   display: block;
   border: 2px solid #2563eb;
