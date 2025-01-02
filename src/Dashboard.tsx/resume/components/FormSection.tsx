@@ -1,7 +1,8 @@
 import Button from "@/ui/Button";
 import { ArrowLeft, ArrowRight, Home } from "lucide-react";
 import { useState } from "react";
-import PersonalDataFrom from "./forms/PersonalDataFrom";
+import { Link, Navigate, useParams } from "react-router-dom";
+import PersonalDataForm from "./forms/PersonalDataFrom";
 import SummaryForm from "./forms/SummaryForm";
 import ExperienceForm from "./forms/ExperienceForm";
 import EducationForm from "./forms/EducationForm";
@@ -10,161 +11,82 @@ import CertificationsForm from "./forms/CertificationsForm";
 import ProjectsForm from "./forms/ProjectsForm";
 import LanguagesForm from "./forms/LanguagesForm";
 import ReferenceForm from "./forms/ReferenceForm";
-import { Link, Navigate, useParams } from "react-router-dom";
 
 const FormSection = () => {
-  /*~~~~~~~~$ States $~~~~~~~~*/
-  const [activeFromIdx, setActiveFromIdx] = useState(1);
+  /*~~~~~~~~~~ States ~~~~~~~~~~*/
+  const [activeFormIdx, setActiveFormIdx] = useState(1);
   const [enableNextBtn, setEnableNextBtn] = useState(false);
-  const params = useParams<{ resumeId: string }>();
+  const { resumeId } = useParams<{ resumeId: string }>();
 
+  /*~~~~~~~~~~ Form Configurations ~~~~~~~~~~*/
+  const forms = [
+    PersonalDataForm,
+    SummaryForm,
+    EducationForm,
+    ExperienceForm,
+    ProjectsForm,
+    CertificationsForm,
+    SkillsForm,
+    LanguagesForm,
+    ReferenceForm,
+  ];
 
-  /*~~~~~~~~$ Handlers $~~~~~~~~*/
-  const handleEnableNextBtn = () => setEnableNextBtn(true);
-
-  const handleDisableNextBtn = () => setEnableNextBtn(false);
-
-  //! handle next button with plus 1 until the last form
-  const handleNext = () => {
-    if (activeFromIdx < 11) {
-      setActiveFromIdx((prev) => prev + 1);
-      handleEnableNextBtn();
-    } else {
-      handleDisableNextBtn();
-    }
+  /*~~~~~~~~~~ Handlers ~~~~~~~~~~*/
+  const handleNavigation = (direction: "next" | "prev") => {
+    setActiveFormIdx((prev) =>
+      direction === "next" ? prev + 1 : prev - 1
+    );
+    setEnableNextBtn(false); //? Reset next button state on navigation
   };
 
-  //! handle previous button with minus 1 until the first form
-  const handlePrev = () => {
-    if (activeFromIdx > 1) {
-      setActiveFromIdx((prev) => prev - 1);
-      handleEnableNextBtn();
-    } else {
-      handleDisableNextBtn();
-    }
-  };
+  const CurrentForm = forms[activeFormIdx - 1];
 
-
+  /*~~~~~~~~~~ Render ~~~~~~~~~~*/
   return (
-    <div>
-      {/*~~~~~~~~$ Form Buttons $~~~~~~~~*/}
-      <div className="flex items-center justify-between">
-        <Link
-          to="/dashboard"
-          className="text-white capitalize tracking-wider text-lg"
-        >
+    <div className="form-section">
+      {/* Navigation Buttons */}
+      <div className="form-section__nav flex items-center justify-between">
+        {/* Home Button */}
+        <Link to="/dashboard" className="text-white capitalize text-lg">
           <Button>
             <Home />
           </Button>
         </Link>
 
-        <div className="flex items-center space-x-2">
-          {activeFromIdx > 1 && (
+        {/* Previous and Next Buttons */}
+        <div className="form-section__actions flex items-center space-x-2">
+          {activeFormIdx > 1 && (
             <Button
-              className="text-white capitalize tracking-wider text-lg"
-              onClick={handlePrev}
+              className="text-white capitalize text-lg"
+              onClick={() => handleNavigation("prev")}
             >
-              <ArrowLeft />
-              prev
+              <ArrowLeft /> Prev
             </Button>
           )}
           <Button
-            className="text-white capitalize tracking-wider text-lg"
-            onClick={handleNext}
-            disabled={!enableNextBtn}
-            variant={"success"}
+            className="text-white capitalize text-lg"
+            onClick={() => handleNavigation("next")}
+            disabled={!enableNextBtn || activeFormIdx === forms.length + 1}
+            variant="success"
           >
-            next <ArrowRight />
+            Next <ArrowRight />
           </Button>
         </div>
       </div>
 
-      {/*~~~~~~~~$ Personal Data Form $~~~~~~~~*/}
-      {activeFromIdx === 1 && (
-        <PersonalDataFrom
+      {/* Form Renderer */}
+      {CurrentForm && (
+        <CurrentForm
           enableNextBtn={enableNextBtn}
-          handleEnableNextBtn={handleEnableNextBtn}
-          handleDisableNextBtn={handleDisableNextBtn}
+          handleEnableNextBtn={() => setEnableNextBtn(true)}
+          handleDisableNextBtn={() => setEnableNextBtn(false)}
         />
       )}
 
-      {/*~~~~~~~~$ Summery Form$~~~~~~~~*/}
-      {activeFromIdx === 2 && (
-        <SummaryForm
-          enableNextBtn={enableNextBtn}
-          handleEnableNextBtn={handleEnableNextBtn}
-          handleDisableNextBtn={handleDisableNextBtn}
-        />
+      {/* Redirect After Last Form */}
+      {activeFormIdx === forms.length + 1 && (
+        <Navigate to={`/my-resume/${resumeId}/view`} />
       )}
-
-      {/*~~~~~~~~$ Education Form $~~~~~~~~*/}
-      {activeFromIdx === 3 && (
-        <EducationForm
-          enableNextBtn={enableNextBtn}
-          handleEnableNextBtn={handleEnableNextBtn}
-          handleDisableNextBtn={handleDisableNextBtn}
-        />
-      )}
-
-      {/*~~~~~~~~$ Professional Experience Form $~~~~~~~~*/}
-      {activeFromIdx === 4 && (
-        <ExperienceForm
-          enableNextBtn={enableNextBtn}
-          handleEnableNextBtn={handleEnableNextBtn}
-          handleDisableNextBtn={handleDisableNextBtn}
-        />
-      )}
-
-      {/*~~~~~~~~$ Project Form $~~~~~~~~*/}
-      {activeFromIdx === 5 && (
-        <ProjectsForm
-          enableNextBtn={enableNextBtn}
-          handleEnableNextBtn={handleEnableNextBtn}
-          handleDisableNextBtn={handleDisableNextBtn}
-        />
-      )}
-
-      {/*~~~~~~~~$ Certification Form $~~~~~~~~*/}
-      {activeFromIdx === 6 && (
-        <CertificationsForm
-          enableNextBtn={enableNextBtn}
-          handleEnableNextBtn={handleEnableNextBtn}
-          handleDisableNextBtn={handleDisableNextBtn}
-        />
-      )}
-
-      {/*~~~~~~~~$ Skills Form $~~~~~~~~*/}
-      {activeFromIdx === 7 && (
-        <SkillsForm
-          enableNextBtn={enableNextBtn}
-          handleEnableNextBtn={handleEnableNextBtn}
-          handleDisableNextBtn={handleDisableNextBtn}
-        />
-      )}
-
-      {/*~~~~~~~~$ Language Form $~~~~~~~~*/}
-      {activeFromIdx === 8 && (
-        <LanguagesForm
-          enableNextBtn={enableNextBtn}
-          handleEnableNextBtn={handleEnableNextBtn}
-          handleDisableNextBtn={handleDisableNextBtn}
-        />
-      )}
-
-      {/*~~~~~~~~$ References Form $~~~~~~~~*/}
-      {activeFromIdx === 9 && (
-        <ReferenceForm
-          enableNextBtn={enableNextBtn}
-          handleEnableNextBtn={handleEnableNextBtn}
-          handleDisableNextBtn={handleDisableNextBtn}
-        />
-      )}
-
-      {
-        activeFromIdx === 10 && (
-          <Navigate to={`/my-resume/${params.resumeId}/view`} />
-        )
-      }
     </div>
   );
 };
