@@ -8,7 +8,7 @@ Welcome to the **AI Resume Builder**! This project is a cutting-edge web applica
 
 **Live Demo:** [Coming Soon!]()
 
-![AI Resume Builder Screenshot](./public/project-image.webp "AI Resume Builder App")
+![AI Resume Builder Screenshot](./public/ai-resume-builder.png "AI Resume Builder App")
 
 ---
 
@@ -27,7 +27,7 @@ This project highlights advanced state management, modern UI patterns, and creat
   - Built with `react-hook-form` and `Yup` for robust validation and smooth user interactions.
 
 - **AI-Powered Summaries:**
-  - Generates professional summaries, skills, and experiences using the **Google Generative AI API**.
+  - Generates professional summaries using the **Google Generative AI API**.
   - Real-time content updates with animations using **Framer Motion**.
 
 - **Live Preview:**
@@ -84,7 +84,7 @@ To run the project locally, follow these steps:
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/mahmoud-saeed1/ai-resume-builder.git
+   git clone git@github.com:mahmoud-saeed1/ai-resume-builder.git
    ```
 
 2. **Navigate to the project directory**:

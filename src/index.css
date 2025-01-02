@@ -1,30 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-/*~~~~~~~~$ Start Global Styling $~~~~~~~~*/
-/*~~~~~~~~$ End Global Styling $~~~~~~~~*/
-
-/*~~~~~~~~$ Start Header Styling $~~~~~~~~*/
-/*~~~~~~~~$ End Header Styling $~~~~~~~~*/
-
-/*~~~~~~~~$ Start Landing Page Styling $~~~~~~~~*/
-/*~~~~~~~~$ End Landing Page Styling $~~~~~~~~*/
-
-/*~~~~~~~~$ Start Dashboard Styling $~~~~~~~~*/
-/*~~~~~~~~$ End Dashboard Styling $~~~~~~~~*/
-
-/*~~~~~~~~$ Start Form Container Styling $~~~~~~~~*/
-/*~~~~~~~~$ End Form Container Styling $~~~~~~~~*/
-
-/*~~~~~~~~$ Start Resume Preview Styling $~~~~~~~~*/
-/*~~~~~~~~$ End Resume Preview Styling $~~~~~~~~*/
-
-/*~~~~~~~~$ Start Resume Item Container $~~~~~~~~*/
-/*~~~~~~~~$ End Resume Item Container $~~~~~~~~*/
-
-/*~~~~~~~~$ Start AddResume Styling $~~~~~~~~*/
-/*~~~~~~~~$ End AddResume Styling $~~~~~~~~*/
+F
 
 /*~~~~~~~~$ Start Resume Form Styling $~~~~~~~~*/
 .form-content {
@@ -48,18 +25,6 @@
   @apply p-3 bg-white rounded-xl shadow cursor-pointer text-gray-800;
 }
 
-/*~~~~~~~~$ End Resume Form Styling $~~~~~~~~*/
-
-/*~~~~~~~~$ Start No Data Component Styling $~~~~~~~~*/
-/*~~~~~~~~$ End No Data Component Styling $~~~~~~~~*/
-
-/*~~~~~~~~$ Start Preview Styling $~~~~~~~~*/
-/*~~~~~~~~$ End Preview Styling $~~~~~~~~*/
-
-/*~~~~~~~~$ Start Generated Summary Styling $~~~~~~~~*/
-/*~~~~~~~~$ End Generated Summary Styling $~~~~~~~~*/
-
-/*~~~~~~~~$ react-simple-wysiwyg $~~~~~~~~*/
 .rsw-ce ul {
   list-style: disc;
   padding-left: 2em;
@@ -148,7 +113,7 @@ header {
 }
 
 .resume-preview__section-title {
-  @apply text-lg font-semibold mb-4 text-gray-700 text-center border-b-2 pb-2;
+  @apply text-lg font-semibold mb-4 text-gray-700 border-b-2 pb-2;
   border-color: #4a90e2;
 }
 
@@ -211,7 +176,7 @@ header {
   font-weight: 600;
   color: var(--theme-color, #3b82f6);
   margin-bottom: 8px;
-  text-transform: uppercase;
+  text-transform: capitalize;
 }
 
 .resume-preview__section-content {
@@ -733,16 +698,7 @@ body {
 }
 
 .landing__hero {
-  @apply relative pt-10 md:pt-20 pb-16;
-}
-
-/* .landing__hero-shape {
-  @apply absolute  -top-44 -left-10 w-3/4 h-full bg-gradient-to-br from-blue-500 to-gray-600 rounded-bl-full z-0;
-  clip-path: circle(90% at top left);
-} */
-
-.landing__hero-container {
-  @apply container mx-auto relative z-10 flex flex-col-reverse md:flex-row items-center justify-between;
+  @apply relative pt-14 md:pt-20 pb-16 overflow-hidden;
 }
 
 .landing__hero-content {
@@ -774,15 +730,20 @@ body {
 }
 
 .landing__hero-image__container {
-  @apply h-full relative flex items-center justify-center mt-10 md:mt-0 bg-transparent overflow-hidden;
+  @apply h-full relative flex items-center justify-center mt-10 md:mt-0 bg-transparent;
+  padding: 0%;
+}
+
+.landing__hero-image {
+  @apply relative;
 }
 
 .landing__hero-img {
-  @apply w-32 lg:w-52 h-auto rounded-xl;
+  @apply w-72 h-auto rounded-xl;
 }
 
 .landing__hero-shape {
-  @apply absolute top-14 lg:top-20 left-32 -z-10 w-96 h-full bg-gradient-to-t to-blue-600 from-teal-400;
+  @apply absolute h-full w-2/3 top-8 -z-10 bg-gradient-to-t to-blue-600 from-teal-400;
   padding: 1.3rem;
   display: block;
   border: 2px solid #2563eb;
@@ -869,7 +830,7 @@ body {
 }
 
 .landing__hero-container {
-  @apply mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-8 items-center;
+  @apply mx-auto grid grid-cols-1 md:grid-cols-2 space-y-14 items-center;
 }
 
 .landing__hero-content {
@@ -879,28 +840,27 @@ body {
 
 /* PersonalDataPreview.css */
 .resume-preview__section {
-  @apply p-4 bg-gray-50; /* Light background for better visibility */
+  @apply p-4 bg-gray-50; 
 }
 
 .resume-preview__title {
-  @apply text-xl font-bold mb-4 text-gray-900; /* Bold title for emphasis */
+  @apply text-xl font-bold mb-4 text-blue-500; 
 }
 
 .resume-preview__personal-details {
-  @apply mb-4 p-2; /* Clean padding */
+  @apply mb-4 p-2; 
 }
 
 .resume-preview__name {
-  @apply text-lg font-semibold text-gray-800; /* Clear name display */
+  @apply text-2xl text-center font-semibold text-blue-500; 
 }
 
 .resume-preview__job-title {
-  @apply text-lg text-gray-700; /* Subtle job title */
+  @apply text-xl text-center text-gray-700; 
 }
 
 .resume-preview__details {
-  @apply mt-1 text-gray-600; /* Text color for details */
-  @apply text-sm; /* Smaller text for details */
+  @apply mt-1 text-gray-600; 
 }
 
 

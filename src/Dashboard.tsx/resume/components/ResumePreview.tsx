@@ -33,6 +33,15 @@ const ResumePreview = () => {
       {resumeData?.experience && (
         <ProfessionalExperience experience={resumeData.experience} />
       )}
+
+      {/*~~~~~~~~$ Projects Section $~~~~~~~~*/}
+      {resumeData?.projects && (
+        <ProjectsPreview projects={resumeData.projects} />
+      )}
+      {/*~~~~~~~~$ Certification Section $~~~~~~~~*/}
+      {resumeData?.certifications && (
+        <CertificationsPreview certifications={resumeData.certifications} />
+      )}
       {/*~~~~~~~~$ Skills Section $~~~~~~~~*/}
       {resumeData?.skills && (
         <SkillsPreview skills={resumeData.skills} />
@@ -40,14 +49,6 @@ const ResumePreview = () => {
       {/*~~~~~~~~$ Language Section $~~~~~~~~*/}
       {resumeData?.languages && (
         <LanguagesPreview languages={resumeData.languages} />
-      )}
-      {/*~~~~~~~~$ Certification Section $~~~~~~~~*/}
-      {resumeData?.certifications && (
-        <CertificationsPreview certifications={resumeData.certifications} />
-      )}
-      {/*~~~~~~~~$ Projects Section $~~~~~~~~*/}
-      {resumeData?.projects && (
-        <ProjectsPreview projects={resumeData.projects} />
       )}
       {/*~~~~~~~~$ References Section $~~~~~~~~*/}
       {resumeData?.references && (
