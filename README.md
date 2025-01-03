@@ -96,13 +96,21 @@ To run the project locally, follow these steps:
    ```bash
    npm install
    ```
+4. **Rename the environment file and obtain API keys**:  
+- Rename the `.env.example` file to `.env` by running:
 
-4. **Start the development server**:
+   ```bash
+   mv .env.example .env 
+   ```
+- Gemini API Key: Get your Gemini API key [here](https://aistudio.google.com/app/apikey).
+- Clerk Publishable Key: Get your Clerk publishable key [here](https://clerk.com/).
+
+5. **Start the development server**:
    ```bash
    npm run dev
    ```
 
-5. **Open your browser**:
+6. **Open your browser**:
    ```bash
    http://localhost:3000
    ```
