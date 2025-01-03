@@ -103,7 +103,7 @@ To run the project locally, follow these steps:
    mv .env.example .env 
    ```
 - Gemini API Key: Get your Gemini API key [here](https://aistudio.google.com/app/apikey).
-- Clerk Publishable Key: Get your Clerk publishable key here [here](https://clerk.com/).
+- Clerk Publishable Key: Get your Clerk publishable key [here](https://clerk.com/).
 
 5. **Start the development server**:
    ```bash
